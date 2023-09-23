@@ -5,6 +5,11 @@
 export const CheckBoxFilled = require('./check_box.png');
 export const User = require('./user.png');
 export const Link = require('./link.png');
+export const Link2 = require('./link_2.png');
+
+/// Emoji Icons
+export const CelebrationEmoji = require('./celebration_emoji.png');
+export const DancingEmoji = require('./dancing_emoji.png');
 
 /// Social Icons
 export const GoogleIcon = require('./google_icon.png');

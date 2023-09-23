@@ -2,18 +2,25 @@ import { useState } from "react";
 import { StyleSheet, TextInput, View } from "react-native";
 import AppColors from "../../constants/AppColors";
 
-function CommonTextInput(props: { placeholder: string, onChangeText: ((text: string) => void) }): JSX.Element {
+function CommonTextInput(props: { placeholder: string, errorText?: string, onChangeText: ((text: string) => void) }): JSX.Element {
     const [inputValue, setInputValue] = useState('');
+    const [focus, setFocus] = useState(false);
 
     return (
         <View>
             <TextInput
-                style={styles.textInputBox}
+                style={[
+                    styles.textInputBox,
+                    ((props.errorText ?? 0) != 0) ? { borderColor: AppColors.RED } : {},
+                    focus ? { borderColor: AppColors.GRAY4 } : {},
+                ]}
                 placeholder={props.placeholder}
                 underlineColorAndroid={AppColors.TRANSPARENT}
                 placeholderTextColor={AppColors.GRAY4}
                 value={inputValue}
                 onChangeText={(value) => { setInputValue(value), props.onChangeText(value) }}
+                onFocus={() => { setFocus(true) }}
+                onBlur={() => { setFocus(false) }}
             />
         </View>
     );

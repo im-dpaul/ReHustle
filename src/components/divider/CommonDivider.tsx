@@ -1,9 +1,13 @@
 import { StyleSheet, View } from "react-native";
 import AppColors from "../../constants/AppColors";
 
-function CommonDivider(): JSX.Element {
+function CommonDivider(props: { height?: number, backgroundColor?: string }): JSX.Element {
     return (
-        <View style={styles.divider}></View>
+        <View style={[
+            styles.divider,
+            props.height ? { height: props.height } : {},
+            props.backgroundColor ? { backgroundColor: props.backgroundColor } : {},
+        ]}></View>
     );
 };
 

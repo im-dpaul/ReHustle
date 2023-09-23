@@ -28,7 +28,7 @@ function CreateAccountScreen(): JSX.Element {
     }
 
     const onChangeLinkField = (value: string) => {
-        console.log(value);
+        // console.log(value);
     }
 
     const onGoogleSignIn = () => { }

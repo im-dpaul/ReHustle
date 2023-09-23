@@ -1,9 +1,9 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, ImageSourcePropType, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { User } from "../../../../assets/images";
 import AppColors from "../../../constants/AppColors";
 import FontFamily from "../../../constants/FontFamily";
 
-function HeaderStepper(props: { title: string, step: number }): JSX.Element {
+function HeaderStepper(props: { title: string, step: number, textSuffixImage?: ImageSourcePropType, skipButton?: boolean, skipBtnTap?: (() => void) }): JSX.Element {
     return (
         <View style={styles.container}>
             <View style={styles.icon}>
@@ -11,12 +11,30 @@ function HeaderStepper(props: { title: string, step: number }): JSX.Element {
             </View>
             <View style={{ width: 8 }}></View>
             <View>
-                <Text style={styles.title}>{props.title}</Text>
+                <View style={styles.titleRow}>
+                    <Text style={styles.title}>{props.title}</Text>
+                    <View style={{ width: 10 }}></View>
+                    {
+                        props.textSuffixImage
+                            ? <Image style={styles.image} source={props.textSuffixImage} />
+                            : null
+                    }
+                </View>
                 <View style={{ height: 10 }}></View>
+
                 <View style={styles.stepper}>
-                    <View style={[styles.progress, { width: (225 * (props.step)) / 5, }]}></View>
+                    <View style={[styles.progress, { width: (224 * (props.step)) / 4, }]}></View>
                 </View>
             </View>
+            {
+                props.skipButton
+                    ? <TouchableOpacity style={{ marginLeft: 'auto' }} onPress={() => { props.skipBtnTap ? props.skipBtnTap() : null }}>
+                        <View style={styles.skipButton}>
+                            <Text style={styles.skipText}>Skip</Text>
+                        </View>
+                    </TouchableOpacity>
+                    : null
+            }
         </View>
     );
 };
@@ -39,6 +57,10 @@ const styles = StyleSheet.create({
         height: 20,
         width: 20,
     },
+    titleRow: {
+        flex: 1,
+        flexDirection: "row",
+    },
     title: {
         color: AppColors.GRAY1,
         fontFamily: FontFamily.GILROY_BOLD,
@@ -57,6 +79,21 @@ const styles = StyleSheet.create({
         backgroundColor: AppColors.GREEN2,
         borderRadius: 2
     },
+    skipButton: {
+        borderRadius: 4,
+        width: 48,
+        height: 32,
+        backgroundColor: AppColors.GRAY6,
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    skipText: {
+        color: AppColors.GRAY2,
+        fontFamily: FontFamily.GILROY_SEMIBOLD,
+        fontSize: 14,
+        fontStyle: 'normal',
+        fontWeight: '400',
+    }
 });
 
 export default HeaderStepper;
