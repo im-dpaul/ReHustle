@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import AppColors from "../../../constants/AppColors";
 import FontFamily from "../../../constants/FontFamily";
+import CommonDivider from "../../../components/divider/CommonDivider";
 
 function AddServicesManually(): JSX.Element {
     return (
@@ -16,6 +17,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         height: 14,
+        alignSelf: 'stretch',
     },
     line: {
         height: 1,
@@ -23,6 +25,7 @@ const styles = StyleSheet.create({
         alignSelf: 'stretch'
     },
     addServiceManually: {
+        flex: 1,
         color: AppColors.GRAY1,
         fontFamily: FontFamily.GILROY_REGULAR,
         fontSize: 10,

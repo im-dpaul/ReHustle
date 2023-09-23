@@ -1,41 +1,32 @@
 import { StyleSheet, Text, View } from "react-native";
 import AppColors from "../../../constants/AppColors";
 import FontFamily from "../../../constants/FontFamily";
-import SocialMediaItemName from "./SocialMediaItemName";
 import SocialMediaType from "../../../data/constants/SocialMediaType";
-import { useState } from "react";
+import CommonChip from "../../../components/chip/CommonChip";
+import { useSelector, useDispatch } from 'react-redux';
+import { addSocialProfile, removeSocialProfile } from '../redux/aboutYouSlice';
 
-function AddSocialProfile(props: { onValueSelected: (selectedValues: number[]) => void }): JSX.Element {
-    let selectedSocialMedia: number[] = [];
-    const [socialMediaId, setSocialMediaId] = useState<number[]>([]);
-    const [socialMedia, setSocialMedia] = useState<number[]>([]);
+function AddSocialProfile(): JSX.Element {
+    const dispatch = useDispatch();
+    const aboutYou = useSelector((state: any) => state.aboutYou);
 
-    const onSelection = (id: number) => {
-        // const allIds = socialMediaId;
-        // if (allIds.includes(id)) {
-        //     let ids = socialMediaId;
-        //     let newids: number[] = [];
-        //     ids.forEach((i) => {
-        //         if (i != id) {
-        //             newids.push(i);
-        //         }
-        //     })
-        // }
-        // else {
-        //     let ids = socialMediaId;
-        //     ids.push(id);
-        //     // setSocialMediaId(ids)
-        // }
-        if (selectedSocialMedia.length == 0) {
-            selectedSocialMedia.push(id);
-        }
-        else if (selectedSocialMedia.includes(id)) {
-            selectedSocialMedia = selectedSocialMedia.filter((old) => old != id);
+    const onSelection = (socialMedia: { ID: number; NAME: string; }) => {
+        if (aboutYou.socialProfileIDs.includes(socialMedia.ID)) {
+            dispatch(removeSocialProfile(socialMedia));
         }
         else {
-            selectedSocialMedia.push(id);
+            dispatch(addSocialProfile(socialMedia));
         }
-        props.onValueSelected(selectedSocialMedia);
+    }
+
+    const isActive = (id: number) => {
+        let active = false;
+        aboutYou.socialProfileIDs.forEach((e: number) => {
+            if (e == id) {
+                active = true;
+            }
+        });
+        return active;
     }
 
     return (
@@ -45,11 +36,12 @@ function AddSocialProfile(props: { onValueSelected: (selectedValues: number[]) =
             <View style={styles.socialMediaList}>
                 {
                     SocialMediaType.map((socialMedia) =>
-                        <SocialMediaItemName
+                        <CommonChip
                             key={socialMedia.ID}
                             name={socialMedia.NAME}
                             id={socialMedia.ID}
-                            onPress={(id) => { onSelection(id) }}
+                            active={isActive(socialMedia.ID)}
+                            onPress={() => onSelection(socialMedia)}
                         />
                     )
                 }

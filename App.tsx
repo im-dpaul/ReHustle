@@ -9,8 +9,8 @@ function App(): JSX.Element {
   return (
     // <SignInScreen />
     // <CreateAccountScreen />
-    // <AboutYouScreen />
-    <AddServicesScreen />
+    <AboutYouScreen />
+    // <AddServicesScreen />
     // <FinishAccountCreationScreen />
   );
 }
