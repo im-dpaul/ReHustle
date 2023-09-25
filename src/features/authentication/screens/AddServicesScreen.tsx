@@ -1,17 +1,21 @@
 import { ScrollView, StyleSheet, View } from "react-native";
-import CommonStatusBar from "../../components/layouts/CommonStatusBar";
-import HeaderStepper from "./components/HeaderStepper";
-import CommonDivider from "../../components/divider/CommonDivider";
-import CommonButton from "../../components/buttons/CommonButton";
-import AppColors from "../../constants/AppColors";
-import TemplateWithDescription from "./components/TemplateWithDescription";
-import AddServicesManually from "./components/AddServicesManually";
-import ServiceType from "../../data/constants/ServiceType";
-import CommonChip from "../../components/chip/CommonChip";
 import { useDispatch, useSelector } from "react-redux";
-import { addService, removeService } from "../authentication/redux/addServicesSlice";
+import { addService, removeService } from "../../authentication/redux/addServicesSlice";
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from "../../../App";
+import CommonStatusBar from "../../../components/layouts/CommonStatusBar";
+import HeaderStepper from "../components/HeaderStepper";
+import CommonDivider from "../../../components/divider/CommonDivider";
+import AppColors from "../../../constants/AppColors";
+import TemplateWithDescription from "../components/TemplateWithDescription";
+import ServiceType from "../../../data/constants/ServiceType";
+import CommonChip from "../../../components/chip/CommonChip";
+import AddServicesManually from "../components/AddServicesManually";
+import CommonButton from "../../../components/buttons/CommonButton";
 
-function AddServicesScreen(): JSX.Element {
+type AddServicesProps = NativeStackScreenProps<RootStackParamList, 'AddServices'>;
+
+function AddServicesScreen({ navigation }: AddServicesProps): JSX.Element {
 
     const servicesReducer = useSelector((state: any) => state.addServices);
 
@@ -19,7 +23,9 @@ function AddServicesScreen(): JSX.Element {
 
     const onContinueTap = () => { }
 
-    const skipBtnTap = () => { }
+    const skipBtnTap = () => {
+        navigation.push('FinishAccountCreation');
+    }
 
     const onAddService = () => { }
 
@@ -43,10 +49,10 @@ function AddServicesScreen(): JSX.Element {
     }
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, backgroundColor: AppColors.WHITE }}>
             <CommonStatusBar />
             <View style={{ flex: 1 }}>
-                <View style={{ height: 72 }}>
+                <View style={{ height: 74 }}>
                     <HeaderStepper title='Add services' step={3} skipButton={true} skipBtnTap={() => skipBtnTap()} />
                     <CommonDivider />
                 </View>

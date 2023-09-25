@@ -6,6 +6,7 @@ export const CheckBoxFilled = require('./check_box.png');
 export const User = require('./user.png');
 export const Link = require('./link.png');
 export const Link2 = require('./link_2.png');
+export const MenuIcon = require('./menu_icon.png');
 
 /// Emoji Icons
 export const CelebrationEmoji = require('./celebration_emoji.png');
@@ -17,3 +18,5 @@ export const InstagramIcon = require('./instagram_icon.png');
 export const FacebookIcon = require('./facebook_icon.png');
 export const TwitterIcon = require('./twitter_icon.png');
 
+/// Services Screen
+export const NoServicesImage = require('./no_services.png');

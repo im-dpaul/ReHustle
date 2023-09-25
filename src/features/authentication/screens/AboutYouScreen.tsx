@@ -4,32 +4,36 @@ import {
     StyleSheet,
     View,
 } from 'react-native';
-import CommonButton from '../../components/buttons/CommonButton';
-import CommonStatusBar from '../../components/layouts/CommonStatusBar';
-import CommonDivider from '../../components/divider/CommonDivider';
-import HeaderStepper from './components/HeaderStepper';
-import AppColors from '../../constants/AppColors';
-import AddSocialProfile from './components/AddSocialProfileLinks';
-import NameInput from './components/NameInput';
-import LinkWithDescription from './components/LinkWithDescription';
-import SocialProfilesList from './components/SocialProfilesList';
-import AddCustomLinkList from './components/AddCustomLinkList';
+import CommonButton from '../../../components/buttons/CommonButton';
+import CommonStatusBar from '../../../components/layouts/CommonStatusBar';
+import CommonDivider from '../../../components/divider/CommonDivider';
+import HeaderStepper from '../components/HeaderStepper';
+import AppColors from '../../../constants/AppColors';
+import AddSocialProfile from '../components/AddSocialProfileLinks';
+import NameInput from '../components/NameInput';
+import LinkWithDescription from '../components/LinkWithDescription';
+import SocialProfilesList from '../components/SocialProfilesList';
+import AddCustomLinkList from '../components/AddCustomLinkList';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../../App';
 
-function AboutYouScreen(): JSX.Element {
+type AboutYouProps = NativeStackScreenProps<RootStackParamList, 'AboutYou'>;
+
+function AboutYouScreen({ navigation }: AboutYouProps): JSX.Element {
 
     const onChangeNameField = (value: string) => { }
 
     const onContinueTap = () => { }
 
     const skipBtnTap = () => {
-
+        navigation.push('AddServices');
     }
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, backgroundColor: AppColors.WHITE }}>
             <CommonStatusBar />
             <View style={{ flex: 1 }}>
-                <View style={{ height: 72 }}>
+                <View style={{ height: 74 }}>
                     <HeaderStepper title='About you' step={2} skipButton={true} skipBtnTap={skipBtnTap} />
                     <CommonDivider />
                 </View>

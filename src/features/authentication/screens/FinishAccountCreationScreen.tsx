@@ -4,28 +4,38 @@ import {
     StyleSheet,
     View,
 } from 'react-native';
-import CommonButton from '../../components/buttons/CommonButton';
-import CommonStatusBar from '../../components/layouts/CommonStatusBar';
-import CommonDivider from '../../components/divider/CommonDivider';
-import HeaderStepper from './components/HeaderStepper';
-import AppColors from '../../constants/AppColors';
-import { CelebrationEmoji, DancingEmoji, Link2, } from '../../../assets/images';
-import CopyLinkButton from '../../components/buttons/CopyLinkButton';
-import ProfileLinkAndDescription from './components/ProfileLinkAndDescription';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../../App';
+import AppColors from '../../../constants/AppColors';
+import CommonStatusBar from '../../../components/layouts/CommonStatusBar';
+import HeaderStepper from '../components/HeaderStepper';
+import CommonDivider from '../../../components/divider/CommonDivider';
+import { CelebrationEmoji, DancingEmoji } from '../../../../assets/images';
+import ProfileLinkAndDescription from '../components/ProfileLinkAndDescription';
+import CommonButton from '../../../components/buttons/CommonButton';
+import CopyLinkButton from '../../../components/buttons/CopyLinkButton';
 
-function FinishAccountCreationScreen(): JSX.Element {
+type FinishAccountCreationProps = NativeStackScreenProps<RootStackParamList, 'FinishAccountCreation'>;
 
-    const onContinueTap = () => { }
+function FinishAccountCreationScreen({ navigation }: FinishAccountCreationProps): JSX.Element {
 
-    const skipBtnTap = () => { }
+    const onFinishTap = () => {
+        navigation.popToTop()
+        navigation.replace('Home');
+    }
+
+    const skipBtnTap = () => {
+        navigation.popToTop()
+        navigation.replace('Home');
+    }
 
     const copyLink = () => { }
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, backgroundColor: AppColors.WHITE }}>
             <CommonStatusBar />
             <View style={{ flex: 1 }}>
-                <View style={{ height: 72 }}>
+                <View style={{ height: 74 }}>
                     <HeaderStepper title='You’re all set !' step={4} textSuffixImage={CelebrationEmoji} skipButton={true} skipBtnTap={() => skipBtnTap()} />
                     <CommonDivider />
                 </View>
@@ -40,7 +50,7 @@ function FinishAccountCreationScreen(): JSX.Element {
                 <View>
                     <CommonDivider />
                     <View style={{ margin: 24 }}>
-                        <CommonButton title='Continue' onPress={onContinueTap} />
+                        <CommonButton title='Finish' onPress={onFinishTap} />
                     </View>
                 </View>
             </View>

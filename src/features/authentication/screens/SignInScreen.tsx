@@ -5,19 +5,23 @@ import {
     StyleSheet,
     View,
 } from 'react-native';
-import ReHustleTitle from '../../components/text/ReHustleTitle';
-import SignInText from './components/SignInText';
-import GoogleSignInButton from '../../components/buttons/GoogleSignInButton';
-import SignUpWithEmailText from './components/SignUpWithEmailText';
-import CommonTextInput from '../../components/textInput/CommonTextInput';
-import RememberMe from './components/RememberMe';
-import TextButton from '../../components/buttons/TextButton';
-import CommonButton from '../../components/buttons/CommonButton';
-import DontHaveAccountRegister from './components/DontHaveAccountRegister';
-import CommonStatusBar from '../../components/layouts/CommonStatusBar';
-import AppColors from '../../constants/AppColors';
+import ReHustleTitle from '../../../components/text/ReHustleTitle';
+import SignInText from '../components/SignInText';
+import GoogleSignInButton from './../../../components/buttons/GoogleSignInButton';
+import SignUpWithEmailText from './.././components/SignUpWithEmailText';
+import CommonTextInput from './../../../components/textInput/CommonTextInput';
+import RememberMe from './.././components/RememberMe';
+import TextButton from './../../../components/buttons/TextButton';
+import CommonButton from '../../../components/buttons/CommonButton';
+import DontHaveAccountRegister from './../components/DontHaveAccountRegister';
+import CommonStatusBar from '../../../components/layouts/CommonStatusBar';
+import AppColors from '../../../constants/AppColors';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../../App';
 
-function SignInScreen(): JSX.Element {
+type HomeProps = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
+
+function SignInScreen({ navigation }: HomeProps): JSX.Element {
 
     const setRememberMe = (value: boolean) => {
         console.log(value);
@@ -35,12 +39,12 @@ function SignInScreen(): JSX.Element {
 
     const onSignUp = () => { }
 
-    const onRegisterTap = () => { }
+    const onRegisterTap = () => { navigation.replace('CreateAccount') }
 
     const onForgetPasswordTap = () => { }
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{ backgroundColor: AppColors.WHITE, flex: 1 }}>
             <CommonStatusBar />
             <ScrollView>
                 <View style={styles.mainBody}>

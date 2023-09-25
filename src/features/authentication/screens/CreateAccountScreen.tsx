@@ -5,19 +5,26 @@ import {
     StyleSheet,
     View,
 } from 'react-native';
-import GoogleSignInButton from '../../components/buttons/GoogleSignInButton';
-import SignUpWithEmailText from './components/SignUpWithEmailText';
-import CommonTextInput from '../../components/textInput/CommonTextInput';
-import CommonButton from '../../components/buttons/CommonButton';
-import AlreadyHaveAccountLogin from './components/AlreadyHaveAccountLogin';
-import CreateRehustleLink from './components/CreateRehustleLink';
-import RehustleTextAndDescription from './components/RehustleTextAndDescription';
-import CommonStatusBar from '../../components/layouts/CommonStatusBar';
-import CommonDivider from '../../components/divider/CommonDivider';
-import HeaderStepper from './components/HeaderStepper';
-import AppColors from '../../constants/AppColors';
+import GoogleSignInButton from '../../../components/buttons/GoogleSignInButton';
+import SignUpWithEmailText from './../components/SignUpWithEmailText';
+import CommonTextInput from '../../../components/textInput/CommonTextInput';
+import CommonButton from '../../../components/buttons/CommonButton';
+import AlreadyHaveAccountLogin from './../components/AlreadyHaveAccountLogin';
+import CreateRehustleLink from '../components/CreateRehustleLink';
+import RehustleTextAndDescription from '../components/RehustleTextAndDescription';
+import CommonStatusBar from '../../../components/layouts/CommonStatusBar';
+import CommonDivider from '../../../components/divider/CommonDivider';
+import HeaderStepper from '../components/HeaderStepper';
+import AppColors from '../../../constants/AppColors';
+import { NativeStackScreenProps, NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from '../../../App';
 
-function CreateAccountScreen(): JSX.Element {
+type CreateAccountProps = NativeStackScreenProps<RootStackParamList, 'CreateAccount'>;
+
+function CreateAccountScreen({ route }: CreateAccountProps): JSX.Element {
+
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
     const onChangeEmailField = (value: string) => {
         // console.log(value);
@@ -33,15 +40,15 @@ function CreateAccountScreen(): JSX.Element {
 
     const onGoogleSignIn = () => { }
 
-    const onSignUp = () => { }
+    const onSignIn = () => { navigation.push('AboutYou'); }
 
-    const onLoginTap = () => { }
+    const onLoginTap = () => { navigation.replace('SignIn'); }
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{ backgroundColor: AppColors.WHITE, flex: 1 }}>
             <CommonStatusBar />
             <ScrollView>
-                <View>
+                <View style={{ height: 74 }}>
                     <HeaderStepper title='Create your account' step={1} />
                     <CommonDivider />
                 </View>
@@ -60,7 +67,7 @@ function CreateAccountScreen(): JSX.Element {
                     <View style={{ height: 16 }}></View>
                     <CommonTextInput placeholder='Password' onChangeText={((value) => onChangePasswordField(value))} />
                     <View style={{ marginVertical: 24 }}>
-                        <CommonButton title='Sign In' onPress={onSignUp} />
+                        <CommonButton title='Sign In' onPress={onSignIn} />
                     </View>
                     <AlreadyHaveAccountLogin onPress={onLoginTap} />
                 </View>
