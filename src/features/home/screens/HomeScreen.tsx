@@ -7,13 +7,25 @@ import HomeAppBar from '../components/HomeAppBar';
 import NoServicesPresent from '../components/NoServicesPresent';
 import CommonButton from '../../../components/buttons/CommonButton';
 import FontFamily from '../../../constants/FontFamily';
+import LocalStorage from '../../../data/local_storage/LocalStorage';
+import StorageDataTypes from '../../../constants/StorageDataTypes';
+import { RootStackParamList } from '../../../App';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-const HomeScreen = () => {
+type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
+
+const HomeScreen = ({ navigation }: HomeProps) => {
+
+    const menuButtonTap = () => {
+        LocalStorage.DeleteData(StorageDataTypes.TOKEN);
+        navigation.replace('SignIn');
+    }
+
     return (
         <SafeAreaView style={{ backgroundColor: AppColors.WHITE, flex: 1 }}>
             <CommonStatusBar />
             <View style={{ height: 74 }}>
-                <HomeAppBar title='Services' subTitle='rehustle.co/imarc36' />
+                <HomeAppBar title='Services' subTitle='rehustle.co/imarc36' menuButtonTap={() => menuButtonTap()} />
                 <CommonDivider />
             </View>
             <View style={{ backgroundColor: AppColors.WHITE, flex: 1 }}>

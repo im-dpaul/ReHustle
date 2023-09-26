@@ -7,8 +7,10 @@ import AddServicesScreen from './features/authentication/screens/AddServicesScre
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './features/home/screens/HomeScreen';
+import SplashScreen from './features/splash/screens/SplashScreen';
 
 export type RootStackParamList = {
+  Splash: undefined;
   SignIn: undefined;
   CreateAccount: undefined;
   AboutYou: undefined;
@@ -22,7 +24,11 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function App(): JSX.Element {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='SignIn' screenOptions={{ headerShown: false }} >
+      <Stack.Navigator initialRouteName='Splash' screenOptions={{ headerShown: false }} >
+        <Stack.Screen
+          name='Splash'
+          component={SplashScreen}
+        />
         <Stack.Screen
           name='SignIn'
           component={SignInScreen}

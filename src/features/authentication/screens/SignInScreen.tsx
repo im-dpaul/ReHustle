@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
+    ActivityIndicator,
     SafeAreaView,
     ScrollView,
     StyleSheet,
@@ -18,26 +19,47 @@ import CommonStatusBar from '../../../components/layouts/CommonStatusBar';
 import AppColors from '../../../constants/AppColors';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../App';
+import { useSelector, useDispatch } from 'react-redux';
+import { signIn, setEmailAddress, setPassword } from '../redux/signInSlice';
+import { AppDispatch } from '../../../app/store';
+import LocalStorage from '../../../data/local_storage/LocalStorage';
+import StorageDataTypes from '../../../constants/StorageDataTypes';
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
 
 function SignInScreen({ navigation }: HomeProps): JSX.Element {
 
+    const dispatch = useDispatch<AppDispatch>();
+    const signInReducer = useSelector((state: any) => state.signIn);
+
+    console.log(signInReducer);
+
     const setRememberMe = (value: boolean) => {
-        console.log(value);
+        const r = `${value}`;
+        LocalStorage.SetData(StorageDataTypes.REMEMBER_ME, r);
     }
 
-    const onChangeEmailField = (value: string) => {
-        // console.log(value);
+    const onChangeEmailField = (email: string) => {
+        dispatch(setEmailAddress(email));
     }
 
-    const onChangePasswordField = (value: string) => {
-        // console.log(value);
+    const onChangePasswordField = (password: string) => {
+        dispatch(setPassword(password));
     }
 
     const onGoogleSignIn = () => { }
 
-    const onSignUp = () => { }
+    const onSignIn = () => {
+        dispatch(signIn());
+    }
+
+    useEffect(() => {
+        if (signInReducer.data != null) {
+            if (signInReducer.data.message == "OK") {
+                navigation.replace('Home');
+            }
+        }
+    }, [signInReducer]);
 
     const onRegisterTap = () => { navigation.replace('CreateAccount') }
 
@@ -67,7 +89,11 @@ function SignInScreen({ navigation }: HomeProps): JSX.Element {
                     </View>
 
                     <View style={{ marginVertical: 24 }}>
-                        <CommonButton title='Sign In' onPress={onSignUp} />
+                        {
+                            signInReducer.loading
+                                ? <ActivityIndicator size={'large'} color={AppColors.PRIMARY_COLOR} />
+                                : <CommonButton title='Sign In' onPress={onSignIn} />
+                        }
                     </View>
                     <DontHaveAccountRegister onPress={onRegisterTap} />
                 </View>
