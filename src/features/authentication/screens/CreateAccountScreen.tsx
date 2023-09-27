@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
+    ActivityIndicator,
     SafeAreaView,
     ScrollView,
     StyleSheet,
@@ -19,6 +20,9 @@ import AppColors from '../../../constants/AppColors';
 import { NativeStackScreenProps, NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../../../App';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '../../../app/store';
+import { createAccount, setEmailAddress, setPassword, setUserName } from "../redux/createAccountSlice";
 
 type CreateAccountProps = NativeStackScreenProps<RootStackParamList, 'CreateAccount'>;
 
@@ -26,23 +30,38 @@ function CreateAccountScreen({ route }: CreateAccountProps): JSX.Element {
 
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-    const onChangeEmailField = (value: string) => {
-        // console.log(value);
+    const createAccountReducer = useSelector((state: any) => state.createAccount);
+    const dispatch = useDispatch<AppDispatch>();
+
+    console.log("Create Account store", createAccountReducer);
+
+    const onChangeEmailField = (email: string) => {
+        dispatch(setEmailAddress(email));
     }
 
-    const onChangePasswordField = (value: string) => {
-        // console.log(value);
+    const onChangePasswordField = (password: string) => {
+        dispatch(setPassword(password));
     }
 
-    const onChangeLinkField = (value: string) => {
-        // console.log(value);
+    const onChangeLinkField = (userName: string) => {
+        dispatch(setUserName(userName));
     }
 
     const onGoogleSignIn = () => { }
 
-    const onSignIn = () => { navigation.push('AboutYou'); }
+    const onSignUp = () => {
+        dispatch(createAccount());
+    }
 
     const onLoginTap = () => { navigation.replace('SignIn'); }
+
+    useEffect(() => {
+        if (createAccountReducer.data != null) {
+            if (createAccountReducer.data.message == "OK") {
+                navigation.replace('GetYourInfo');
+            }
+        }
+    }, [createAccountReducer]);
 
     return (
         <SafeAreaView style={{ backgroundColor: AppColors.WHITE, flex: 1 }}>
@@ -67,7 +86,11 @@ function CreateAccountScreen({ route }: CreateAccountProps): JSX.Element {
                     <View style={{ height: 16 }}></View>
                     <CommonTextInput placeholder='Password' onChangeText={((value) => onChangePasswordField(value))} />
                     <View style={{ marginVertical: 24 }}>
-                        <CommonButton title='Sign In' onPress={onSignIn} />
+                        {
+                            createAccountReducer.loading
+                                ? <ActivityIndicator size={'large'} color={AppColors.PRIMARY_COLOR} />
+                                : <CommonButton title='Sign Up' onPress={onSignUp} />
+                        }
                     </View>
                     <AlreadyHaveAccountLogin onPress={onLoginTap} />
                 </View>

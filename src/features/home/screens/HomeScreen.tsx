@@ -16,9 +16,9 @@ type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
 const HomeScreen = ({ navigation }: HomeProps) => {
 
-    const menuButtonTap = () => {
-        LocalStorage.DeleteData(StorageDataTypes.TOKEN);
-        navigation.replace('SignIn');
+    const menuButtonTap = async () => {
+        navigation.replace('SignIn', { 'fromHome': true });
+        await LocalStorage.DeleteData(StorageDataTypes.TOKEN);
     }
 
     return (

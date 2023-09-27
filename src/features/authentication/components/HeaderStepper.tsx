@@ -2,13 +2,29 @@ import { Image, ImageSourcePropType, StyleSheet, Text, TouchableOpacity, View } 
 import { User } from "../../../../assets/images";
 import AppColors from "../../../constants/AppColors";
 import FontFamily from "../../../constants/FontFamily";
+import { useState } from "react";
+import LocalStorage from "../../../data/local_storage/LocalStorage";
+import StorageDataTypes from "../../../constants/StorageDataTypes";
 
 function HeaderStepper(props: { title: string, step: number, textSuffixImage?: ImageSourcePropType, skipButton?: boolean, skipBtnTap?: (() => void) }): JSX.Element {
+
+    const [img, setImage] = useState('');
+
+    LocalStorage.GetData(StorageDataTypes.PROFILE_IMAGE).then((image) => {
+        if ((image != null) && (image.length != 0)) {
+            setImage(image);
+        }
+    })
+
     return (
         <View style={styles.container}>
-            <View style={styles.icon}>
-                <Image style={styles.image} source={User} />
-            </View>
+            {
+                (img.length == 0)
+                    ? <View style={styles.icon}>
+                        <Image style={styles.image} source={User} />
+                    </View>
+                    : <Image style={styles.networkImage} source={{ uri: img }} />
+            }
             <View style={{ width: 8 }}></View>
             <View>
                 <View style={styles.titleRow}>
@@ -56,6 +72,11 @@ const styles = StyleSheet.create({
     image: {
         height: 20,
         width: 20,
+    },
+    networkImage: {
+        height: 40,
+        width: 40,
+        borderRadius: 20,
     },
     titleRow: {
         flex: 1,

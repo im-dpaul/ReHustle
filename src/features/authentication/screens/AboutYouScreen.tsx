@@ -16,12 +16,20 @@ import SocialProfilesList from '../components/SocialProfilesList';
 import AddCustomLinkList from '../components/AddCustomLinkList';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../App';
+import { addName } from '../redux/aboutYouSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 type AboutYouProps = NativeStackScreenProps<RootStackParamList, 'AboutYou'>;
 
 function AboutYouScreen({ navigation }: AboutYouProps): JSX.Element {
+    const aboutYouReducer = useSelector((state: any) => state.aboutYou);
+    const dispatch = useDispatch();
 
-    const onChangeNameField = (value: string) => { }
+    // console.log(aboutYouReducer);
+
+    const onChangeNameField = (name: string) => {
+        dispatch(addName(name));
+    }
 
     const onContinueTap = () => { }
 

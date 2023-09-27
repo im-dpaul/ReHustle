@@ -1,6 +1,10 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
 
 const initialState = {
+    name: '',
+    data: null,
+    loading: false,
+    error: null,
     socialProfiles: [],
     socialProfileIDs: [],
     customLinks: [{
@@ -14,6 +18,9 @@ export const aboutYouSlice = createSlice({
     name: 'aboutYou',
     initialState: initialState,
     reducers: {
+        addName: (state, action) => {
+            state.name = action.payload;
+        },
         addSocialProfile: (state, action) => {
             const profile = {
                 id: nanoid(),
@@ -40,6 +47,6 @@ export const aboutYouSlice = createSlice({
     }
 });
 
-export const { addSocialProfile, removeSocialProfile, addCustomLink, removeCustomLink } = aboutYouSlice.actions;
+export const { addName, addSocialProfile, removeSocialProfile, addCustomLink, removeCustomLink } = aboutYouSlice.actions;
 
 export default aboutYouSlice.reducer;

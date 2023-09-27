@@ -20,23 +20,26 @@ import AppColors from '../../../constants/AppColors';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../App';
 import { useSelector, useDispatch } from 'react-redux';
-import { signIn, setEmailAddress, setPassword } from '../redux/signInSlice';
+import { signIn, setEmailAddress, setPassword, setRememberMe, clearData } from '../redux/signInSlice';
 import { AppDispatch } from '../../../app/store';
-import LocalStorage from '../../../data/local_storage/LocalStorage';
-import StorageDataTypes from '../../../constants/StorageDataTypes';
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
 
-function SignInScreen({ navigation }: HomeProps): JSX.Element {
+function SignInScreen({ navigation, route }: HomeProps): JSX.Element {
+
+    let routeParams = route.params;
+    let fromHome: boolean;
+    if (routeParams != undefined) {
+        fromHome = routeParams.fromHome;
+    }
 
     const dispatch = useDispatch<AppDispatch>();
     const signInReducer = useSelector((state: any) => state.signIn);
 
-    console.log(signInReducer);
+    // console.log("Sign In store ", signInReducer);
 
-    const setRememberMe = (value: boolean) => {
-        const r = `${value}`;
-        LocalStorage.SetData(StorageDataTypes.REMEMBER_ME, r);
+    const changeRememberMe = (value: boolean) => {
+        dispatch(setRememberMe(value));
     }
 
     const onChangeEmailField = (email: string) => {
@@ -54,12 +57,35 @@ function SignInScreen({ navigation }: HomeProps): JSX.Element {
     }
 
     useEffect(() => {
+
         if (signInReducer.data != null) {
             if (signInReducer.data.message == "OK") {
-                navigation.replace('Home');
+                if (signInReducer.setupStage == '') {
+                    navigation.replace('SignIn');
+                }
+                else if (signInReducer.setupStage == '0') {
+                    navigation.replace('GetYourInfo');
+                }
+                else if (signInReducer.setupStage == '1') {
+                    navigation.replace('AboutYou');
+                }
+                else if (signInReducer.setupStage == '2') {
+                    navigation.replace('AddServices');
+                }
+                else if (signInReducer.setupStage == '3') {
+                    navigation.replace('FinishAccountCreation');
+                }
+                else if (signInReducer.setupStage == '4') {
+                    navigation.replace('Home');
+                }
+                else {
+                    navigation.replace('SignIn');
+                }
+                dispatch(clearData(null));
             }
         }
-    }, [signInReducer]);
+
+    }, [signInReducer.setupStage]);
 
     const onRegisterTap = () => { navigation.replace('CreateAccount') }
 
@@ -84,7 +110,7 @@ function SignInScreen({ navigation }: HomeProps): JSX.Element {
                     <View style={{ height: 18 }}></View>
 
                     <View style={styles.checkBoxRow}>
-                        <RememberMe setRememberMe={((value) => setRememberMe(value))} />
+                        <RememberMe setRememberMe={((value) => changeRememberMe(value))} />
                         <TextButton text='Forgot Password?' onPress={onForgetPasswordTap} />
                     </View>
 

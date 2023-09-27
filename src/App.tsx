@@ -8,11 +8,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './features/home/screens/HomeScreen';
 import SplashScreen from './features/splash/screens/SplashScreen';
+import GetYourInfoScreen from './features/authentication/screens/GetYourInfoScreen';
 
 export type RootStackParamList = {
   Splash: undefined;
-  SignIn: undefined;
+  SignIn: any;
   CreateAccount: undefined;
+  GetYourInfo: undefined;
   AboutYou: undefined;
   AddServices: undefined;
   FinishAccountCreation: undefined;
@@ -36,6 +38,10 @@ function App(): JSX.Element {
         <Stack.Screen
           name='CreateAccount'
           component={CreateAccountScreen}
+        />
+        <Stack.Screen
+          name='GetYourInfo'
+          component={GetYourInfoScreen}
         />
         <Stack.Screen
           name='AboutYou'

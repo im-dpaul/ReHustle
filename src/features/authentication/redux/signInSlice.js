@@ -9,6 +9,8 @@ const initialState = {
     error: null,
     emailAddress: "",
     password: "",
+    rememberMe: false,
+    setupStage: null,
 };
 
 export const signIn = createAsyncThunk('api/signIn', async (arg, thunkAPI) => {
@@ -20,26 +22,25 @@ export const signIn = createAsyncThunk('api/signIn', async (arg, thunkAPI) => {
         "email": emailAddress,
         "password": password
     };
-    console.log("abcde", authCredentials);
     let data = null;
     // try {
     const response = await postMethod('/auth/signin', authCredentials);
     data = response.data;
 
-    const save = await LocalStorage.GetData(StorageDataTypes.REMEMBER_ME);
-
-    if (save == 'true') {
+    if (state.rememberMe == true) {
         let name = data.result.name ?? "";
         let token = data.result.token ?? "";
         let email = data.result.email ?? "";
         let userName = data.result.userName ?? "";
         let profileImage = data.result.profileImage ?? "";
+        let id = data.result._id ?? "";
 
         await LocalStorage.SetData(StorageDataTypes.TOKEN, token);
         await LocalStorage.SetData(StorageDataTypes.EMAIL, email);
         await LocalStorage.SetData(StorageDataTypes.NAME, name);
         await LocalStorage.SetData(StorageDataTypes.USER_NAME, userName);
         await LocalStorage.SetData(StorageDataTypes.PROFILE_IMAGE, profileImage);
+        await LocalStorage.SetData(StorageDataTypes.ID, id);
     }
     // } catch (e) {
     //     console.log('Error -> ', e);
@@ -57,6 +58,12 @@ export const signInSlice = createSlice({
         setPassword: (state, action) => {
             state.password = action.payload;
         },
+        setRememberMe: (state, action) => {
+            state.rememberMe = action.payload;
+        },
+        clearData: (state, action) => {
+            state.data = action.payload;
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(signIn.pending, (state) => {
@@ -64,15 +71,17 @@ export const signInSlice = createSlice({
         });
         builder.addCase(signIn.fulfilled, (state, action) => {
             state.loading = false;
+            state.setupStage = `${action.payload.result.setupStage}`;
             state.data = action.payload;
         });
         builder.addCase(signIn.rejected, (state, action) => {
             state.loading = false;
             state.error = action.error.message;
+            state.setupStage = '';
         });
     },
 });
 
-export const { setEmailAddress, setPassword } = signInSlice.actions;
+export const { setEmailAddress, setPassword, setRememberMe, clearData } = signInSlice.actions;
 
 export default signInSlice.reducer;
