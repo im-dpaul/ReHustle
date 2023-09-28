@@ -4,16 +4,26 @@ import RemoveButton from "../../../components/buttons/RemoveButton";
 import { FacebookIcon, InstagramIcon, TwitterIcon } from "../../../../assets/images";
 import SocialMediaType from "../../../data/constants/SocialMediaType";
 import { useSelector, useDispatch } from 'react-redux';
-import { removeSocialProfile } from '../redux/aboutYouSlice';
+import { removeSocialProfile, updateSocialProfile } from '../redux/aboutYouSlice';
 
 function SocialProfilesList(): JSX.Element {
     const dispatch = useDispatch();
     const aboutYou = useSelector((state: any) => state.aboutYou);
 
-    const onSelection = (socialMedia: { ID: number; NAME: string; }) => {
+    const onSelection = (socialMedia: { ID: number; title: string; link: string; }) => {
         if (aboutYou.socialProfileIDs.includes(socialMedia.ID)) {
             dispatch(removeSocialProfile(socialMedia));
         }
+    }
+
+    const onChangeUrl = (value: string, socialMedia: { ID: number; title: string; link: string; }) => {
+        let socialUrl = {};
+        socialUrl = {
+            ID: socialMedia.ID,
+            title: socialMedia.title,
+            link: value
+        };
+        dispatch(updateSocialProfile(socialUrl));
     }
 
     const isActive = (id: number) => {
@@ -33,7 +43,7 @@ function SocialProfilesList(): JSX.Element {
                     ? <View>
                         <View style={styles.socialLinkAndRemove}>
                             <CustomTextInput
-                                onChangeText={(val) => { }}
+                                onChangeText={(fbUrl) => onChangeUrl(fbUrl, SocialMediaType[0])}
                                 placeholder='https://www.facebook.com/'
                                 initialValue='https://www.facebook.com/'
                                 prefixIcon={FacebookIcon}
@@ -50,7 +60,7 @@ function SocialProfilesList(): JSX.Element {
                     ? <View>
                         <View style={styles.socialLinkAndRemove}>
                             <CustomTextInput
-                                onChangeText={(val) => { }}
+                                onChangeText={(insta) => onChangeUrl(insta, SocialMediaType[1])}
                                 placeholder='https://www.instagram.com/'
                                 initialValue='https://www.instagram.com/'
                                 prefixIcon={InstagramIcon}
@@ -67,7 +77,7 @@ function SocialProfilesList(): JSX.Element {
                     ? <View>
                         <View style={styles.socialLinkAndRemove}>
                             <CustomTextInput
-                                onChangeText={(val) => { }}
+                                onChangeText={(twitter) => onChangeUrl(twitter, SocialMediaType[2])}
                                 placeholder='https://twitter.com/'
                                 initialValue='https://twitter.com/'
                                 prefixIcon={TwitterIcon}
@@ -84,7 +94,7 @@ function SocialProfilesList(): JSX.Element {
                     ? <View>
                         <View style={styles.socialLinkAndRemove}>
                             <CustomTextInput
-                                onChangeText={(val) => { }}
+                                onChangeText={(linkedin) => onChangeUrl(linkedin, SocialMediaType[3])}
                                 placeholder='https://www.linkedin.com/'
                                 initialValue='https://www.linkedin.com/'
                                 prefixIcon={TwitterIcon}
@@ -101,7 +111,7 @@ function SocialProfilesList(): JSX.Element {
                     ? <View>
                         <View style={styles.socialLinkAndRemove}>
                             <CustomTextInput
-                                onChangeText={(val) => { }}
+                                onChangeText={(youtube) => onChangeUrl(youtube, SocialMediaType[4])}
                                 placeholder='https://www.youtube.com/'
                                 initialValue='https://www.youtube.com/'
                                 prefixIcon={TwitterIcon}

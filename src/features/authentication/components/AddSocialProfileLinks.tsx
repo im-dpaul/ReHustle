@@ -10,7 +10,7 @@ function AddSocialProfile(): JSX.Element {
     const dispatch = useDispatch();
     const aboutYou = useSelector((state: any) => state.aboutYou);
 
-    const onSelection = (socialMedia: { ID: number; NAME: string; }) => {
+    const onSelection = (socialMedia: { ID: number; title: string; link: string }) => {
         if (aboutYou.socialProfileIDs.includes(socialMedia.ID)) {
             dispatch(removeSocialProfile(socialMedia));
         }
@@ -38,7 +38,7 @@ function AddSocialProfile(): JSX.Element {
                     SocialMediaType.map((socialMedia) =>
                         <CommonChip
                             key={socialMedia.ID}
-                            name={socialMedia.NAME}
+                            name={socialMedia.title}
                             id={socialMedia.ID}
                             active={isActive(socialMedia.ID)}
                             onPress={() => onSelection(socialMedia)}

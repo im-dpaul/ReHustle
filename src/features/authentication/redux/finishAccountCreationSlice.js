@@ -1,21 +1,19 @@
-import { createSlice, nanoid, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { authenticatedPutMethod } from "../../../core/services/NetworkServices";
 import LocalStorage from "../../../data/local_storage/LocalStorage";
 import StorageDataTypes from "../../../constants/StorageDataTypes";
 
 const initialState = {
-    services: [],
-    servicesId: [],
     data: null,
     error: null,
     loading: false,
 }
 
-export const skipServices = createAsyncThunk('api/skipServices', async (arg, thunkAPI) => {
-    const state = thunkAPI.getState().addServices;
+export const finishCreation = createAsyncThunk('api/finishCreation', async (arg, thunkAPI) => {
+    const state = thunkAPI.getState().finishAccountCreation;
 
     let values = {
-        "setupStage": 3,
+        "setupStage": 4,
     };
 
     const url = `/user/update`
@@ -44,38 +42,32 @@ export const skipServices = createAsyncThunk('api/skipServices', async (arg, thu
     return data;
 });
 
-export const addServicesSlice = createSlice({
-    name: 'addServices',
+export const finishAccountCreationSlice = createSlice({
+    name: 'finishAccountCreation',
     initialState,
     reducers: {
-        addService: (state, action) => {
-            const service = {
-                id: nanoid(),
-                data: action.payload
-            };
-            state.services.push(service);
-            state.servicesId.push(action.payload.ID);
-        },
-        removeService: (state, action) => {
-            state.services = state.services.filter((service) => service.data.ID !== action.payload.ID)
-            state.servicesId = state.servicesId.filter((id) => id !== action.payload.ID)
+        clearData: (state, action) => {
+            state.data = null;
+            state.error = null;
         }
     },
     extraReducers: (builder) => {
-        builder.addCase(skipServices.pending, (state) => {
+        builder.addCase(finishCreation.pending, (state) => {
             state.loading = true;
         });
-        builder.addCase(skipServices.fulfilled, (state, action) => {
+        builder.addCase(finishCreation.fulfilled, (state, action) => {
             state.data = action.payload.result;
+            state.error = null;
             state.loading = false;
         });
-        builder.addCase(skipServices.rejected, (state, action) => {
+        builder.addCase(finishCreation.rejected, (state, action) => {
             state.error = action.error.message;
+            state.data = null;
             state.loading = false;
         });
     }
 });
 
-export const { addService, removeService } = addServicesSlice.actions;
+export const { clearData } = finishAccountCreationSlice.actions;
 
-export default addServicesSlice.reducer;
+export default finishAccountCreationSlice.reducer;

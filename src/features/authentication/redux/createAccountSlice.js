@@ -58,6 +58,9 @@ export const createAccountSlice = createSlice({
         },
         setUserName: (state, action) => {
             state.userName = action.payload;
+        },
+        clearData: (state, action) => {
+            state.data = action.payload;
         }
     },
     extraReducers: (builder) => {
@@ -75,6 +78,6 @@ export const createAccountSlice = createSlice({
     },
 })
 
-export const { setEmailAddress, setPassword, setUserName } = createAccountSlice.actions;
+export const { setEmailAddress, setPassword, setUserName, clearData } = createAccountSlice.actions;
 
 export default createAccountSlice.reducer;

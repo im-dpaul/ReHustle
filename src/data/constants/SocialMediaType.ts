@@ -1,23 +1,28 @@
 const SocialMediaType = [
     {
         ID: 1,
-        NAME: 'Facebook',
+        title: 'Facebook',
+        link: ''
     },
     {
         ID: 2,
-        NAME: 'Instagram'
+        title: 'Instagram',
+        link: ''
     },
     {
         ID: 3,
-        NAME: 'Twitter'
+        title: 'Twitter',
+        link: ''
     },
     {
         ID: 4,
-        NAME: 'LinkedIn'
+        title: 'LinkedIn',
+        link: ''
     },
     {
         ID: 5,
-        NAME: 'Youtube'
+        title: 'Youtube',
+        link: ''
     },
 ];
 

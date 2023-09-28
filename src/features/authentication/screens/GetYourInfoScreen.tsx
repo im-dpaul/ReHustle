@@ -19,9 +19,7 @@ import CustomTextInput from '../../../components/textInput/CustomTextInput';
 import { TwitterIcon } from '../../../../assets/images';
 import FontFamily from '../../../constants/FontFamily';
 import { AppDispatch } from '../../../app/store';
-import { addTwitterProfile, getTwitterProfile, saveProfile } from '../redux/getYourInfoSlice';
-import LocalStorage from '../../../data/local_storage/LocalStorage';
-import StorageDataTypes from '../../../constants/StorageDataTypes';
+import { addTwitterProfile, getTwitterProfile, saveProfile, skipProfile } from '../redux/getYourInfoSlice';
 
 type GetYourInfoProps = NativeStackScreenProps<RootStackParamList, 'GetYourInfo'>;
 
@@ -43,8 +41,8 @@ function GetYouInfoScreen({ navigation }: GetYourInfoProps): JSX.Element {
     }
 
     const skipBtnTap = async () => {
-        await LocalStorage.SetData(StorageDataTypes.PROFILE_IMAGE, "");
-        navigation.push('AboutYou');
+        dispatch(skipProfile());
+        navigation.replace('AboutYou');
     }
 
     useEffect(() => {

@@ -80,6 +80,39 @@ export const saveProfile = createAsyncThunk('api/saveProfile', async (arg, thunk
     return data;
 });
 
+export const skipProfile = createAsyncThunk('api/skipProfile', async (arg, thunkAPI) => {
+    const state = thunkAPI.getState().getYourInfo;
+
+    let values = {
+        "setupStage": 1,
+    };
+
+    const url = `/user/update`
+    let data = null;
+    // try {
+    const response = await authenticatedPutMethod(url, values);
+    data = response.data;
+
+    let name = data.result.name ?? "";
+    let email = data.result.email ?? "";
+    let userName = data.result.userName ?? "";
+    let profileImage = data.result.profileImage ?? "";
+    let id = data.result._id ?? "";
+    let setupStage = `${data.result.setupStage}` ?? "";
+
+    await LocalStorage.SetData(StorageDataTypes.EMAIL, email);
+    await LocalStorage.SetData(StorageDataTypes.NAME, name);
+    await LocalStorage.SetData(StorageDataTypes.USER_NAME, userName);
+    await LocalStorage.SetData(StorageDataTypes.PROFILE_IMAGE, profileImage);
+    await LocalStorage.SetData(StorageDataTypes.ID, id);
+    await LocalStorage.SetData(StorageDataTypes.SETUP_STAGE, setupStage);
+
+    // } catch (e) {
+    //     console.log('Error -> ', e);
+    // }
+    return data;
+});
+
 export const getYourInfoSlice = createSlice({
     name: 'getYourInfo',
     initialState: initialState,
@@ -111,6 +144,17 @@ export const getYourInfoSlice = createSlice({
             state.loading = false;
         });
         builder.addCase(saveProfile.rejected, (state, action) => {
+            state.error = action.error.message;
+            state.loading = false;
+        });
+        builder.addCase(skipProfile.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(skipProfile.fulfilled, (state, action) => {
+            state.data = action.payload.result;
+            state.loading = false;
+        });
+        builder.addCase(skipProfile.rejected, (state, action) => {
             state.error = action.error.message;
             state.loading = false;
         });

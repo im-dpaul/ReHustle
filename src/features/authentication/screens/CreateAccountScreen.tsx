@@ -22,7 +22,7 @@ import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../../../App';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../../app/store';
-import { createAccount, setEmailAddress, setPassword, setUserName } from "../redux/createAccountSlice";
+import { createAccount, setEmailAddress, setPassword, setUserName, clearData } from "../redux/createAccountSlice";
 
 type CreateAccountProps = NativeStackScreenProps<RootStackParamList, 'CreateAccount'>;
 
@@ -33,7 +33,7 @@ function CreateAccountScreen({ route }: CreateAccountProps): JSX.Element {
     const createAccountReducer = useSelector((state: any) => state.createAccount);
     const dispatch = useDispatch<AppDispatch>();
 
-    console.log("Create Account store", createAccountReducer);
+    // console.log("Create Account store", createAccountReducer);
 
     const onChangeEmailField = (email: string) => {
         dispatch(setEmailAddress(email));
@@ -59,6 +59,7 @@ function CreateAccountScreen({ route }: CreateAccountProps): JSX.Element {
         if (createAccountReducer.data != null) {
             if (createAccountReducer.data.message == "OK") {
                 navigation.replace('GetYourInfo');
+                dispatch(clearData(null));
             }
         }
     }, [createAccountReducer]);

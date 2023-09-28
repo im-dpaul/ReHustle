@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
+    ActivityIndicator,
     ScrollView,
     StyleSheet,
     View,
@@ -16,26 +17,38 @@ import SocialProfilesList from '../components/SocialProfilesList';
 import AddCustomLinkList from '../components/AddCustomLinkList';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../App';
-import { addName } from '../redux/aboutYouSlice';
+import { addName, skipAboutYou, addProfileLinks } from '../redux/aboutYouSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '../../../app/store';
 
 type AboutYouProps = NativeStackScreenProps<RootStackParamList, 'AboutYou'>;
 
 function AboutYouScreen({ navigation }: AboutYouProps): JSX.Element {
     const aboutYouReducer = useSelector((state: any) => state.aboutYou);
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
 
-    // console.log(aboutYouReducer);
+    console.log('About You store', aboutYouReducer);
 
     const onChangeNameField = (name: string) => {
         dispatch(addName(name));
     }
 
-    const onContinueTap = () => { }
+    const onContinueTap = () => {
+        dispatch(addProfileLinks());
+    }
 
     const skipBtnTap = () => {
-        navigation.push('AddServices');
+        dispatch(skipAboutYou());
+        navigation.replace('AddServices');
     }
+
+    useEffect(() => {
+        if (aboutYouReducer.data != null) {
+            if (aboutYouReducer.data.message == "OK") {
+                navigation.replace('AboutYou');
+            }
+        }
+    }, [aboutYouReducer.data])
 
     return (
         <View style={{ flex: 1, backgroundColor: AppColors.WHITE }}>
@@ -61,7 +74,12 @@ function AboutYouScreen({ navigation }: AboutYouProps): JSX.Element {
                 <View>
                     <CommonDivider />
                     <View style={{ margin: 24 }}>
-                        <CommonButton title='Continue' onPress={onContinueTap} />
+                        {
+                            aboutYouReducer.loading
+                                ? <ActivityIndicator size={'large'} color={AppColors.PRIMARY_COLOR} />
+                                : <CommonButton title='Continue' onPress={onContinueTap} />
+                        }
+
                     </View>
                 </View>
             </View>

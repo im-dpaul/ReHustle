@@ -19,6 +19,11 @@ const HomeScreen = ({ navigation }: HomeProps) => {
     const menuButtonTap = async () => {
         navigation.replace('SignIn', { 'fromHome': true });
         await LocalStorage.DeleteData(StorageDataTypes.TOKEN);
+        await LocalStorage.DeleteData(StorageDataTypes.ID);
+        await LocalStorage.DeleteData(StorageDataTypes.NAME);
+        await LocalStorage.DeleteData(StorageDataTypes.EMAIL);
+        await LocalStorage.DeleteData(StorageDataTypes.PROFILE_IMAGE);
+        await LocalStorage.DeleteData(StorageDataTypes.SETUP_STAGE);
     }
 
     return (

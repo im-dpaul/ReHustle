@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { addService, removeService } from "../../authentication/redux/addServicesSlice";
+import { addService, removeService, skipServices } from "../../authentication/redux/addServicesSlice";
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from "../../../App";
 import CommonStatusBar from "../../../components/layouts/CommonStatusBar";
@@ -12,6 +12,8 @@ import ServiceType from "../../../data/constants/ServiceType";
 import CommonChip from "../../../components/chip/CommonChip";
 import AddServicesManually from "../components/AddServicesManually";
 import CommonButton from "../../../components/buttons/CommonButton";
+import { AppDispatch } from "../../../app/store";
+import { useEffect } from "react";
 
 type AddServicesProps = NativeStackScreenProps<RootStackParamList, 'AddServices'>;
 
@@ -19,12 +21,15 @@ function AddServicesScreen({ navigation }: AddServicesProps): JSX.Element {
 
     const servicesReducer = useSelector((state: any) => state.addServices);
 
-    const dispatch = useDispatch();
+    // console.log('Service store', servicesReducer);
+
+    const dispatch = useDispatch<AppDispatch>();
 
     const onContinueTap = () => { }
 
     const skipBtnTap = () => {
-        navigation.push('FinishAccountCreation');
+        dispatch(skipServices());
+        navigation.replace('FinishAccountCreation');
     }
 
     const onAddService = () => { }
@@ -47,6 +52,14 @@ function AddServicesScreen({ navigation }: AddServicesProps): JSX.Element {
         });
         return value;
     }
+
+    useEffect(() => {
+        if (servicesReducer.data != null) {
+            if (servicesReducer.data.message == "OK") {
+                navigation.replace('FinishAccountCreation');
+            }
+        }
+    }, [servicesReducer.data])
 
     return (
         <View style={{ flex: 1, backgroundColor: AppColors.WHITE }}>
