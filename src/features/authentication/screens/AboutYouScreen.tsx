@@ -17,7 +17,7 @@ import SocialProfilesList from '../components/SocialProfilesList';
 import AddCustomLinkList from '../components/AddCustomLinkList';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../App';
-import { addName, skipAboutYou, addProfileLinks } from '../redux/aboutYouSlice';
+import { addName, skipAboutYou, addProfileLinks, clearData } from '../redux/aboutYouSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../../app/store';
 
@@ -45,7 +45,8 @@ function AboutYouScreen({ navigation }: AboutYouProps): JSX.Element {
     useEffect(() => {
         if (aboutYouReducer.data != null) {
             if (aboutYouReducer.data.message == "OK") {
-                navigation.replace('AboutYou');
+                navigation.replace('AddServices');
+                dispatch(clearData(null));
             }
         }
     }, [aboutYouReducer.data])

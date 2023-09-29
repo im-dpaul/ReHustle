@@ -1,5 +1,5 @@
 import { createSlice, nanoid, createAsyncThunk } from "@reduxjs/toolkit";
-import { authenticatedPutMethod } from "../../../core/services/NetworkServices";
+import { authenticatedPostMethod, authenticatedPutMethod } from "../../../core/services/NetworkServices";
 import LocalStorage from "../../../data/local_storage/LocalStorage";
 import StorageDataTypes from "../../../constants/StorageDataTypes";
 
@@ -43,6 +43,28 @@ export const skipServices = createAsyncThunk('api/skipServices', async (arg, thu
     // }
     return data;
 });
+
+export const addNewServices = createAsyncThunk(
+    'api/addNewServices',
+    async (arg, thunkAPI) => {
+        const state = thunkAPI.getState().addServices;
+
+        const { extraArg } = thunkAPI.extra;
+
+        let values = {
+        };
+
+        const url = `/p/product`
+        let data = null;
+        // try {
+        const response = await authenticatedPostMethod(url, values);
+        data = response.data;
+
+        // } catch (e) {
+        //     console.log('Error -> ', e);
+        // }
+        return data;
+    });
 
 export const addServicesSlice = createSlice({
     name: 'addServices',

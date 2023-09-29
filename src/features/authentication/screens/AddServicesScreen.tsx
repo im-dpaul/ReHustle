@@ -1,6 +1,6 @@
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { addService, removeService, skipServices } from "../../authentication/redux/addServicesSlice";
+import { addService, removeService, skipServices, addNewServices } from "../../authentication/redux/addServicesSlice";
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from "../../../App";
 import CommonStatusBar from "../../../components/layouts/CommonStatusBar";
@@ -14,6 +14,7 @@ import AddServicesManually from "../components/AddServicesManually";
 import CommonButton from "../../../components/buttons/CommonButton";
 import { AppDispatch } from "../../../app/store";
 import { useEffect } from "react";
+import ServicesList from "../components/ServicesList";
 
 type AddServicesProps = NativeStackScreenProps<RootStackParamList, 'AddServices'>;
 
@@ -21,7 +22,7 @@ function AddServicesScreen({ navigation }: AddServicesProps): JSX.Element {
 
     const servicesReducer = useSelector((state: any) => state.addServices);
 
-    // console.log('Service store', servicesReducer);
+    console.log('Service store', servicesReducer);
 
     const dispatch = useDispatch<AppDispatch>();
 
@@ -40,6 +41,7 @@ function AddServicesScreen({ navigation }: AddServicesProps): JSX.Element {
         }
         else {
             dispatch(addService(service));
+            // dispatch(addNewServices());
         }
     }
 
@@ -75,9 +77,7 @@ function AddServicesScreen({ navigation }: AddServicesProps): JSX.Element {
                         <View style={{ height: 24 }}></View>
                         <View style={styles.servicesListRow}>
                             {
-
                                 ServiceType.ServiceType.map((service) =>
-
                                     <CommonChip
                                         key={service.ID}
                                         name={service.ROLE}
@@ -93,12 +93,19 @@ function AddServicesScreen({ navigation }: AddServicesProps): JSX.Element {
                         <View style={{ width: '100%' }}>
                             <CommonButton title='+ Add Service' height={40} active={false} onPress={onAddService} />
                         </View>
+                        <View style={{ height: 24 }}></View>
+                        <ServicesList />
+                        <View style={{ height: 24 }}></View>
                     </View>
                 </ScrollView>
                 <View>
                     <CommonDivider />
                     <View style={{ margin: 24 }}>
-                        <CommonButton title='Continue' onPress={onContinueTap} />
+                        {
+                            servicesReducer.loading
+                                ? <ActivityIndicator size={'large'} color={AppColors.PRIMARY_COLOR} />
+                                : <CommonButton title='Continue' onPress={onContinueTap} />
+                        }
                     </View>
                 </View>
             </View>

@@ -27,21 +27,21 @@ export const signIn = createAsyncThunk('api/signIn', async (arg, thunkAPI) => {
     const response = await postMethod('/auth/signin', authCredentials);
     data = response.data;
 
-    if (state.rememberMe == true) {
-        let name = data.result.name ?? "";
-        let token = data.result.token ?? "";
-        let email = data.result.email ?? "";
-        let userName = data.result.userName ?? "";
-        let profileImage = data.result.profileImage ?? "";
-        let id = data.result._id ?? "";
+    // if (state.rememberMe == true) {
+    let name = data.result.name ?? "";
+    let token = data.result.token ?? "";
+    let email = data.result.email ?? "";
+    let userName = data.result.userName ?? "";
+    let profileImage = data.result.profileImage ?? "";
+    let id = data.result._id ?? "";
 
-        await LocalStorage.SetData(StorageDataTypes.TOKEN, token);
-        await LocalStorage.SetData(StorageDataTypes.EMAIL, email);
-        await LocalStorage.SetData(StorageDataTypes.NAME, name);
-        await LocalStorage.SetData(StorageDataTypes.USER_NAME, userName);
-        await LocalStorage.SetData(StorageDataTypes.PROFILE_IMAGE, profileImage);
-        await LocalStorage.SetData(StorageDataTypes.ID, id);
-    }
+    await LocalStorage.SetData(StorageDataTypes.TOKEN, token);
+    await LocalStorage.SetData(StorageDataTypes.EMAIL, email);
+    await LocalStorage.SetData(StorageDataTypes.NAME, name);
+    await LocalStorage.SetData(StorageDataTypes.USER_NAME, userName);
+    await LocalStorage.SetData(StorageDataTypes.PROFILE_IMAGE, profileImage);
+    await LocalStorage.SetData(StorageDataTypes.ID, id);
+    // }
     // } catch (e) {
     //     console.log('Error -> ', e);
     // }
@@ -63,6 +63,7 @@ export const signInSlice = createSlice({
         },
         clearData: (state, action) => {
             state.data = action.payload;
+            state.setupStage = null;
         }
     },
     extraReducers: (builder) => {

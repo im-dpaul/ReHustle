@@ -40,23 +40,39 @@ export const saveProfile = createAsyncThunk('api/saveProfile', async (arg, thunk
     const token = await LocalStorage.GetData(StorageDataTypes.TOKEN);
     const id = await LocalStorage.GetData(StorageDataTypes.ID);
 
-    let values = {
-        "appearance": `{\"profileImage\":\"${twitterApiData.profileImage}\"}`,
-        "description": twitterApiData.description,
-        "email": emailID,
-        "emailVerified": false,
-        "location": twitterApiData.location,
-        "name": twitterApiData.name,
-        "profileImage": twitterApiData.profileImage,
-        "profileType": "normal",
-        "profileUrls": [],
-        "setupStage": 1,
-        "socialLinks": [],
-        // "token": token,
-        "url": twitterApiData.url,
-        "userName": twitterApiData.userName,
-        // "_id": id,
-    };
+    let values;
+
+    if (twitterApiData != null) {
+        values = {
+            "appearance": `{\"profileImage\":\"${twitterApiData.profileImage}\"}`,
+            "description": twitterApiData.description,
+            "email": emailID,
+            "emailVerified": false,
+            "location": twitterApiData.location,
+            "name": twitterApiData.name,
+            "profileImage": twitterApiData.profileImage,
+            "profileType": "normal",
+            "profileUrls": [],
+            "setupStage": 1,
+            "socialLinks": [],
+            // "token": token,
+            "url": twitterApiData.url,
+            "userName": twitterApiData.userName,
+            // "_id": id,
+        };
+    }
+    else {
+        values = {
+            "email": emailID,
+            "emailVerified": false,
+            "profileType": "normal",
+            "profileUrls": [],
+            "setupStage": 1,
+            "socialLinks": [],
+            // "token": token,
+            // "_id": id,
+        };
+    }
 
     const url = `/user/update`
     let data = null;

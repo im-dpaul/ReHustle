@@ -25,7 +25,9 @@ export const addProfileLinks = createAsyncThunk('api/addProfileLinks', async (ar
     }
     else {
         const val = await LocalStorage.GetData(StorageDataTypes.NAME);
-        updateName = val;
+        if (val != null) {
+            updateName = val;
+        }
     }
 
     let localProfiles = [];
@@ -39,27 +41,28 @@ export const addProfileLinks = createAsyncThunk('api/addProfileLinks', async (ar
         });
     }
 
-    console.log("localProfiles", localProfiles);
-
     let localLinks = [];
     if (state.customLinks.length) {
         localLinks = state.customLinks.map((profile) => {
-            let localLink = {
-                title: profile.title,
-                url: profile.url
-            };
-            return localLink;
+            if (profile.title != '' && profile.url != '') {
+                let localLink = {
+                    title: profile.title,
+                    url: profile.url
+                };
+                return localLink;
+            }
         });
+        localLinks = localLinks.filter((lcoalLink) => lcoalLink != undefined)
     }
-
-    console.log("localLinks", localLinks);
 
     let values = {
         "setupStage": 2,
         "name": updateName,
-        "profileUrls": state.customLinks,
-        "socialLinks": state.socialProfiles,
+        "profileUrls": localLinks,
+        "socialLinks": localProfiles,
     };
+
+    console.log(values);
 
     const url = `/user/update`
     let data = null;
@@ -169,6 +172,10 @@ export const aboutYouSlice = createSlice({
             });
             state.customLinks = links;
         },
+        clearData: (state, action) => {
+            state.data = action.payload;
+            state.name = '';
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(addProfileLinks.pending, (state) => {
@@ -187,6 +194,6 @@ export const aboutYouSlice = createSlice({
     }
 });
 
-export const { addName, addSocialProfile, removeSocialProfile, updateSocialProfile, addCustomLink, removeCustomLink, updateCustomLink } = aboutYouSlice.actions;
+export const { addName, addSocialProfile, removeSocialProfile, updateSocialProfile, addCustomLink, removeCustomLink, updateCustomLink, clearData } = aboutYouSlice.actions;
 
 export default aboutYouSlice.reducer;

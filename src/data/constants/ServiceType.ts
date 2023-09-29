@@ -1,34 +1,50 @@
 const ServiceType = [
     {
         ID: 1,
-        ROLE: 'Marketer',
+        ROLE: 'Artist',
     },
     {
         ID: 2,
-        ROLE: 'Coach',
+        ROLE: 'Musician',
     },
     {
         ID: 3,
-        ROLE: 'Influencer',
+        ROLE: 'Writer',
     },
     {
         ID: 4,
-        ROLE: 'Engineer',
+        ROLE: 'Podcaster',
     },
     {
         ID: 5,
-        ROLE: 'Designer',
+        ROLE: 'Developer',
     },
     {
         ID: 6,
-        ROLE: 'Nutritionist',
+        ROLE: 'Designer',
     },
     {
         ID: 7,
-        ROLE: 'Personal Trainer',
+        ROLE: 'Coach',
     },
     {
         ID: 8,
+        ROLE: 'Influencer',
+    },
+    {
+        ID: 9,
+        ROLE: 'Marketer',
+    },
+    {
+        ID: 10,
+        ROLE: 'Personal Trainer',
+    },
+    {
+        ID: 11,
+        ROLE: 'Teacher',
+    },
+    {
+        ID: 12,
         ROLE: 'Other',
     }
 ];
@@ -65,7 +81,23 @@ const ServicesObjects = {
     OTHER: {
         ID: 8,
         ROLE: 'Other',
-    }
+    },
+    ARTIST: {
+        ID: 1,
+        ROLE: 'Artist',
+    },
+    MUSICIAN: {
+        ID: 2,
+        ROLE: 'Musician',
+    },
+    WRITER: {
+        ID: 3,
+        ROLE: 'Writer',
+    },
+    PODCASTER: {
+        ID: 4,
+        ROLE: 'Podcaster',
+    },
 }
 
 export default { ServiceType, ServicesObjects };
