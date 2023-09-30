@@ -14,6 +14,12 @@ export const simpleAxios: AxiosInstance = axios.create({
     }
 });
 
+simpleAxios.interceptors.response.use((response) => {
+    return response
+}, (error) => {
+    return Promise.reject(error.response.data);
+})
+
 export const authenticatedAxios = async (): Promise<AxiosInstance> => {
     const token = await getAuthToken();
 
@@ -24,6 +30,12 @@ export const authenticatedAxios = async (): Promise<AxiosInstance> => {
             'Authorization': token,
         },
     });
+
+    authenticatedInstance.interceptors.response.use((response) => {
+        return response
+    }, (error) => {
+        return Promise.reject(error.response.data);
+    })
 
     return authenticatedInstance;
 };

@@ -23,29 +23,29 @@ export const signIn = createAsyncThunk('api/signIn', async (arg, thunkAPI) => {
         "password": password
     };
     let data = null;
-    // try {
-    const response = await postMethod('/auth/signin', authCredentials);
-    data = response.data;
+    try {
+        const response = await postMethod('/auth/signin', authCredentials);
+        data = response.data;
 
-    // if (state.rememberMe == true) {
-    let name = data.result.name ?? "";
-    let token = data.result.token ?? "";
-    let email = data.result.email ?? "";
-    let userName = data.result.userName ?? "";
-    let profileImage = data.result.profileImage ?? "";
-    let id = data.result._id ?? "";
+        // if (state.rememberMe == true) {
+        let name = data.result.name ?? "";
+        let token = data.result.token ?? "";
+        let email = data.result.email ?? "";
+        let userName = data.result.userName ?? "";
+        let profileImage = data.result.profileImage ?? "";
+        let id = data.result._id ?? "";
 
-    await LocalStorage.SetData(StorageDataTypes.TOKEN, token);
-    await LocalStorage.SetData(StorageDataTypes.EMAIL, email);
-    await LocalStorage.SetData(StorageDataTypes.NAME, name);
-    await LocalStorage.SetData(StorageDataTypes.USER_NAME, userName);
-    await LocalStorage.SetData(StorageDataTypes.PROFILE_IMAGE, profileImage);
-    await LocalStorage.SetData(StorageDataTypes.ID, id);
-    // }
-    // } catch (e) {
-    //     console.log('Error -> ', e);
-    // }
-    return data;
+        await LocalStorage.SetData(StorageDataTypes.TOKEN, token);
+        await LocalStorage.SetData(StorageDataTypes.EMAIL, email);
+        await LocalStorage.SetData(StorageDataTypes.NAME, name);
+        await LocalStorage.SetData(StorageDataTypes.USER_NAME, userName);
+        await LocalStorage.SetData(StorageDataTypes.PROFILE_IMAGE, profileImage);
+        await LocalStorage.SetData(StorageDataTypes.ID, id);
+        // }
+        return data;
+    } catch (e) {
+        return thunkAPI.rejectWithValue(e)
+    }
 });
 
 export const signInSlice = createSlice({
@@ -77,7 +77,7 @@ export const signInSlice = createSlice({
         });
         builder.addCase(signIn.rejected, (state, action) => {
             state.loading = false;
-            state.error = action.error.message;
+            state.error = action.payload;
             state.setupStage = '';
         });
     },

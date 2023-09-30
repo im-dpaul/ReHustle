@@ -22,3 +22,8 @@ export const authenticatedPutMethod = async (url: string, data: any) => {
     const authAxios = await authenticatedAxios();
     return authAxios.put(url, data);
 };
+
+export const authenticatedDeleteMethod = async (url: string) => {
+    const authAxios = await authenticatedAxios();
+    return authAxios.delete(url);
+};

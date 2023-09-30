@@ -1,14 +1,38 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import ServiceCard from './ServiceCard'
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateService, deleteService } from '../redux/addServicesSlice';
+import { AppDispatch } from '../../../app/store';
 
 const ServicesList = () => {
     const servicesReducer = useSelector((state: any) => state.addServices);
+    const dispatch = useDispatch<AppDispatch>();
 
-    const onHidePage = () => { }
+    const onHidePage = (service: any) => {
+        let updatedService;
+        updatedService = {
+            "_id": service._id,
+            "bannerImage": service.bannerImage,
+            "chronicalOrder": service.chronicalOrder,
+            "description": service.description,
+            "isActive": !service.isActive,
+            "pId": service.pId,
+            "paymentMode": service.paymentMode,
+            "price": service.price,
+            "service": service.service,
+            "title": service.title,
+        };
+
+        dispatch(updateService(updatedService));
+    }
+
     const onEditService = () => { }
-    const onDeleteService = () => { }
+
+    const onDeleteService = (id: string) => {
+        dispatch(deleteService(id));
+    }
+
     const onMoreTap = () => { }
 
     return (
@@ -27,9 +51,10 @@ const ServicesList = () => {
                                 duration={item.item.service.duration}
                                 date={item.item.service.date}
                                 price={item.item.price.amount}
-                                onHidePage={() => { onHidePage() }}
+                                active={item.item.isActive}
+                                onHidePage={() => { onHidePage(item.item) }}
                                 onEditService={() => { onEditService() }}
-                                onDeleteService={() => { onDeleteService() }}
+                                onDeleteService={() => { onDeleteService(item.item._id) }}
                                 onMoreTap={() => { onMoreTap() }}
                             />
                         </View>

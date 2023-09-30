@@ -7,7 +7,7 @@ import CommonDivider from '../../../components/divider/CommonDivider'
 import CommonButton from '../../../components/buttons/CommonButton'
 import { CalendarIcon, ClockIcon, EditIcon, HalfCalender, HalfStar, MoreIcon, PriceGroup, TrashIcon, VideoIcon } from '../../../../assets/images'
 
-const ServiceCard = (props: { title: string, description: string, bannerImage: string, serviceType: string, duration: string, date: string, price: string, onHidePage: (() => void), onEditService: (() => void), onDeleteService: (() => void), onMoreTap: (() => void) }) => {
+const ServiceCard = (props: { title: string, description: string, bannerImage: string, serviceType: string, duration: string, date: string, price: string, active: boolean, onHidePage: (() => void), onEditService: (() => void), onDeleteService: (() => void), onMoreTap: (() => void) }) => {
     let service = '';
     if (props.serviceType == 'call') {
         service = 'Video Call'
@@ -22,6 +22,11 @@ const ServiceCard = (props: { title: string, description: string, bannerImage: s
     }
     else {
         date = 'You choose'
+    }
+
+    let activeText = 'Hide from page'
+    if (props.active != true) {
+        activeText = 'Show on profile'
     }
 
     return (
@@ -73,7 +78,7 @@ const ServiceCard = (props: { title: string, description: string, bannerImage: s
             <CommonDivider />
             <View style={styles.editServiceRow}>
                 <View style={{ width: 120 }}>
-                    <CommonButton title='Hide from page' active={false} height={32} onPress={props.onHidePage} />
+                    <CommonButton title={activeText} active={false} height={32} onPress={props.onHidePage} />
                 </View>
                 <View style={{ marginLeft: 'auto' }}></View>
                 <TouchableOpacity onPress={() => { props.onEditService() }}>

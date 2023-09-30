@@ -1,5 +1,5 @@
 import { createSlice, nanoid, createAsyncThunk } from "@reduxjs/toolkit";
-import { authenticatedGetMethod, authenticatedPostMethod, authenticatedPutMethod } from "../../../core/services/NetworkServices";
+import { authenticatedDeleteMethod, authenticatedGetMethod, authenticatedPostMethod, authenticatedPutMethod } from "../../../core/services/NetworkServices";
 import LocalStorage from "../../../data/local_storage/LocalStorage";
 import StorageDataTypes from "../../../constants/StorageDataTypes";
 
@@ -71,6 +71,29 @@ export const addNewServices = createAsyncThunk(
         return data;
     });
 
+export const updateService = createAsyncThunk(
+    'api/updateService',
+    async (service, thunkAPI, _) => {
+        const id = service._id;
+        const url = `p/product/${id}`;
+
+        const response = await authenticatedPutMethod(url, service);
+        const data = response.data.result;
+
+        return data;
+    });
+
+export const deleteService = createAsyncThunk(
+    'api/deleteService',
+    async (id, thunkAPI, _) => {
+        const url = `p/product/${id}`;
+
+        const response = await authenticatedDeleteMethod(url);
+        const data = response.data.result;
+
+        return id;
+    });
+
 export const addServicesSlice = createSlice({
     name: 'addServices',
     initialState,
@@ -124,6 +147,31 @@ export const addServicesSlice = createSlice({
         builder.addCase(addNewServices.rejected, (state, action) => {
             state.servicesError = action.error.message;
             state.screenLoading = false;
+        });
+        builder.addCase(updateService.pending, (state) => {
+        });
+        builder.addCase(updateService.fulfilled, (state, action) => {
+            let allData = state.servicesData;
+            const newData = allData.map((service) => {
+                if (service._id == action.payload._id) {
+                    return action.payload
+                }
+                else {
+                    return service
+                }
+            });
+            state.servicesData = newData;
+        });
+        builder.addCase(updateService.rejected, (state, action) => {
+            state.servicesError = action.error.message;
+        });
+        builder.addCase(deleteService.pending, (state) => {
+        });
+        builder.addCase(deleteService.fulfilled, (state, action) => {
+            state.servicesData = state.servicesData.filter((service) => service._id !== action.payload)
+        });
+        builder.addCase(deleteService.rejected, (state, action) => {
+            state.servicesError = action.error.message;
         });
     }
 });
