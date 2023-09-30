@@ -52,7 +52,7 @@ function FinishAccountCreationScreen({ navigation }: FinishAccountCreationProps)
 
     useEffect(() => {
         if (finishCreationReducer.data != null) {
-            if (finishCreationReducer.data.message == "OK") {
+            if (finishCreationReducer.data._id != "") {
                 navigation.replace('Home');
                 dispatch(clearData(null));
             }

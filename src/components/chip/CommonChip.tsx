@@ -1,19 +1,18 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import AppColors from "../../constants/AppColors";
 import FontFamily from "../../constants/FontFamily";
-import { useState } from "react";
 
 function CommonChip(props: { name: string, active?: boolean, id?: number, onPress?: ((id: number) => void) }): JSX.Element {
 
     return (
         <View>
-            <TouchableOpacity onPress={() => { props.onPress ? props.onPress(props.id ? props.id : 0) : null }}>
+            <Pressable onPress={() => { props.onPress ? props.onPress(props.id ? props.id : 0) : null }}>
                 <View style={[styles.container, props.active ? { backgroundColor: AppColors.PRIMARY_COLOR } : {}]}>
                     <Text style={[styles.title, props.active ? { color: AppColors.WHITE } : {}]}>
                         {props.name}
                     </Text>
                 </View>
-            </TouchableOpacity>
+            </Pressable>
         </View>
     );
 };

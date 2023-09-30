@@ -1,8 +1,11 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { FlatList, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import ServiceCard from './ServiceCard'
+import { useSelector } from 'react-redux';
 
 const ServicesList = () => {
+    const servicesReducer = useSelector((state: any) => state.addServices);
+
     const onHidePage = () => { }
     const onEditService = () => { }
     const onDeleteService = () => { }
@@ -10,18 +13,28 @@ const ServicesList = () => {
 
     return (
         <View style={styles.list}>
-            <ServiceCard
-                title='Sell your time'
-                description='Write an amazing description in this dedicated card section. Each word counts.'
-                bannerImage='https://rehustle-images.s3.amazonaws.com/images/virtual-call-banner.jpeg'
-                serviceType='Video call'
-                duration='30 min'
-                date='You choose'
-                price='₹2000'
-                onHidePage={() => { onHidePage() }}
-                onEditService={() => { onEditService() }}
-                onDeleteService={() => { onDeleteService() }}
-                onMoreTap={() => { onMoreTap() }}
+            <FlatList
+                data={servicesReducer.servicesData}
+                scrollEnabled={false}
+                renderItem={
+                    (item) =>
+                        <View style={{ marginBottom: 20, paddingHorizontal: 2 }}>
+                            <ServiceCard
+                                title={item.item.title}
+                                description={item.item.description}
+                                bannerImage={item.item.bannerImage}
+                                serviceType={item.item.service.serviceType}
+                                duration={item.item.service.duration}
+                                date={item.item.service.date}
+                                price={item.item.price.amount}
+                                onHidePage={() => { onHidePage() }}
+                                onEditService={() => { onEditService() }}
+                                onDeleteService={() => { onDeleteService() }}
+                                onMoreTap={() => { onMoreTap() }}
+                            />
+                        </View>
+                }
+                ItemSeparatorComponent={() => <View style={{ height: 10 }}></View>}
             />
         </View>
     )

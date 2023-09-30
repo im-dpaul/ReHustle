@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     ActivityIndicator,
     ScrollView,
@@ -20,21 +20,40 @@ import { RootStackParamList } from '../../../App';
 import { addName, skipAboutYou, addProfileLinks, clearData } from '../redux/aboutYouSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../../app/store';
+import LocalStorage from '../../../data/local_storage/LocalStorage';
+import StorageDataTypes from '../../../constants/StorageDataTypes';
 
 type AboutYouProps = NativeStackScreenProps<RootStackParamList, 'AboutYou'>;
 
 function AboutYouScreen({ navigation }: AboutYouProps): JSX.Element {
     const aboutYouReducer = useSelector((state: any) => state.aboutYou);
     const dispatch = useDispatch<AppDispatch>();
+    const [err, setError] = useState('');
 
-    console.log('About You store', aboutYouReducer);
+    // console.log('About You store', aboutYouReducer);
 
     const onChangeNameField = (name: string) => {
         dispatch(addName(name));
     }
 
-    const onContinueTap = () => {
-        dispatch(addProfileLinks());
+    const onContinueTap = async () => {
+        let name = ''
+        if (aboutYouReducer.name != '') {
+            name = aboutYouReducer.name;
+        }
+        else {
+            const val = await LocalStorage.GetData(StorageDataTypes.NAME);
+            if (val != null) {
+                name = val;
+            }
+        }
+        if (name == '') {
+            setError('Name is required');
+        }
+        else {
+            setError('');
+            dispatch(addProfileLinks());
+        }
     }
 
     const skipBtnTap = () => {
@@ -61,7 +80,7 @@ function AboutYouScreen({ navigation }: AboutYouProps): JSX.Element {
                 </View>
                 <ScrollView>
                     <View style={[styles.mainBody,]}>
-                        <NameInput onNameChange={((value) => onChangeNameField(value))} />
+                        <NameInput errorText={err} onNameChange={((value) => onChangeNameField(value))} />
                         <View style={{ height: 24 }}></View>
                         <AddSocialProfile />
                         <View style={{ height: 16 }}></View>

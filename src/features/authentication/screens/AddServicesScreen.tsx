@@ -1,6 +1,6 @@
 import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { addService, removeService, skipServices, addNewServices } from "../../authentication/redux/addServicesSlice";
+import { addService, removeService, skipServices, addNewServices, getAllServices, clearData } from "../../authentication/redux/addServicesSlice";
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from "../../../App";
 import CommonStatusBar from "../../../components/layouts/CommonStatusBar";
@@ -30,18 +30,19 @@ function AddServicesScreen({ navigation }: AddServicesProps): JSX.Element {
 
     const skipBtnTap = () => {
         dispatch(skipServices());
-        navigation.replace('FinishAccountCreation');
     }
 
     const onAddService = () => { }
 
     const onServiceSelection = (service: { ID: number; ROLE: string; }) => {
         if (servicesReducer.servicesId.includes(service.ID)) {
-            dispatch(removeService(service));
+            // dispatch(removeService(service));
         }
         else {
             dispatch(addService(service));
-            // dispatch(addNewServices());
+            ServiceType.ServiceType[service.ID - 1].SERVICES.forEach(async (service, index) => {
+                await dispatch(addNewServices(service));
+            })
         }
     }
 
@@ -57,11 +58,16 @@ function AddServicesScreen({ navigation }: AddServicesProps): JSX.Element {
 
     useEffect(() => {
         if (servicesReducer.data != null) {
-            if (servicesReducer.data.message == "OK") {
+            if (servicesReducer.data._id != "") {
                 navigation.replace('FinishAccountCreation');
+                dispatch(clearData({}));
             }
         }
     }, [servicesReducer.data])
+
+    useEffect(() => {
+        dispatch(getAllServices());
+    }, [])
 
     return (
         <View style={{ flex: 1, backgroundColor: AppColors.WHITE }}>
@@ -94,8 +100,14 @@ function AddServicesScreen({ navigation }: AddServicesProps): JSX.Element {
                             <CommonButton title='+ Add Service' height={40} active={false} onPress={onAddService} />
                         </View>
                         <View style={{ height: 24 }}></View>
+                        {
+                            servicesReducer.screenLoading
+                                ? <View style={{ height: 120, alignItems: "center", justifyContent: "center" }}>
+                                    <ActivityIndicator size={'large'} color={AppColors.PRIMARY_COLOR} />
+                                </View>
+                                : null
+                        }
                         <ServicesList />
-                        <View style={{ height: 24 }}></View>
                     </View>
                 </ScrollView>
                 <View>
@@ -104,7 +116,7 @@ function AddServicesScreen({ navigation }: AddServicesProps): JSX.Element {
                         {
                             servicesReducer.loading
                                 ? <ActivityIndicator size={'large'} color={AppColors.PRIMARY_COLOR} />
-                                : <CommonButton title='Continue' onPress={onContinueTap} />
+                                : <CommonButton title='Continue' onPress={skipBtnTap} />
                         }
                     </View>
                 </View>

@@ -1,5 +1,6 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
+import Moment from 'moment';
 import AppColors from '../../../constants/AppColors'
 import FontFamily from '../../../constants/FontFamily'
 import CommonDivider from '../../../components/divider/CommonDivider'
@@ -7,6 +8,22 @@ import CommonButton from '../../../components/buttons/CommonButton'
 import { CalendarIcon, ClockIcon, EditIcon, HalfCalender, HalfStar, MoreIcon, PriceGroup, TrashIcon, VideoIcon } from '../../../../assets/images'
 
 const ServiceCard = (props: { title: string, description: string, bannerImage: string, serviceType: string, duration: string, date: string, price: string, onHidePage: (() => void), onEditService: (() => void), onDeleteService: (() => void), onMoreTap: (() => void) }) => {
+    let service = '';
+    if (props.serviceType == 'call') {
+        service = 'Video Call'
+    }
+    else {
+        service = 'Event'
+    }
+
+    let date = ''
+    if ((props.date ?? '') != '') {
+        date = Moment(props.date).format('MMM Do, yyyy');
+    }
+    else {
+        date = 'You choose'
+    }
+
     return (
         <View style={styles.card}>
             <View style={styles.imageContainer}>
@@ -29,26 +46,26 @@ const ServiceCard = (props: { title: string, description: string, bannerImage: s
                         <View style={styles.iconAndText}>
                             <Image style={styles.imageIcon} source={VideoIcon} />
                             <View style={{ width: 8 }}></View>
-                            <Text style={styles.iconText}>{props.serviceType}</Text>
+                            <Text style={styles.iconText}>{service}</Text>
                         </View>
                         <View style={{ height: 16 }}></View>
                         <View style={styles.iconAndText}>
                             <Image style={styles.imageIcon} source={ClockIcon} />
                             <View style={{ width: 8 }}></View>
-                            <Text style={styles.iconText}>{props.duration}</Text>
+                            <Text style={styles.iconText}>{props.duration} minutes</Text>
                         </View>
                     </View>
                     <View>
                         <View style={styles.iconAndText}>
                             <Image style={styles.imageIcon} source={PriceGroup} />
                             <View style={{ width: 8 }}></View>
-                            <Text style={styles.iconText}>{props.price}</Text>
+                            <Text style={styles.iconText}>₹ {props.price}</Text>
                         </View>
                         <View style={{ height: 16 }}></View>
                         <View style={styles.iconAndText}>
                             <Image style={styles.imageIcon} source={CalendarIcon} />
                             <View style={{ width: 8 }}></View>
-                            <Text style={styles.iconText}>{props.date}</Text>
+                            <Text style={styles.iconText}>{date}</Text>
                         </View>
                     </View>
                 </View>

@@ -26,7 +26,7 @@ function NameInput(props: { errorText?: string, onNameChange: (value: string) =>
             <TextInput
                 style={[
                     styles.textInputBox,
-                    ((props.errorText ?? 0) != 0) ? { borderColor: AppColors.RED } : {},
+                    ((props.errorText ?? '') != '') ? { borderColor: AppColors.RED } : {},
                     focus ? { borderColor: AppColors.GRAY4 } : {},
                 ]}
                 placeholder='Your Name'
@@ -37,6 +37,13 @@ function NameInput(props: { errorText?: string, onNameChange: (value: string) =>
                 onFocus={() => { setFocus(true) }}
                 onBlur={() => { setFocus(false) }}
             />
+            {
+                ((props.errorText ?? '') != '')
+                    ? <View style={{ marginTop: 4 }}>
+                        <Text style={styles.errorText}>{props.errorText}</Text>
+                    </View>
+                    : null
+            }
         </View>
     );
 };
@@ -55,8 +62,16 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         borderRadius: 4,
         borderWidth: 1,
-        borderColor: AppColors.GRAY6
+        borderColor: AppColors.GRAY6,
+        color: AppColors.BLACK
     },
+    errorText: {
+        color: AppColors.RED,
+        fontFamily: FontFamily.GILROY_BOLD,
+        fontSize: 10,
+        fontStyle: 'normal',
+        fontWeight: '400',
+    }
 });
 
 export default NameInput;

@@ -1,5 +1,5 @@
 import { createSlice, nanoid, createAsyncThunk } from "@reduxjs/toolkit";
-import { authenticatedPostMethod, authenticatedPutMethod } from "../../../core/services/NetworkServices";
+import { authenticatedGetMethod, authenticatedPostMethod, authenticatedPutMethod } from "../../../core/services/NetworkServices";
 import LocalStorage from "../../../data/local_storage/LocalStorage";
 import StorageDataTypes from "../../../constants/StorageDataTypes";
 
@@ -9,7 +9,18 @@ const initialState = {
     data: null,
     error: null,
     loading: false,
+    screenLoading: false,
+    servicesData: [],
+    servicesError: [],
 }
+
+export const getAllServices = createAsyncThunk('api/getAllServices', async () => {
+    let data = null;
+
+    const response = await authenticatedGetMethod('/p/products');
+    data = response.data.result;
+    return data;
+})
 
 export const skipServices = createAsyncThunk('api/skipServices', async (arg, thunkAPI) => {
     const state = thunkAPI.getState().addServices;
@@ -46,20 +57,14 @@ export const skipServices = createAsyncThunk('api/skipServices', async (arg, thu
 
 export const addNewServices = createAsyncThunk(
     'api/addNewServices',
-    async (arg, thunkAPI) => {
+    async (values, thunkAPI, _) => {
         const state = thunkAPI.getState().addServices;
-
-        const { extraArg } = thunkAPI.extra;
-
-        let values = {
-        };
 
         const url = `/p/product`
         let data = null;
         // try {
         const response = await authenticatedPostMethod(url, values);
-        data = response.data;
-
+        data = response.data.result;
         // } catch (e) {
         //     console.log('Error -> ', e);
         // }
@@ -81,9 +86,23 @@ export const addServicesSlice = createSlice({
         removeService: (state, action) => {
             state.services = state.services.filter((service) => service.data.ID !== action.payload.ID)
             state.servicesId = state.servicesId.filter((id) => id !== action.payload.ID)
+        },
+        clearData: (state, action) => {
+            state.data = [];
         }
     },
     extraReducers: (builder) => {
+        builder.addCase(getAllServices.pending, (state) => {
+            state.screenLoading = true;
+        });
+        builder.addCase(getAllServices.fulfilled, (state, action) => {
+            state.servicesData = action.payload;
+            state.screenLoading = false;
+        });
+        builder.addCase(getAllServices.rejected, (state, action) => {
+            state.servicesError = action.error.message;
+            state.screenLoading = false;
+        });
         builder.addCase(skipServices.pending, (state) => {
             state.loading = true;
         });
@@ -95,9 +114,20 @@ export const addServicesSlice = createSlice({
             state.error = action.error.message;
             state.loading = false;
         });
+        builder.addCase(addNewServices.pending, (state) => {
+            state.screenLoading = true;
+        });
+        builder.addCase(addNewServices.fulfilled, (state, action) => {
+            state.servicesData.unshift(action.payload);
+            state.screenLoading = false;
+        });
+        builder.addCase(addNewServices.rejected, (state, action) => {
+            state.servicesError = action.error.message;
+            state.screenLoading = false;
+        });
     }
 });
 
-export const { addService, removeService } = addServicesSlice.actions;
+export const { addService, removeService, clearData } = addServicesSlice.actions;
 
 export default addServicesSlice.reducer;

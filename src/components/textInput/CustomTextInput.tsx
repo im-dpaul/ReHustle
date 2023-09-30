@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     },
     textInputBox: {
         height: 40,
+        color: AppColors.BLACK
     },
     prefixIcon: {
         height: 20,
