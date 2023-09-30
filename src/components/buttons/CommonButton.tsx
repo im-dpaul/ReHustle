@@ -2,11 +2,22 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import AppColors from "../../constants/AppColors";
 import FontFamily from "../../constants/FontFamily";
 
-function CommonButton(props: { title: string, onPress: (() => void) }): JSX.Element {
+function CommonButton(props: { title: string, height?: number, active?: boolean, onPress: (() => void) }): JSX.Element {
     return (
         <TouchableOpacity onPress={() => { props.onPress() }}>
-            <View style={styles.button}>
-                <Text style={styles.text}>
+            <View style={[
+                styles.button,
+                props.height ? { height: props.height } : {},
+                (props.active != null)
+                    ? props.active ? { backgroundColor: AppColors.PRIMARY_COLOR } : { backgroundColor: AppColors.GRAY7 }
+                    : {},
+            ]}>
+                <Text style={[
+                    styles.text,
+                    (props.active != null)
+                        ? props.active ? { color: AppColors.WHITE } : { color: AppColors.GRAY2, }
+                        : {}
+                ]}>
                     {props.title}
                 </Text>
             </View>
@@ -20,7 +31,7 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         height: 48,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     text: {
         color: AppColors.WHITE,

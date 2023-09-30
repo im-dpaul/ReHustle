@@ -4,6 +4,7 @@ const AppColors = {
     TRANSPARENT: 'transparent',
 
     PRIMARY_COLOR: '#7A38FF',
+    SECONDARY_COLOR: '#945FFF',
 
     GRAY1: '#333333',
     GRAY2: '#828282',

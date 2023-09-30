@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
         width: 200,
         paddingHorizontal: 12,
         paddingVertical: 10,
+        color: AppColors.BLACK
     },
 });
 
