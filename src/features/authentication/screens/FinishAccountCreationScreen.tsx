@@ -45,7 +45,7 @@ function FinishAccountCreationScreen({ navigation }: FinishAccountCreationProps)
 
     const skipBtnTap = () => {
         // navigation.popToTop()
-        // navigation.replace('Home');
+        // navigation.replace('Services');
     }
 
     const copyLink = () => { }
@@ -53,7 +53,7 @@ function FinishAccountCreationScreen({ navigation }: FinishAccountCreationProps)
     useEffect(() => {
         if (finishCreationReducer.data != null) {
             if (finishCreationReducer.data._id != "") {
-                navigation.replace('Home');
+                navigation.replace('Services');
                 dispatch(clearData(null));
             }
         }

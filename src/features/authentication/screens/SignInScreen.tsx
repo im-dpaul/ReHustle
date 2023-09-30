@@ -23,9 +23,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { signIn, setEmailAddress, setPassword, setRememberMe, clearData } from '../redux/signInSlice';
 import { AppDispatch } from '../../../app/store';
 
-type HomeProps = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
+type SignInProps = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
 
-function SignInScreen({ navigation, route }: HomeProps): JSX.Element {
+function SignInScreen({ navigation, route }: SignInProps): JSX.Element {
 
     let routeParams = route.params;
     let fromHome: boolean;
@@ -76,7 +76,7 @@ function SignInScreen({ navigation, route }: HomeProps): JSX.Element {
                     navigation.replace('FinishAccountCreation');
                 }
                 else if (signInReducer.setupStage == '4') {
-                    navigation.replace('Home');
+                    navigation.replace('Services');
                 }
                 else {
                     navigation.replace('SignIn');

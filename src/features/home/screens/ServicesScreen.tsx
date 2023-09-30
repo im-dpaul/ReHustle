@@ -1,4 +1,4 @@
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import CommonStatusBar from '../../../components/layouts/CommonStatusBar';
 import AppColors from '../../../constants/AppColors';
@@ -11,10 +11,19 @@ import LocalStorage from '../../../data/local_storage/LocalStorage';
 import StorageDataTypes from '../../../constants/StorageDataTypes';
 import { RootStackParamList } from '../../../App';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { AppDispatch } from '../../../app/store';
+import { getAllServices } from '../redux/servicesSlice';
+import ServicesList from '../components/ServicesList';
 
-type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
+type ServicesProps = NativeStackScreenProps<RootStackParamList, 'Services'>;
 
-const HomeScreen = ({ navigation }: HomeProps) => {
+const ServicesScreen = ({ navigation }: ServicesProps) => {
+    const servicesReducer = useSelector((state: any) => state.services);
+    const dispatch = useDispatch<AppDispatch>();
+
+    console.log('Services store', servicesReducer);
 
     const menuButtonTap = async () => {
         navigation.replace('SignIn', { 'fromHome': true });
@@ -25,6 +34,10 @@ const HomeScreen = ({ navigation }: HomeProps) => {
         await LocalStorage.DeleteData(StorageDataTypes.PROFILE_IMAGE);
         await LocalStorage.DeleteData(StorageDataTypes.SETUP_STAGE);
     }
+
+    useEffect(() => {
+        dispatch(getAllServices());
+    }, [])
 
     return (
         <SafeAreaView style={{ backgroundColor: AppColors.WHITE, flex: 1 }}>
@@ -40,11 +53,23 @@ const HomeScreen = ({ navigation }: HomeProps) => {
                             <Text style={styles.servicesText}>Services</Text>
                             <View style={{ width: 126 }}>
                                 <CommonButton title='Add Service' height={32} onPress={() => { }} />
-
                             </View>
                         </View>
-                        <View style={{ height: 160 }}></View>
-                        <NoServicesPresent />
+                        <View style={{ marginVertical: 24 }}>
+                            {
+                                servicesReducer.screenLoading
+                                    ? <View style={{ height: 600, justifyContent: 'center' }}>
+                                        <ActivityIndicator size={48} color={AppColors.PRIMARY_COLOR} />
+                                    </View>
+                                    : servicesReducer.servicesData.length
+                                        ? <ServicesList />
+                                        : <View >
+                                            <View style={{ height: 150 }}></View>
+                                            <NoServicesPresent />
+                                        </View>
+                            }
+
+                        </View>
                     </View>
                 </ScrollView>
             </View>
@@ -72,4 +97,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default HomeScreen;
+export default ServicesScreen;

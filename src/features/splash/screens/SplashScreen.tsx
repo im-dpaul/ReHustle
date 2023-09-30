@@ -58,7 +58,7 @@ const SplashScreen = ({ navigation }: SplashProps) => {
                 navigation.replace('FinishAccountCreation');
             }
             else if (splashReducer.setupStage == '4') {
-                navigation.replace('Home');
+                navigation.replace('Services');
             }
             else {
                 navigation.replace('SignIn');
@@ -68,7 +68,7 @@ const SplashScreen = ({ navigation }: SplashProps) => {
 
     // setTimeout(() => {
     //     if (userExist) {
-    //         navigation.replace('Home');
+    //         navigation.replace('Services');
     //     }
     //     else {
     //         navigation.replace('SignIn');

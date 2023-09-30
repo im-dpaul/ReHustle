@@ -6,7 +6,8 @@ import signInReducer from "../features/authentication/redux/signInSlice";
 import createAccountReducer from '../features/authentication/redux/createAccountSlice';
 import getYourInfoReducer from '../features/authentication/redux/getYourInfoSlice';
 import splashReducer from '../features/splash/redux/splashSlice';
-import finishAccountCreationReducer from '../features/authentication/redux/finishAccountCreationSlice'
+import finishAccountCreationReducer from '../features/authentication/redux/finishAccountCreationSlice';
+import servicesReducer from "../features/home/redux/servicesSlice";
 
 export const store = configureStore({
     reducer: {
@@ -17,6 +18,7 @@ export const store = configureStore({
         createAccount: createAccountReducer,
         getYourInfo: getYourInfoReducer,
         finishAccountCreation: finishAccountCreationReducer,
+        services: servicesReducer,
     },
 });
 

@@ -6,7 +6,7 @@ import FinishAccountCreationScreen from './features/authentication/screens/Finis
 import AddServicesScreen from './features/authentication/screens/AddServicesScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from './features/home/screens/HomeScreen';
+import ServicesScreen from './features/home/screens/ServicesScreen';
 import SplashScreen from './features/splash/screens/SplashScreen';
 import GetYourInfoScreen from './features/authentication/screens/GetYourInfoScreen';
 
@@ -18,7 +18,7 @@ export type RootStackParamList = {
   AboutYou: undefined;
   AddServices: undefined;
   FinishAccountCreation: undefined;
-  Home: undefined;
+  Services: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -56,8 +56,8 @@ function App(): JSX.Element {
           component={FinishAccountCreationScreen}
         />
         <Stack.Screen
-          name='Home'
-          component={HomeScreen}
+          name='Services'
+          component={ServicesScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
