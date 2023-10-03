@@ -2,6 +2,7 @@ const AppColors = {
     WHITE: '#FFFFFF',
     BLACK: '#000000',
     TRANSPARENT: 'transparent',
+    MODAL_BG: 'rgba(0, 0, 0, 0.60)',
 
     PRIMARY_COLOR: '#7A38FF',
     SECONDARY_COLOR: '#945FFF',

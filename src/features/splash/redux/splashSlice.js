@@ -20,14 +20,12 @@ export const getUserData = createAsyncThunk('api/getUserData', async (arg, thunk
     data = response.data;
 
     let name = data.result.name ?? "";
-    let token = data.result.token ?? "";
     let email = data.result.email ?? "";
     let userName = data.result.userName ?? "";
     let profileImage = data.result.profileImage ?? "";
     let setupStage = `${data.result.setupStage}` ?? "";
     let id = `${data.result._id}` ?? "";
 
-    await LocalStorage.SetData(StorageDataTypes.TOKEN, token);
     await LocalStorage.SetData(StorageDataTypes.ID, id);
     await LocalStorage.SetData(StorageDataTypes.EMAIL, email);
     await LocalStorage.SetData(StorageDataTypes.NAME, name);

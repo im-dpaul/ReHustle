@@ -13,6 +13,7 @@ interface ServicesState {
     screenLoading: boolean;
     servicesData: any[];
     servicesError: any;
+    showAddServiceModal: boolean,
 }
 
 type ThunkAPI = {
@@ -28,6 +29,7 @@ const initialState: ServicesState = {
     screenLoading: false,
     servicesData: [],
     servicesError: null,
+    showAddServiceModal: false,
 }
 
 export const getAllServices = createAsyncThunk<any[]>(
@@ -100,6 +102,9 @@ export const servicesSlice = createSlice({
     reducers: {
         clearData: (state, action) => {
             state.data = [];
+        },
+        showAddServiceModal: (state, action) => {
+            state.showAddServiceModal = action.payload;
         }
     },
     extraReducers: (builder) => {
@@ -153,6 +158,6 @@ export const servicesSlice = createSlice({
     }
 });
 
-export const { clearData } = servicesSlice.actions;
+export const { clearData, showAddServiceModal } = servicesSlice.actions;
 
 export default servicesSlice.reducer;

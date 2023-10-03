@@ -8,6 +8,7 @@ import getYourInfoReducer from '../features/authentication/redux/getYourInfoSlic
 import splashReducer from '../features/splash/redux/splashSlice';
 import finishAccountCreationReducer from '../features/authentication/redux/finishAccountCreationSlice';
 import servicesReducer from "../features/home/redux/servicesSlice";
+import createEventServiceReducer from '../features/home/redux/createEventServiceSlice'
 
 export const store = configureStore({
     reducer: {
@@ -19,6 +20,7 @@ export const store = configureStore({
         getYourInfo: getYourInfoReducer,
         finishAccountCreation: finishAccountCreationReducer,
         services: servicesReducer,
+        createEventService: createEventServiceReducer,
     },
 });
 

@@ -9,6 +9,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ServicesScreen from './features/home/screens/ServicesScreen';
 import SplashScreen from './features/splash/screens/SplashScreen';
 import GetYourInfoScreen from './features/authentication/screens/GetYourInfoScreen';
+import CreateEventService from './features/home/screens/CreateEventService';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -19,6 +20,7 @@ export type RootStackParamList = {
   AddServices: undefined;
   FinishAccountCreation: undefined;
   Services: undefined;
+  CreateEventService: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -58,6 +60,10 @@ function App(): JSX.Element {
         <Stack.Screen
           name='Services'
           component={ServicesScreen}
+        />
+        <Stack.Screen
+          name='CreateEventService'
+          component={CreateEventService}
         />
       </Stack.Navigator>
     </NavigationContainer>

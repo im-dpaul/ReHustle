@@ -1,5 +1,5 @@
-import { ActivityIndicator, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { ActivityIndicator, Modal, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
+import React, { useState } from 'react'
 import CommonStatusBar from '../../../components/layouts/CommonStatusBar';
 import AppColors from '../../../constants/AppColors';
 import CommonDivider from '../../../components/divider/CommonDivider';
@@ -14,16 +14,21 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { AppDispatch } from '../../../app/store';
-import { getAllServices } from '../redux/servicesSlice';
+import { getAllServices, showAddServiceModal } from '../redux/servicesSlice';
 import ServicesList from '../components/ServicesList';
+import AddServiceModal from '../components/AddServiceModal';
 
 type ServicesProps = NativeStackScreenProps<RootStackParamList, 'Services'>;
 
-const ServicesScreen = ({ navigation }: ServicesProps) => {
+const ServicesScreen = ({ navigation, route }: ServicesProps) => {
     const servicesReducer = useSelector((state: any) => state.services);
     const dispatch = useDispatch<AppDispatch>();
 
     console.log('Services store', servicesReducer);
+
+    const modalVisibility = (val: boolean) => {
+        dispatch(showAddServiceModal(val));
+    }
 
     const menuButtonTap = async () => {
         navigation.replace('SignIn', { 'fromHome': true });
@@ -52,7 +57,7 @@ const ServicesScreen = ({ navigation }: ServicesProps) => {
                         <View style={styles.servicesRow}>
                             <Text style={styles.servicesText}>Services</Text>
                             <View style={{ width: 126 }}>
-                                <CommonButton title='Add Service' height={32} onPress={() => { }} />
+                                <CommonButton title='Add Service' height={32} onPress={() => { modalVisibility(true) }} />
                             </View>
                         </View>
                         <View style={{ marginVertical: 24 }}>
@@ -68,8 +73,8 @@ const ServicesScreen = ({ navigation }: ServicesProps) => {
                                             <NoServicesPresent />
                                         </View>
                             }
-
                         </View>
+                        <AddServiceModal navigation={navigation} route={route} />
                     </View>
                 </ScrollView>
             </View>
