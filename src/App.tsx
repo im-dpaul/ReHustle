@@ -19,7 +19,7 @@ export type RootStackParamList = {
   AboutYou: undefined;
   AddServices: undefined;
   FinishAccountCreation: undefined;
-  Services: undefined;
+  Services: any;
   CreateEventService: undefined;
 };
 

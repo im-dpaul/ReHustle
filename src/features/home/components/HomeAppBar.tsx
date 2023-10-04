@@ -7,7 +7,7 @@ import { useState } from "react";
 import StorageDataTypes from "../../../constants/StorageDataTypes";
 import LocalStorage from "../../../data/local_storage/LocalStorage";
 
-function HomeAppBar(props: { title: string, subTitle: string, copyButtonTap?: (() => void), menuButtonTap?: (() => void) }): JSX.Element {
+function HomeAppBar(props: { title: string, copyButtonTap?: (() => void), menuButtonTap?: (() => void) }): JSX.Element {
 
     const [avatar, setAvatar] = useState('');
     const [userName, setUserName] = useState('rehustle.co/');

@@ -14,15 +14,19 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { AppDispatch } from '../../../app/store';
-import { getAllServices, showAddServiceModal } from '../redux/servicesSlice';
+import { getAllServices, showAddServiceModal, setRefresh } from '../redux/servicesSlice';
 import ServicesList from '../components/ServicesList';
 import AddServiceModal from '../components/AddServiceModal';
+import { useNavigation } from '@react-navigation/native';
 
 type ServicesProps = NativeStackScreenProps<RootStackParamList, 'Services'>;
 
 const ServicesScreen = ({ navigation, route }: ServicesProps) => {
     const servicesReducer = useSelector((state: any) => state.services);
     const dispatch = useDispatch<AppDispatch>();
+    // const nav = useNavigation();
+
+    const routeData = route.params;
 
     console.log('Services store', servicesReducer);
 
@@ -40,6 +44,23 @@ const ServicesScreen = ({ navigation, route }: ServicesProps) => {
         await LocalStorage.DeleteData(StorageDataTypes.SETUP_STAGE);
     }
 
+    // useEffect(() => {
+    //     const unsubscribe = nav.addListener('focus', () => {
+    //         console.log('First screen is in focus');
+    //     });
+
+    //     return unsubscribe;
+    // }, [nav]);
+
+    useEffect(() => {
+        if (routeData != undefined) {
+            if (routeData.refresh == true) {
+                dispatch(getAllServices());
+                dispatch(getAllServices());
+            }
+        }
+    }, [routeData])
+
     useEffect(() => {
         dispatch(getAllServices());
     }, [])
@@ -48,7 +69,7 @@ const ServicesScreen = ({ navigation, route }: ServicesProps) => {
         <SafeAreaView style={{ backgroundColor: AppColors.WHITE, flex: 1 }}>
             <CommonStatusBar />
             <View style={{ height: 74 }}>
-                <HomeAppBar title='Services' subTitle='rehustle.co/imarc36' menuButtonTap={() => menuButtonTap()} />
+                <HomeAppBar title='Services' menuButtonTap={() => menuButtonTap()} />
                 <CommonDivider />
             </View>
             <View style={{ backgroundColor: AppColors.WHITE, flex: 1 }}>

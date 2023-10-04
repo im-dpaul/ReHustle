@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import ToggleTabButton from '../../../components/buttons/ToggleTabButton'
 import TimeDurationTextInput from '../../../components/textInput/TimeDurationTextInput'
 import DateTimePicker from '../../../components/dateTime/DateTimePicker'
+import { StackActions } from '@react-navigation/native';
 
 type CreateEventServiceProps = NativeStackScreenProps<RootStackParamList, 'CreateEventService'>
 
@@ -25,7 +26,7 @@ const CreateEventService = ({ navigation }: CreateEventServiceProps): JSX.Elemen
     const createEventServiceReducer = useSelector((state: any) => state.createEventService)
     const dispatch = useDispatch<AppDispatch>();
 
-    console.log("Create event service store", createEventServiceReducer);
+    // console.log("Create event service store", createEventServiceReducer);
 
     const onCreate = () => {
         dispatch(addNewService());
@@ -71,11 +72,10 @@ const CreateEventService = ({ navigation }: CreateEventServiceProps): JSX.Elemen
     }
 
     useEffect(() => {
-        console.log('test--->', createEventServiceReducer.data);
         if (createEventServiceReducer.data != null) {
             if (createEventServiceReducer.data._id != '') {
-                navigation.pop();
                 dispatch(clearData({}));
+                navigation.navigate('Services', { refresh: true })
             }
         }
     }, [createEventServiceReducer.data])

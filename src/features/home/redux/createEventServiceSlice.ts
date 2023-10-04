@@ -42,7 +42,7 @@ export const addNewService = createAsyncThunk<any>(
         const url = `/p/product`
         let data: any = null;
         let values: any = {
-            "bannerImage": "",
+            "bannerImage": "https://rehustle-images.s3.amazonaws.com/images/virtual-coffee-banner.jpeg",
             "title": stateValue.serviceName == "" ? "New Event" : stateValue.serviceName,
             "description": stateValue.serviceDescription == "" ? "Trying to create a new event, it's the description" : stateValue.serviceDescription,
             "paymentMode": stateValue.servicePaymentType.toLowerCase(),
@@ -74,7 +74,18 @@ export const createEventServiceSlice = createSlice({
     initialState,
     reducers: {
         clearData: (state, action) => {
-            state = initialState;
+            state.data = null
+            state.error = null
+            state.loading = false
+            state.screenLoading = true
+            state.serviceName = ''
+            state.serviceDescription = ''
+            state.servicePrice = ''
+            state.serviceEventUrl = ''
+            state.servicePaymentType = 'Paid'
+            state.serviceEventDuration = ''
+            state.serviceDate = ''
+            state.serviceTime = ''
         },
         setName: (state, action) => {
             state.serviceName = action.payload;
