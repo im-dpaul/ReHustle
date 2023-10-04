@@ -3,10 +3,14 @@ import React from 'react'
 import AppColors from '../../constants/AppColors'
 import FontFamily from '../../constants/FontFamily'
 
-const IconWithTitleDescription = (props: { title: string, description: string, icon: ImageSourcePropType }) => {
+const IconWithTitleDescription = (props: { title: string, description: string, icon: ImageSourcePropType, imageIcon?: any }) => {
     return (
         <View style={styles.container}>
-            <Image style={styles.prefixIcon} source={props.icon} />
+            {
+                props.imageIcon != undefined
+                    ? props.imageIcon
+                    : <Image style={styles.prefixIcon} source={props.icon} />
+            }
             <View style={{ marginLeft: 14 }}>
                 <Text style={styles.titleText}>{props.title}</Text>
                 <View style={{ height: 2 }}></View>

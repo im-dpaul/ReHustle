@@ -14,6 +14,7 @@ interface ServicesState {
     servicesData: any[];
     servicesError: any;
     showAddServiceModal: boolean,
+    showMenuModal: boolean,
     refresh: boolean,
 }
 
@@ -31,6 +32,7 @@ const initialState: ServicesState = {
     servicesData: [],
     servicesError: null,
     showAddServiceModal: false,
+    showMenuModal: false,
     refresh: false,
 }
 
@@ -49,22 +51,6 @@ export const getAllServices = createAsyncThunk<any[]>(
         }
 
     })
-
-export const addNewServices = createAsyncThunk<Service, any, ThunkAPI>(
-    'api/addNewServices',
-    async (values, thunkAPI) => {
-        const state = thunkAPI.getState();
-
-        const url = `/p/product`
-        let data: any = null;
-        // try {
-        const response = await authenticatedPostMethod(url, values);
-        data = response.data.result;
-        // } catch (e) {
-        //     console.log('Error -> ', e);
-        // }
-        return data;
-    });
 
 export const updateService = createAsyncThunk<any, any>(
     'api/updateService',
@@ -108,6 +94,9 @@ export const servicesSlice = createSlice({
         showAddServiceModal: (state, action) => {
             state.showAddServiceModal = action.payload;
         },
+        showMenuModal: (state, action) => {
+            state.showMenuModal = action.payload;
+        },
         setRefresh: (state, action) => {
             state.refresh = action.payload
         }
@@ -125,17 +114,6 @@ export const servicesSlice = createSlice({
             state.servicesError = action.payload;
             state.screenLoading = false;
             state.refresh = false;
-        });
-        builder.addCase(addNewServices.pending, (state) => {
-            state.loading = true;
-        });
-        builder.addCase(addNewServices.fulfilled, (state, action) => {
-            state.servicesData.unshift(action.payload);
-            state.loading = false;
-        });
-        builder.addCase(addNewServices.rejected, (state, action) => {
-            state.servicesError = action.payload;
-            state.loading = false;
         });
         builder.addCase(updateService.pending, (state) => {
         });
@@ -165,6 +143,6 @@ export const servicesSlice = createSlice({
     }
 });
 
-export const { clearData, showAddServiceModal, setRefresh } = servicesSlice.actions;
+export const { clearData, showAddServiceModal, setRefresh, showMenuModal } = servicesSlice.actions;
 
 export default servicesSlice.reducer;

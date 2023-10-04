@@ -1,5 +1,5 @@
-import { ActivityIndicator, Modal, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React, { useState } from 'react'
+import { ActivityIndicator, RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
+import React from 'react'
 import CommonStatusBar from '../../../components/layouts/CommonStatusBar';
 import AppColors from '../../../constants/AppColors';
 import CommonDivider from '../../../components/divider/CommonDivider';
@@ -14,10 +14,11 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { AppDispatch } from '../../../app/store';
-import { getAllServices, showAddServiceModal, setRefresh } from '../redux/servicesSlice';
+import { getAllServices, showAddServiceModal, setRefresh, showMenuModal } from '../redux/servicesSlice';
 import ServicesList from '../components/ServicesList';
 import AddServiceModal from '../components/AddServiceModal';
 import { useNavigation } from '@react-navigation/native';
+import MenuOptionsModal from '../components/MenuOptionsModal';
 
 type ServicesProps = NativeStackScreenProps<RootStackParamList, 'Services'>;
 
@@ -28,20 +29,19 @@ const ServicesScreen = ({ navigation, route }: ServicesProps) => {
 
     const routeData = route.params;
 
-    console.log('Services store', servicesReducer);
+    // console.log('Services store', servicesReducer);
 
     const modalVisibility = (val: boolean) => {
         dispatch(showAddServiceModal(val));
     }
 
-    const menuButtonTap = async () => {
-        navigation.replace('SignIn', { 'fromHome': true });
-        await LocalStorage.DeleteData(StorageDataTypes.TOKEN);
-        await LocalStorage.DeleteData(StorageDataTypes.ID);
-        await LocalStorage.DeleteData(StorageDataTypes.NAME);
-        await LocalStorage.DeleteData(StorageDataTypes.EMAIL);
-        await LocalStorage.DeleteData(StorageDataTypes.PROFILE_IMAGE);
-        await LocalStorage.DeleteData(StorageDataTypes.SETUP_STAGE);
+    const refreshControl = () => {
+        dispatch(setRefresh(true))
+        dispatch(getAllServices());
+    }
+
+    const menuButtonTap = (value: boolean) => {
+        dispatch(showMenuModal(value));
     }
 
     // useEffect(() => {
@@ -69,11 +69,22 @@ const ServicesScreen = ({ navigation, route }: ServicesProps) => {
         <SafeAreaView style={{ backgroundColor: AppColors.WHITE, flex: 1 }}>
             <CommonStatusBar />
             <View style={{ height: 74 }}>
-                <HomeAppBar title='Services' menuButtonTap={() => menuButtonTap()} />
+                <HomeAppBar
+                    title='Services'
+                    appBar={true}
+                    menuButtonTap={() => menuButtonTap(true)} />
                 <CommonDivider />
             </View>
             <View style={{ backgroundColor: AppColors.WHITE, flex: 1 }}>
-                <ScrollView >
+                <ScrollView
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={servicesReducer.refresh}
+                            onRefresh={refreshControl}
+                            colors={[AppColors.PRIMARY_COLOR]}
+                        />
+                    }
+                >
                     <View style={styles.mainBody}>
                         <View style={styles.servicesRow}>
                             <Text style={styles.servicesText}>Services</Text>
@@ -96,6 +107,11 @@ const ServicesScreen = ({ navigation, route }: ServicesProps) => {
                             }
                         </View>
                         <AddServiceModal navigation={navigation} route={route} />
+                        <MenuOptionsModal
+                            title='Services'
+                            visible={servicesReducer.showMenuModal}
+                            menuButtonTap={() => menuButtonTap(false)}
+                        />
                     </View>
                 </ScrollView>
             </View>

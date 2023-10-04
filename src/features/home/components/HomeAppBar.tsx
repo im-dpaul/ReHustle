@@ -1,13 +1,13 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { MenuIcon, User } from "../../../../assets/images";
 import AppColors from "../../../constants/AppColors";
 import FontFamily from "../../../constants/FontFamily";
 import CommonButton from "../../../components/buttons/CommonButton";
 import { useState } from "react";
 import StorageDataTypes from "../../../constants/StorageDataTypes";
 import LocalStorage from "../../../data/local_storage/LocalStorage";
+import { CrossIcon, MenuIconSVG, UserAvatar } from "../../../../assets/images/svg_index";
 
-function HomeAppBar(props: { title: string, copyButtonTap?: (() => void), menuButtonTap?: (() => void) }): JSX.Element {
+function HomeAppBar(props: { title: string, appBar: boolean, copyButtonTap?: (() => void), menuButtonTap?: (() => void) }): JSX.Element {
 
     const [avatar, setAvatar] = useState('');
     const [userName, setUserName] = useState('rehustle.co/');
@@ -29,9 +29,7 @@ function HomeAppBar(props: { title: string, copyButtonTap?: (() => void), menuBu
         <View style={styles.container}>
             {
                 (avatar.length == 0)
-                    ? <View style={styles.avatar}>
-                        <Image style={styles.image} source={User} />
-                    </View>
+                    ? <UserAvatar style={styles.avatar} />
                     : <Image style={styles.networkImage} source={{ uri: avatar }} />
             }
             <View style={{ width: 8 }}></View>
@@ -44,9 +42,12 @@ function HomeAppBar(props: { title: string, copyButtonTap?: (() => void), menuBu
                 <CommonButton title="Copy Link" height={32} active={false} onPress={() => { props.copyButtonTap ? props.copyButtonTap() : null }} />
             </View>
             <TouchableOpacity onPress={() => { props.menuButtonTap ? props.menuButtonTap() : null }}>
-                <Image style={styles.menuIcon} source={MenuIcon} />
+                {
+                    props.appBar
+                        ? <MenuIconSVG style={styles.menuIcon} />
+                        : <CrossIcon style={styles.menuIcon} />
+                }
             </TouchableOpacity>
-
         </View>
     );
 };
@@ -62,13 +63,6 @@ const styles = StyleSheet.create({
     avatar: {
         height: 40,
         width: 40,
-        borderRadius: 20,
-        backgroundColor: AppColors.PRIMARY_COLOR,
-        padding: 10,
-    },
-    image: {
-        height: 20,
-        width: 20,
     },
     networkImage: {
         height: 40,
