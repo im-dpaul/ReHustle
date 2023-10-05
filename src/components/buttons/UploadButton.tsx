@@ -1,15 +1,15 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import { UploadIcon } from '../../../assets/images'
 import AppColors from '../../constants/AppColors'
 import FontFamily from '../../constants/FontFamily'
+import { UploadIcon } from '../../../assets/images/svg_index'
 
 const UploadButton = (props: { onPress: () => void }) => {
     return (
         <View>
             <TouchableOpacity onPress={() => { props.onPress() }}>
                 <View style={styles.button}>
-                    <Image style={{ height: 12, width: 12 }} source={UploadIcon} />
+                    <UploadIcon style={{ maxHeight: 12, maxWidth: 12 }} />
                     <View style={{ width: 8 }}></View>
                     <Text style={styles.uploadImageText}>Upload Image</Text>
                 </View>

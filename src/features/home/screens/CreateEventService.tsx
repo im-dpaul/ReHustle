@@ -18,7 +18,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import ToggleTabButton from '../../../components/buttons/ToggleTabButton'
 import TimeDurationTextInput from '../../../components/textInput/TimeDurationTextInput'
 import DateTimePicker from '../../../components/dateTime/DateTimePicker'
-import { StackActions } from '@react-navigation/native';
 
 type CreateEventServiceProps = NativeStackScreenProps<RootStackParamList, 'CreateEventService'>
 

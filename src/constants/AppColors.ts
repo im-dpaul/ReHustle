@@ -6,6 +6,7 @@ const AppColors = {
 
     PRIMARY_COLOR: '#7A38FF',
     SECONDARY_COLOR: '#945FFF',
+    IRIS: '#5D5FEF',
 
     GRAY1: '#333333',
     GRAY2: '#828282',

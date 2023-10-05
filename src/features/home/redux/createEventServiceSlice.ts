@@ -37,7 +37,7 @@ export const addNewService = createAsyncThunk<any>(
         const state: any = thunkAPI.getState();
         const stateValue = state.createEventService;
 
-        let price = Number(stateValue.servicePrice);
+        let price = (stateValue.servicePrice != '') ? Number(stateValue.servicePrice) : 250;
 
         const url = `/p/product`
         let data: any = null;

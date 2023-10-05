@@ -2,24 +2,28 @@ import { Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'reac
 import React from 'react'
 import HomeAppBar from './HomeAppBar'
 import AppColors from '../../../constants/AppColors'
-import { EventIcon, SmartphoneIcon, ClockIcon, ChatIcon } from '../../../../assets/images'
 import IconWithTitleDescription from '../../../components/text/IconWithTitleDescription'
 import CommonDivider from '../../../components/divider/CommonDivider'
 import FontFamily from '../../../constants/FontFamily'
-import { LogoutIcon, SlidersIcon, UserIcon, GridIcon, HelpCircleIcon, PreviewIcon } from '../../../../assets/images/svg_index'
+import { LogoutIcon, SlidersIcon, UserIcon, GridIcon, HelpCircleIcon, PreviewIcon, PriceIcon, SettingsIcon, PreviewActiveIcon, SlidersActiveIcon, UserActiveIcon, GridActiveIcon, SettingsActiveIcon } from '../../../../assets/images/svg_index'
 import StorageDataTypes from '../../../constants/StorageDataTypes'
 import LocalStorage from '../../../data/local_storage/LocalStorage'
-import { StackActions, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../../App'
+import MenuOptions from '../../../constants/MenuOptions'
 
 const MenuOptionsModal = (props: { title: string, visible: boolean, menuButtonTap: (() => void) }): JSX.Element => {
     const Navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-    const addEventService = () => { }
-    const addSellProductService = () => { }
-    const addSellTimeService = () => { }
-    const addChatService = () => { }
+    const onMenuSelection = (option: string) => {
+        if (props.title == option) {
+            props.menuButtonTap()
+        }
+        else {
+            console.log('Val', option);
+        }
+    }
 
     const onLogout = async () => {
         props.menuButtonTap()
@@ -53,58 +57,92 @@ const MenuOptionsModal = (props: { title: string, visible: boolean, menuButtonTa
                         </View>
                         <CommonDivider />
                         <View style={styles.menuBox}>
-                            <Pressable onPress={() => addEventService()}>
+                            <Pressable onPress={() => onMenuSelection(MenuOptions.PREVIEW)}>
                                 <IconWithTitleDescription
                                     imageIcon={
-                                        <PreviewIcon style={styles.iconStyle} />
+                                        props.title == MenuOptions.PREVIEW
+                                            ? <PreviewActiveIcon style={styles.iconStyle} />
+                                            : <PreviewIcon style={styles.iconStyle} />
                                     }
-                                    title='Preview'
+                                    title={MenuOptions.PREVIEW}
+                                    active={props.title == MenuOptions.PREVIEW ? true : false}
                                     description='Check your public profile view'
-                                    icon={EventIcon}
                                 />
                             </Pressable>
                             <View style={{ height: 24 }}></View>
-                            <Pressable onPress={() => addSellProductService()} >
+                            <Pressable onPress={() => onMenuSelection(MenuOptions.INSIGHTS)} >
                                 <IconWithTitleDescription
                                     imageIcon={
-                                        <SlidersIcon style={styles.iconStyle} />
+                                        props.title == MenuOptions.INSIGHTS
+                                            ? <SlidersActiveIcon style={styles.iconStyle} />
+                                            : <SlidersIcon style={styles.iconStyle} />
                                     }
-                                    title='Insights'
+                                    title={MenuOptions.INSIGHTS}
+                                    active={props.title == MenuOptions.INSIGHTS ? true : false}
                                     description='Page views, clicks and sales'
-                                    icon={SmartphoneIcon}
                                 />
                             </Pressable>
                             <View style={{ height: 24 }}></View>
-                            <Pressable onPress={() => addSellTimeService()}>
+                            <Pressable onPress={() => onMenuSelection(MenuOptions.PROFILE)}>
                                 <IconWithTitleDescription
                                     imageIcon={
-                                        <UserIcon style={styles.iconStyle} />
+                                        props.title == MenuOptions.PROFILE
+                                            ? <UserActiveIcon style={styles.iconStyle} />
+                                            : <UserIcon style={styles.iconStyle} />
                                     }
-                                    title='Profile'
+                                    title={MenuOptions.PROFILE}
+                                    active={props.title == MenuOptions.PROFILE ? true : false}
                                     description='Your personal information and social links'
-                                    icon={ClockIcon}
                                 />
                             </Pressable>
                             <View style={{ height: 24 }}></View>
-                            <Pressable onPress={() => addChatService()}>
+                            <Pressable onPress={() => onMenuSelection(MenuOptions.SERVICES)}>
                                 <IconWithTitleDescription
                                     imageIcon={
-                                        <GridIcon style={styles.iconStyle} />
+                                        props.title == MenuOptions.SERVICES
+                                            ? <GridActiveIcon style={styles.iconStyle} />
+                                            : <GridIcon style={styles.iconStyle} />
                                     }
-                                    title='Services'
+                                    title={MenuOptions.SERVICES}
+                                    active={props.title == MenuOptions.SERVICES ? true : false}
                                     description='View and manage the services you offer'
-                                    icon={ChatIcon}
                                 />
                             </Pressable>
                             <View style={{ height: 24 }}></View>
-                            <Pressable onPress={() => addChatService()}>
+                            <Pressable onPress={() => onMenuSelection(MenuOptions.PAYOUTS)}>
+                                <IconWithTitleDescription
+                                    imageIcon={
+                                        props.title == MenuOptions.PAYOUTS
+                                            ? <PriceIcon style={styles.iconStyle} />
+                                            : <PriceIcon style={styles.iconStyle} />
+                                    }
+                                    title={MenuOptions.PAYOUTS}
+                                    active={props.title == MenuOptions.PAYOUTS ? true : false}
+                                    description='View your payouts and sales'
+                                />
+                            </Pressable>
+                            <View style={{ height: 24 }}></View>
+                            <Pressable onPress={() => onMenuSelection(MenuOptions.SETTINGS)}>
+                                <IconWithTitleDescription
+                                    imageIcon={
+                                        props.title == MenuOptions.SETTINGS
+                                            ? <SettingsActiveIcon style={styles.iconStyle} />
+                                            : <SettingsIcon style={styles.iconStyle} />
+                                    }
+                                    title={MenuOptions.SETTINGS}
+                                    active={props.title == MenuOptions.SETTINGS ? true : false}
+                                    description='Edit Password'
+                                />
+                            </Pressable>
+                            <View style={{ height: 24 }}></View>
+                            <Pressable onPress={() => onMenuSelection(MenuOptions.HELP)}>
                                 <IconWithTitleDescription
                                     imageIcon={
                                         <HelpCircleIcon style={styles.iconStyle} />
                                     }
-                                    title='Help'
+                                    title={MenuOptions.HELP}
+                                    active={props.title == MenuOptions.HELP ? true : false}
                                     description='Share feedback or contact us for support'
-                                    icon={ChatIcon}
                                 />
                             </Pressable>
                         </View>

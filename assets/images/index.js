@@ -15,8 +15,6 @@ export const TrashIcon = require('./trash_icon.png');
 export const VideoIcon = require('./video_icon.png');
 export const HalfCalender = require('./half_calender.png');
 export const HalfStar = require('./half_star.png');
-export const CloseIcon = require('./close_icon.png');
-export const ArrowLeft = require('./arrow_left.png');
 export const ChevronDown = require('./chevron_down.png');
 
 /// Emoji Icons
@@ -31,8 +29,3 @@ export const TwitterIcon = require('./twitter_icon.png');
 
 /// Services Screen
 export const NoServicesImage = require('./no_services.png');
-export const ChatIcon = require('./chat_icon.png');
-export const EventIcon = require('./event_icon.png');
-export const SmartphoneIcon = require('./smartphone_icon.png');
-export const UploadIcon = require('./upload_icon.png')
-export const InrIcon = require('./inr_icon.png')

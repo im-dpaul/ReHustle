@@ -1,9 +1,9 @@
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { ArrowLeft } from '../../../../assets/images'
 import CommonButton from '../../../components/buttons/CommonButton'
 import AppColors from '../../../constants/AppColors'
 import FontFamily from '../../../constants/FontFamily'
+import { BackButtonIcon } from '../../../../assets/images/svg_index'
 
 const CreateServiceAppBar = (props: { title: string, onCreate: () => void, onBackPress: () => void }) => {
 
@@ -11,7 +11,7 @@ const CreateServiceAppBar = (props: { title: string, onCreate: () => void, onBac
         <View>
             <View style={styles.header}>
                 <Pressable onPress={() => props.onBackPress()}>
-                    <Image style={styles.backButton} source={ArrowLeft} />
+                    <BackButtonIcon style={styles.backButton} />
                 </Pressable>
                 <View style={{ width: 16 }}></View>
                 <Text style={styles.headerTitleText}>{props.title}</Text>

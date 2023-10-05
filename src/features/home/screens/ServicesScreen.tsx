@@ -7,8 +7,6 @@ import HomeAppBar from '../components/HomeAppBar';
 import NoServicesPresent from '../components/NoServicesPresent';
 import CommonButton from '../../../components/buttons/CommonButton';
 import FontFamily from '../../../constants/FontFamily';
-import LocalStorage from '../../../data/local_storage/LocalStorage';
-import StorageDataTypes from '../../../constants/StorageDataTypes';
 import { RootStackParamList } from '../../../App';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useSelector, useDispatch } from 'react-redux';
@@ -19,6 +17,7 @@ import ServicesList from '../components/ServicesList';
 import AddServiceModal from '../components/AddServiceModal';
 import { useNavigation } from '@react-navigation/native';
 import MenuOptionsModal from '../components/MenuOptionsModal';
+import MenuOptions from '../../../constants/MenuOptions';
 
 type ServicesProps = NativeStackScreenProps<RootStackParamList, 'Services'>;
 
@@ -70,7 +69,7 @@ const ServicesScreen = ({ navigation, route }: ServicesProps) => {
             <CommonStatusBar />
             <View style={{ height: 74 }}>
                 <HomeAppBar
-                    title='Services'
+                    title={MenuOptions.SERVICES}
                     appBar={true}
                     menuButtonTap={() => menuButtonTap(true)} />
                 <CommonDivider />
@@ -83,8 +82,7 @@ const ServicesScreen = ({ navigation, route }: ServicesProps) => {
                             onRefresh={refreshControl}
                             colors={[AppColors.PRIMARY_COLOR]}
                         />
-                    }
-                >
+                    }>
                     <View style={styles.mainBody}>
                         <View style={styles.servicesRow}>
                             <Text style={styles.servicesText}>Services</Text>
@@ -108,7 +106,7 @@ const ServicesScreen = ({ navigation, route }: ServicesProps) => {
                         </View>
                         <AddServiceModal navigation={navigation} route={route} />
                         <MenuOptionsModal
-                            title='Services'
+                            title={MenuOptions.SERVICES}
                             visible={servicesReducer.showMenuModal}
                             menuButtonTap={() => menuButtonTap(false)}
                         />
