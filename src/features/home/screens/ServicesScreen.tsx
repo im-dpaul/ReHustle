@@ -12,11 +12,10 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { AppDispatch } from '../../../app/store';
-import { getAllServices, showAddServiceModal, setRefresh, showMenuModal } from '../redux/servicesSlice';
+import { getAllServices, showAddServiceModal, setRefresh } from '../redux/servicesSlice';
 import ServicesList from '../components/ServicesList';
 import AddServiceModal from '../components/AddServiceModal';
 import { useNavigation } from '@react-navigation/native';
-import MenuOptionsModal from '../components/MenuOptionsModal';
 import MenuOptions from '../../../constants/MenuOptions';
 
 type ServicesProps = NativeStackScreenProps<RootStackParamList, 'Services'>;
@@ -37,10 +36,6 @@ const ServicesScreen = ({ navigation, route }: ServicesProps) => {
     const refreshControl = () => {
         dispatch(setRefresh(true))
         dispatch(getAllServices());
-    }
-
-    const menuButtonTap = (value: boolean) => {
-        dispatch(showMenuModal(value));
     }
 
     // useEffect(() => {
@@ -69,9 +64,7 @@ const ServicesScreen = ({ navigation, route }: ServicesProps) => {
             <CommonStatusBar />
             <View style={{ height: 74 }}>
                 <HomeAppBar
-                    title={MenuOptions.SERVICES}
-                    appBar={true}
-                    menuButtonTap={() => menuButtonTap(true)} />
+                    title={MenuOptions.SERVICES} />
                 <CommonDivider />
             </View>
             <View style={{ backgroundColor: AppColors.WHITE, flex: 1 }}>
@@ -105,11 +98,6 @@ const ServicesScreen = ({ navigation, route }: ServicesProps) => {
                             }
                         </View>
                         <AddServiceModal navigation={navigation} route={route} />
-                        <MenuOptionsModal
-                            title={MenuOptions.SERVICES}
-                            visible={servicesReducer.showMenuModal}
-                            menuButtonTap={() => menuButtonTap(false)}
-                        />
                     </View>
                 </ScrollView>
             </View>

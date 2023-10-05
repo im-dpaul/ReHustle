@@ -1,24 +1,32 @@
-import { Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import HomeAppBar from './HomeAppBar'
 import AppColors from '../../../constants/AppColors'
 import IconWithTitleDescription from '../../../components/text/IconWithTitleDescription'
 import CommonDivider from '../../../components/divider/CommonDivider'
 import FontFamily from '../../../constants/FontFamily'
-import { LogoutIcon, SlidersIcon, UserIcon, GridIcon, HelpCircleIcon, PreviewIcon, PriceIcon, SettingsIcon, PreviewActiveIcon, SlidersActiveIcon, UserActiveIcon, GridActiveIcon, SettingsActiveIcon } from '../../../../assets/images/svg_index'
+import { LogoutIcon, SlidersIcon, UserIcon, GridIcon, HelpCircleIcon, PreviewIcon, PriceIcon, SettingsIcon, PreviewActiveIcon, SlidersActiveIcon, UserActiveIcon, GridActiveIcon, SettingsActiveIcon, CrossIcon, UserAvatar } from '../../../../assets/images/svg_index'
 import StorageDataTypes from '../../../constants/StorageDataTypes'
 import LocalStorage from '../../../data/local_storage/LocalStorage'
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../../App'
 import MenuOptions from '../../../constants/MenuOptions'
+import CommonButton from '../../../components/buttons/CommonButton'
 
-const MenuOptionsModal = (props: { title: string, visible: boolean, menuButtonTap: (() => void) }): JSX.Element => {
+const MenuOptionsModal = (props: {
+    title: string,
+    userName: string,
+    avatar: string,
+    visible: boolean,
+    closeButtonTap: (() => void),
+    copyButtonTap: (() => void)
+}): JSX.Element => {
+
     const Navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
     const onMenuSelection = (option: string) => {
         if (props.title == option) {
-            props.menuButtonTap()
+            props.closeButtonTap()
         }
         else {
             console.log('Val', option);
@@ -26,7 +34,7 @@ const MenuOptionsModal = (props: { title: string, visible: boolean, menuButtonTa
     }
 
     const onLogout = async () => {
-        props.menuButtonTap()
+        props.closeButtonTap()
         if (Navigation.canGoBack()) {
             Navigation.popToTop();
         }
@@ -44,16 +52,30 @@ const MenuOptionsModal = (props: { title: string, visible: boolean, menuButtonTa
         <View>
             <Modal
                 transparent visible={props.visible}
-                onRequestClose={() => { props.menuButtonTap ? props.menuButtonTap() : null }}
+                onRequestClose={() => { props.closeButtonTap() }}
                 animationType='fade'>
                 <View style={styles.main}>
                     <View style={styles.container}>
                         <View style={styles.appBar}>
-                            <HomeAppBar
-                                appBar={false}
-                                title={props.title}
-                                menuButtonTap={() => { props.menuButtonTap ? props.menuButtonTap() : null }}
-                            />
+                            <View style={styles.appBarContainer}>
+                                {
+                                    (props.avatar.length == 0)
+                                        ? <UserAvatar style={styles.avatar} />
+                                        : <Image style={styles.networkImage} source={{ uri: props.avatar }} />
+                                }
+                                <View style={{ width: 8 }}></View>
+                                <View>
+                                    <Text style={styles.title}>{props.title}</Text>
+                                    <View style={{ height: 4 }}></View>
+                                    <Text style={styles.subTitle}>{props.userName}</Text>
+                                </View>
+                                <View style={{ marginLeft: 'auto', marginRight: 16, width: 80 }}>
+                                    <CommonButton title="Copy Link" height={32} active={false} onPress={() => props.copyButtonTap()} />
+                                </View>
+                                <TouchableOpacity onPress={() => { props.closeButtonTap ? props.closeButtonTap() : null }}>
+                                    <CrossIcon style={styles.iconStyle} />
+                                </TouchableOpacity>
+                            </View>
                         </View>
                         <CommonDivider />
                         <View style={styles.menuBox}>
@@ -206,5 +228,39 @@ const styles = StyleSheet.create({
     iconStyle: {
         height: 24,
         width: 24,
-    }
+    },
+    appBarContainer: {
+        paddingHorizontal: 24,
+        paddingVertical: 18,
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: "center"
+    },
+    avatar: {
+        height: 40,
+        width: 40,
+    },
+    networkImage: {
+        height: 40,
+        width: 40,
+        borderRadius: 20,
+    },
+    titleRow: {
+        flex: 1,
+        flexDirection: "row",
+    },
+    title: {
+        color: AppColors.GRAY1,
+        fontFamily: FontFamily.GILROY_BOLD,
+        fontSize: 18,
+        fontStyle: 'normal',
+        fontWeight: '400',
+    },
+    subTitle: {
+        color: AppColors.GRAY2,
+        fontFamily: FontFamily.GILROY_REGULAR,
+        fontSize: 12,
+        fontStyle: 'normal',
+        fontWeight: '400',
+    },
 })

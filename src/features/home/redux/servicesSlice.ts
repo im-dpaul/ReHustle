@@ -14,7 +14,6 @@ interface ServicesState {
     servicesData: any[];
     servicesError: any;
     showAddServiceModal: boolean,
-    showMenuModal: boolean,
     refresh: boolean,
 }
 
@@ -32,7 +31,6 @@ const initialState: ServicesState = {
     servicesData: [],
     servicesError: null,
     showAddServiceModal: false,
-    showMenuModal: false,
     refresh: false,
 }
 
@@ -94,9 +92,6 @@ export const servicesSlice = createSlice({
         showAddServiceModal: (state, action) => {
             state.showAddServiceModal = action.payload;
         },
-        showMenuModal: (state, action) => {
-            state.showMenuModal = action.payload;
-        },
         setRefresh: (state, action) => {
             state.refresh = action.payload
         }
@@ -143,6 +138,6 @@ export const servicesSlice = createSlice({
     }
 });
 
-export const { clearData, showAddServiceModal, setRefresh, showMenuModal } = servicesSlice.actions;
+export const { clearData, showAddServiceModal, setRefresh } = servicesSlice.actions;
 
 export default servicesSlice.reducer;

@@ -5,12 +5,14 @@ import CommonButton from "../../../components/buttons/CommonButton";
 import { useState } from "react";
 import StorageDataTypes from "../../../constants/StorageDataTypes";
 import LocalStorage from "../../../data/local_storage/LocalStorage";
-import { CrossIcon, MenuIconSVG, UserAvatar } from "../../../../assets/images/svg_index";
+import { MenuIconSVG, UserAvatar } from "../../../../assets/images/svg_index";
+import MenuOptionsModal from "./MenuOptionsModal";
 
-function HomeAppBar(props: { title: string, appBar: boolean, copyButtonTap?: (() => void), menuButtonTap?: (() => void) }): JSX.Element {
+function HomeAppBar(props: { title: string }): JSX.Element {
 
     const [avatar, setAvatar] = useState('');
     const [userName, setUserName] = useState('rehustle.co/');
+    const [showMenu, setShowMenu] = useState(false);
 
     LocalStorage.GetData(StorageDataTypes.PROFILE_IMAGE).then((image) => {
         if ((image != null) && (image.length != 0)) {
@@ -24,6 +26,16 @@ function HomeAppBar(props: { title: string, appBar: boolean, copyButtonTap?: (()
             setUserName(uname);
         }
     });
+
+    const onCopyButtonTap = () => { }
+
+    const onMenuButtonTap = () => {
+        setShowMenu(true);
+    }
+
+    const onCloseButtonTap = () => {
+        setShowMenu(false);
+    }
 
     return (
         <View style={styles.container}>
@@ -39,15 +51,19 @@ function HomeAppBar(props: { title: string, appBar: boolean, copyButtonTap?: (()
                 <Text style={styles.subTitle}>{userName}</Text>
             </View>
             <View style={{ marginLeft: 'auto', marginRight: 16, width: 80 }}>
-                <CommonButton title="Copy Link" height={32} active={false} onPress={() => { props.copyButtonTap ? props.copyButtonTap() : null }} />
+                <CommonButton title="Copy Link" height={32} active={false} onPress={() => { onCopyButtonTap() }} />
             </View>
-            <TouchableOpacity onPress={() => { props.menuButtonTap ? props.menuButtonTap() : null }}>
-                {
-                    props.appBar
-                        ? <MenuIconSVG style={styles.menuIcon} />
-                        : <CrossIcon style={styles.menuIcon} />
-                }
+            <TouchableOpacity onPress={() => { onMenuButtonTap() }}>
+                <MenuIconSVG style={styles.menuIcon} />
             </TouchableOpacity>
+            <MenuOptionsModal
+                title={props.title}
+                userName={userName}
+                avatar={avatar}
+                visible={showMenu}
+                closeButtonTap={() => { onCloseButtonTap() }}
+                copyButtonTap={() => { onCopyButtonTap() }}
+            />
         </View>
     );
 };
