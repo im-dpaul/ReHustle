@@ -1,3 +1,4 @@
+import RehustleLogo from './rehustle_logo.png'
 import MenuIconSVG from './menu_icon.svg';
 import GridIcon from './grid_icon.svg';
 import HelpCircleIcon from './help_circle_icon.svg';
@@ -9,4 +10,16 @@ import UserAvatar from './user_avatar.svg';
 import CrossIcon from './cross_icon.svg';
 import PreviewIcon from './preview_icon.svg';
 
-export { MenuIconSVG, GridIcon, HelpCircleIcon, LogoutIcon, SettingsIcon, SlidersIcon, UserIcon, UserAvatar, CrossIcon, PreviewIcon }
+export {
+    RehustleLogo,
+    MenuIconSVG,
+    GridIcon,
+    HelpCircleIcon,
+    LogoutIcon,
+    SettingsIcon,
+    SlidersIcon,
+    UserIcon,
+    UserAvatar,
+    CrossIcon,
+    PreviewIcon
+}
