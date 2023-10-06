@@ -10,6 +10,11 @@ import ServicesScreen from './features/home/screens/ServicesScreen';
 import SplashScreen from './features/splash/screens/SplashScreen';
 import GetYourInfoScreen from './features/authentication/screens/GetYourInfoScreen';
 import CreateEventService from './features/home/screens/CreateEventService';
+import PayoutsScreen from './features/home/screens/PayoutsScreen';
+import PreviewScreen from './features/home/screens/PreviewScreen';
+import InsightsScreen from './features/home/screens/InsightsScreen';
+import ProfileScreen from './features/home/screens/ProfileScreen';
+import SettingsScreen from './features/home/screens/SettingsScreen';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -21,6 +26,11 @@ export type RootStackParamList = {
   FinishAccountCreation: undefined;
   Services: any;
   CreateEventService: undefined;
+  Payouts: undefined;
+  Preview: undefined;
+  Insights: undefined;
+  Profile: undefined;
+  Settings: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -58,8 +68,28 @@ function App(): JSX.Element {
           component={FinishAccountCreationScreen}
         />
         <Stack.Screen
+          name='Preview'
+          component={PreviewScreen}
+        />
+        <Stack.Screen
+          name='Insights'
+          component={InsightsScreen}
+        />
+        <Stack.Screen
+          name='Profile'
+          component={ProfileScreen}
+        />
+        <Stack.Screen
           name='Services'
           component={ServicesScreen}
+        />
+        <Stack.Screen
+          name='Payouts'
+          component={PayoutsScreen}
+        />
+        <Stack.Screen
+          name='Settings'
+          component={SettingsScreen}
         />
         <Stack.Screen
           name='CreateEventService'

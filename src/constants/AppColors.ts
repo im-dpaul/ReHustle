@@ -11,8 +11,10 @@ const AppColors = {
     GRAY1: '#333333',
     GRAY2: '#828282',
     GRAY4: '#BDBDBD',
+    GRAY5: '#E0E0E0',
     GRAY6: '#F2F2F2',
     GRAY7: '#F5F5F5',
+    GRAY8: '#F8F8F8',
 
     RED: '#EB5757',
 

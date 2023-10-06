@@ -29,7 +29,51 @@ const MenuOptionsModal = (props: {
             props.closeButtonTap()
         }
         else {
-            console.log('Val', option);
+            if (option == MenuOptions.PREVIEW) {
+                props.closeButtonTap()
+                if (Navigation.canGoBack()) {
+                    Navigation.popToTop();
+                }
+                Navigation.replace('Preview');
+            }
+            else if (option == MenuOptions.INSIGHTS) {
+                props.closeButtonTap()
+                if (Navigation.canGoBack()) {
+                    Navigation.popToTop();
+                }
+                Navigation.replace('Insights');
+            }
+            else if (option == MenuOptions.PROFILE) {
+                props.closeButtonTap()
+                if (Navigation.canGoBack()) {
+                    Navigation.popToTop();
+                }
+                Navigation.replace('Profile');
+            }
+            else if (option == MenuOptions.SERVICES) {
+                props.closeButtonTap()
+                if (Navigation.canGoBack()) {
+                    Navigation.popToTop();
+                }
+                Navigation.replace('Services');
+            }
+            else if (option == MenuOptions.PAYOUTS) {
+                props.closeButtonTap()
+                if (Navigation.canGoBack()) {
+                    Navigation.popToTop();
+                }
+                Navigation.replace('Payouts');
+            }
+            else if (option == MenuOptions.SETTINGS) {
+                props.closeButtonTap()
+                if (Navigation.canGoBack()) {
+                    Navigation.popToTop();
+                }
+                Navigation.replace('Settings');
+            }
+            else if (option == MenuOptions.HELP) {
+
+            }
         }
     }
 

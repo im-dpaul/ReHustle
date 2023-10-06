@@ -9,6 +9,8 @@ import splashReducer from '../features/splash/redux/splashSlice';
 import finishAccountCreationReducer from '../features/authentication/redux/finishAccountCreationSlice';
 import servicesReducer from "../features/home/redux/servicesSlice";
 import createEventServiceReducer from '../features/home/redux/createEventServiceSlice'
+import profileReducer from '../features/home/redux/profileSlice'
+import insightsReducer from "../features/home/redux/insightsSlice";
 
 export const store = configureStore({
     reducer: {
@@ -21,6 +23,8 @@ export const store = configureStore({
         finishAccountCreation: finishAccountCreationReducer,
         services: servicesReducer,
         createEventService: createEventServiceReducer,
+        profile: profileReducer,
+        insights: insightsReducer,
     },
 });
 
