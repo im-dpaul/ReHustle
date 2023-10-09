@@ -1,4 +1,4 @@
-import { Image, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Linking, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import AppColors from '../../../constants/AppColors'
 import IconWithTitleDescription from '../../../components/text/IconWithTitleDescription'
@@ -72,7 +72,7 @@ const MenuOptionsModal = (props: {
                 Navigation.replace('Settings');
             }
             else if (option == MenuOptions.HELP) {
-
+                Linking.openURL('mailto:hello@rehustle.co').then((value) => { }).catch((err) => { })
             }
         }
     }

@@ -11,6 +11,7 @@ import servicesReducer from "../features/home/redux/servicesSlice";
 import createEventServiceReducer from '../features/home/redux/createEventServiceSlice'
 import profileReducer from '../features/home/redux/profileSlice'
 import insightsReducer from "../features/home/redux/insightsSlice";
+import settingsReducer from '../features/home/redux/settingsSlice'
 
 export const store = configureStore({
     reducer: {
@@ -25,6 +26,7 @@ export const store = configureStore({
         createEventService: createEventServiceReducer,
         profile: profileReducer,
         insights: insightsReducer,
+        settings: settingsReducer,
     },
 });
 
