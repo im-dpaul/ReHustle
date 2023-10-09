@@ -62,8 +62,6 @@ export const addProfileLinks = createAsyncThunk('api/addProfileLinks', async (ar
         "socialLinks": localProfiles,
     };
 
-    console.log(values);
-
     const url = `/user/update`
     let data = null;
     // try {

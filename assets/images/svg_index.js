@@ -30,6 +30,7 @@ import TimeIcon from './time_icon.svg'
 
 /// Create Services icons
 import UploadIcon from './upload_icon.svg'
+import VideoIcon from './video_icon.svg'
 
 export {
     RehustleLogo,
@@ -54,5 +55,6 @@ export {
     SlidersActiveIcon,
     UserActiveIcon,
     BackButtonIcon,
-    UploadIcon
+    UploadIcon,
+    VideoIcon
 }

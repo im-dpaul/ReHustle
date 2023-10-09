@@ -28,7 +28,7 @@ function FinishAccountCreationScreen({ navigation }: FinishAccountCreationProps)
     const finishCreationReducer = useSelector((state: any) => state.finishAccountCreation);
     const dispatch = useDispatch<AppDispatch>();
 
-    console.log('FinishAccountCreation', finishCreationReducer);
+    // console.log('FinishAccountCreation', finishCreationReducer);
 
     const [userName, setUserName] = useState('rehustle.co/');
     LocalStorage.GetData(StorageDataTypes.USER_NAME).then((value) => {

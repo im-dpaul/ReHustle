@@ -22,7 +22,7 @@ function AddServicesScreen({ navigation }: AddServicesProps): JSX.Element {
 
     const servicesReducer = useSelector((state: any) => state.addServices);
 
-    console.log('Service store', servicesReducer);
+    // console.log('Service store', servicesReducer);
 
     const dispatch = useDispatch<AppDispatch>();
 
