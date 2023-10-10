@@ -197,7 +197,7 @@ const MenuOptionsModal = (props: {
                                     }
                                     title={MenuOptions.SETTINGS}
                                     active={props.title == MenuOptions.SETTINGS ? true : false}
-                                    description='Edit Password'
+                                    description='Update Bank account details'
                                 />
                             </Pressable>
                             <View style={{ height: 24 }}></View>

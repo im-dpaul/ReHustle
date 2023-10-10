@@ -7,6 +7,7 @@ import StorageDataTypes from "../../../constants/StorageDataTypes";
 import LocalStorage from "../../../data/local_storage/LocalStorage";
 import { MenuIconSVG, UserAvatar } from "../../../../assets/images/svg_index";
 import MenuOptionsModal from "./MenuOptionsModal";
+import Clipboard from '@react-native-community/clipboard'
 
 function HomeAppBar(props: { title: string }): JSX.Element {
 
@@ -27,7 +28,9 @@ function HomeAppBar(props: { title: string }): JSX.Element {
         }
     });
 
-    const onCopyButtonTap = () => { }
+    const onCopyButtonTap = () => {
+        Clipboard.setString(`${userName}`)
+    }
 
     const onMenuButtonTap = () => {
         setShowMenu(true);

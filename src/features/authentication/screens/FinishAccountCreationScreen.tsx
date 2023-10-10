@@ -20,6 +20,7 @@ import StorageDataTypes from '../../../constants/StorageDataTypes';
 import { finishCreation, clearData } from "../redux/finishAccountCreationSlice";
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../../app/store'
+import Clipboard from '@react-native-community/clipboard';
 
 type FinishAccountCreationProps = NativeStackScreenProps<RootStackParamList, 'FinishAccountCreation'>;
 
@@ -48,7 +49,9 @@ function FinishAccountCreationScreen({ navigation }: FinishAccountCreationProps)
         // navigation.replace('Services');
     }
 
-    const copyLink = () => { }
+    const copyLink = () => {
+        Clipboard.setString(`${userName}`)
+    }
 
     useEffect(() => {
         if (finishCreationReducer.data != null) {
