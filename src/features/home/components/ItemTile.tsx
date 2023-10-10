@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
         fontWeight: '400'
     },
     typeText: {
-        color: AppColors.GRAY2,
+        color: AppColors.GRAY3,
         fontFamily: FontFamily.GILROY_REGULAR,
         fontSize: 12,
         fontStyle: 'normal',

@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
         fontWeight: '400',
     },
     subTitle: {
-        color: AppColors.GRAY2,
+        color: AppColors.GRAY3,
         fontFamily: FontFamily.NUNITO_MEDIUM,
         fontSize: 14,
         fontStyle: 'normal',

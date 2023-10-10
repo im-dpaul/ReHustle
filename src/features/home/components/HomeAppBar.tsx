@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
         fontWeight: '400',
     },
     subTitle: {
-        color: AppColors.GRAY2,
+        color: AppColors.GRAY3,
         fontFamily: FontFamily.GILROY_REGULAR,
         fontSize: 12,
         fontStyle: 'normal',

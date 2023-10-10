@@ -2,8 +2,9 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { authenticatedGetMethod, authenticatedPutMethod } from "../../../core/services/NetworkServices";
 import StorageDataTypes from "../../../constants/StorageDataTypes";
 import LocalStorage from "../../../data/local_storage/LocalStorage";
+import { SocialProfileDataType } from "../../../data/constants/AllSocialProfileType";
 
-interface ProfileState {
+export interface ProfileState {
     data: any;
     error: errorType;
     loading: boolean;
@@ -15,18 +16,22 @@ interface ProfileState {
     bannerImage: string;
     validated: boolean;
     showSnackbar: boolean;
+    socialProfileIDs: string[];
+    socialProfiles: SocialProfileDataType[];
 }
 
 type errorType = {
     nameError: string;
     linkError: string;
     message: string;
+    profileLinkEmptyError: string;
 }
 
 const noError: errorType = {
     nameError: '',
     linkError: '',
-    message: ''
+    message: '',
+    profileLinkEmptyError: ''
 }
 
 const initialState: ProfileState = {
@@ -40,7 +45,9 @@ const initialState: ProfileState = {
     profileImage: '',
     bannerImage: '',
     showSnackbar: false,
-    validated: false
+    validated: false,
+    socialProfileIDs: [],
+    socialProfiles: []
 };
 
 export const getCurrentUserData = createAsyncThunk<any>(
@@ -84,7 +91,7 @@ export const updateProfile = createAsyncThunk<any>(
             "description": stateValue.about == undefined ? '' : stateValue.about,
             "profileImage": stateValue.profileImage == '' ? null : stateValue.profileImage,
             "profileUrls": [],
-            "socialLinks": [],
+            "socialLinks": stateValue.socialProfiles,
             "appearance": `{\"color\":\"\",\"bannerImage\":\"${bannerImg}\",\"profileImage\":\"${profileImg}\",\"buttonRounded\":\"\"}`
         };
 
@@ -121,7 +128,20 @@ export const profileSlice = createSlice({
             state.about = action.payload;
         },
         setValidation: (state) => {
-            if ((state.name != '') && (state.link != '')) {
+            let emptyProfileLinks: boolean = false;
+            if (state.socialProfiles.length != 0) {
+                state.socialProfiles.forEach((profile) => {
+                    if (profile.link == '') {
+                        emptyProfileLinks = true;
+                    }
+                })
+                if (emptyProfileLinks) {
+                    state.error.profileLinkEmptyError = 'All links values must be present'
+                } else {
+                    state.error.profileLinkEmptyError = ''
+                }
+            }
+            if ((state.name != '') && (state.link != '') && !emptyProfileLinks) {
                 state.validated = true
                 state.error = noError
             }
@@ -141,6 +161,27 @@ export const profileSlice = createSlice({
         },
         setSnackbar: (state, action) => {
             state.showSnackbar = action.payload
+        },
+        addSocialProfile: (state, action) => {
+            const profile: SocialProfileDataType = action.payload;
+            state.socialProfiles.push(profile);
+            state.socialProfileIDs.push(action.payload.title);
+        },
+        removeSocialProfile: (state, action) => {
+            const title: string = action.payload;
+            state.socialProfiles = state.socialProfiles.filter((profile) => profile.title !== title)
+            state.socialProfileIDs = state.socialProfileIDs.filter((ID) => ID !== title)
+        },
+        updateSocialProfile: (state, action) => {
+            let profiles: SocialProfileDataType[];
+            profiles = state.socialProfiles.map((profile) => {
+                let localProfile: SocialProfileDataType = profile;
+                if (action.payload.title == profile.title) {
+                    localProfile = action.payload;
+                }
+                return localProfile;
+            });
+            state.socialProfiles = profiles;
         },
     },
     extraReducers: (builder) => {
@@ -212,6 +253,6 @@ export const profileSlice = createSlice({
     },
 });
 
-export const { updateName, updateLink, updateAbout, setSnackbar, setValidation } = profileSlice.actions;
+export const { updateName, updateLink, updateAbout, setSnackbar, setValidation, addSocialProfile, removeSocialProfile, updateSocialProfile } = profileSlice.actions;
 
 export default profileSlice.reducer;

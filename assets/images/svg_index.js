@@ -32,6 +32,23 @@ import TimeIcon from './time_icon.svg'
 import UploadIcon from './upload_icon.svg'
 import VideoIcon from './video_icon.svg'
 
+/// Social Profile icons
+import AppleMusicIcon from './apple_music_icon.svg'
+import BehanceIcon from './behance_icon.svg'
+import DribbleIcon from './dribble_icon.svg'
+import EmailIcon from './email_icon.svg'
+import FacebookIcon from './facebook_icon.svg'
+import GithubIcon from './github_icon.svg'
+import InstagramIcon from './instagram_icon.svg'
+import LinkedinIcon from './linkedin_icon.svg'
+import ProductHuntIcon from './producthunt_icon.svg'
+import SnapchatIcon from './snapchat_icon.svg'
+import SpotifyIcon from './spotify_icon.svg'
+import TiktokIcon from './tiktok_icon.svg'
+import TwitterIcon from './twitter_icon.svg'
+import WebsiteIcon from './website_icon.svg'
+import YoutubeIcon from './youtube_icon.svg'
+
 export {
     RehustleLogo,
     MenuIconSVG,
@@ -56,5 +73,20 @@ export {
     UserActiveIcon,
     BackButtonIcon,
     UploadIcon,
-    VideoIcon
+    VideoIcon,
+    AppleMusicIcon,
+    BehanceIcon,
+    DribbleIcon,
+    EmailIcon,
+    FacebookIcon,
+    GithubIcon,
+    InstagramIcon,
+    LinkedinIcon,
+    ProductHuntIcon,
+    SnapchatIcon,
+    SpotifyIcon,
+    TiktokIcon,
+    TwitterIcon,
+    WebsiteIcon,
+    YoutubeIcon
 }

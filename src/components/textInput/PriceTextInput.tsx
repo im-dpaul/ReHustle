@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 10
     },
     inrText: {
-        color: AppColors.GRAY2,
+        color: AppColors.GRAY3,
         fontFamily: FontFamily.GILROY_SEMIBOLD,
         fontSize: 12,
         fontStyle: 'normal',

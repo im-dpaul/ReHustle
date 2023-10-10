@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     buttonTitle: {
-        color: AppColors.GRAY2,
+        color: AppColors.GRAY3,
         fontFamily: FontFamily.GILROY_MEDIUM,
         fontSize: 14,
         fontStyle: 'normal',

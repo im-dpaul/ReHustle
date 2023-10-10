@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
         margin: 24,
     },
     title: {
-        color: AppColors.GRAY2,
+        color: AppColors.GRAY3,
         fontFamily: FontFamily.GILROY_BOLD,
         fontSize: 12,
         fontStyle: 'normal',

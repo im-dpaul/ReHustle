@@ -9,7 +9,7 @@ const AppColors = {
     IRIS: '#5D5FEF',
 
     GRAY1: '#333333',
-    GRAY2: '#828282',
+    GRAY3: '#828282',
     GRAY4: '#BDBDBD',
     GRAY5: '#E0E0E0',
     GRAY6: '#F2F2F2',

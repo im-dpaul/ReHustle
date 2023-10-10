@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
         backgroundColor: AppColors.WHITE,
         borderRadius: 16,
         elevation: 6,
-        shadowColor: AppColors.GRAY2
+        shadowColor: AppColors.GRAY3
     },
     imageContainer: {
         backgroundColor: AppColors.SECONDARY_COLOR,
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
         fontWeight: '400'
     },
     descriptionText: {
-        color: AppColors.GRAY2,
+        color: AppColors.GRAY3,
         fontFamily: FontFamily.GILROY_MEDIUM,
         fontSize: 14,
         fontStyle: 'normal',

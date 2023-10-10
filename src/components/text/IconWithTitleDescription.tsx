@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
         fontWeight: '400'
     },
     descriptionText: {
-        color: AppColors.GRAY2,
+        color: AppColors.GRAY3,
         fontFamily: FontFamily.NUNITO_REGULAR,
         fontSize: 10,
         fontStyle: 'normal',

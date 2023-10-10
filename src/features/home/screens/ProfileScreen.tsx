@@ -15,6 +15,9 @@ import { getCurrentUserData } from '../redux/profileSlice'
 import { updateName, updateLink, updateAbout, setSnackbar, setValidation, updateProfile } from '../redux/profileSlice'
 import CommonButton from '../../../components/buttons/CommonButton'
 import CommonSnackbar, { SnackbarPosition } from '../../../components/snackbar/CommonSnackbar'
+import SocialProfileLinks from '../components/SocialProfileLinks'
+import SocialProfilesLinksList from '../components/SocialProfilesLinksList'
+import LinkWithDescription from '../../authentication/components/LinkWithDescription'
 
 const ProfileScreen = (): JSX.Element => {
     const profileStore = useSelector((state: any) => state.profile)
@@ -74,7 +77,7 @@ const ProfileScreen = (): JSX.Element => {
                             <View style={styles.main}>
                                 <Text style={[styles.title, { fontSize: 14, color: AppColors.GRAY1 }]}>Profile Information</Text>
                                 <View style={{ height: 8 }}></View>
-                                <Text style={[styles.title, { color: AppColors.GRAY4 }]}>Let your audience know more about you. Add a brief description about yourself and social links which would be visible on your profile page</Text>
+                                <Text style={[styles.title, { color: AppColors.GRAY3 }]}>Let your audience know more about you. Add a brief description about yourself and social links which would be visible on your profile page</Text>
                                 <View style={{ height: 16 }}></View>
                                 <Text style={styles.title}>Name</Text>
                                 <View style={{ height: 8 }}></View>
@@ -101,11 +104,19 @@ const ProfileScreen = (): JSX.Element => {
                                     // errorText={profileStore.error.accountNoError}
                                     onChangeText={(about) => { setAbout(about) }}
                                 />
+                                <View style={{ height: 16 }}></View>
+                                <SocialProfileLinks />
+                                <View style={{ height: 8 }}></View>
+                                <SocialProfilesLinksList />
+                                <View style={{ height: 16 }}></View>
+                                <LinkWithDescription />
+                                <View style={{ height: 8 }}></View>
+
                                 <View style={{ height: 24 }}></View>
                                 <Text style={[styles.title, { fontSize: 14, color: AppColors.GRAY1 }]}>Appearance</Text>
                                 <View style={{ height: 8 }}></View>
-                                <Text style={[styles.title, { color: AppColors.GRAY4 }]}>Choose how your page looks and feels. Get started with a preset below, or pick everything from scratch.</Text>
-                                <View style={{ height: 16 }}></View>
+                                <Text style={[styles.title, { color: AppColors.GRAY3 }]}>Choose how your page looks and feels. Get started with a preset below, or pick everything from scratch.</Text>
+                                <View style={{ height: 24 }}></View>
                                 <View style={styles.card}>
                                     {
                                         ((profileStore.bannerImage == "") || (profileStore.bannerImage == null) || (profileStore.bannerImage == undefined))
@@ -164,7 +175,7 @@ const styles = StyleSheet.create({
         alignContent: 'center'
     },
     title: {
-        color: AppColors.GRAY2,
+        color: AppColors.GRAY1,
         fontFamily: FontFamily.GILROY_BOLD,
         fontSize: 12,
         fontStyle: 'normal',

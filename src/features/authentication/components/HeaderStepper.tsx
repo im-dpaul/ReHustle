@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
         justifyContent: "center"
     },
     skipText: {
-        color: AppColors.GRAY2,
+        color: AppColors.GRAY3,
         fontFamily: FontFamily.GILROY_SEMIBOLD,
         fontSize: 14,
         fontStyle: 'normal',
