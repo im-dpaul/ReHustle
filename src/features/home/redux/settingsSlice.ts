@@ -127,8 +127,12 @@ export const settingsSlice = createSlice({
             state.showSnackbar = action.payload
         },
         clearData: (state) => {
+            state.accountName = ''
+            state.accountNumber = ''
             state.data = null
             state.error = noError
+            state.ifsc = ''
+            state.verifyAccountNumber = ''
         }
     },
     extraReducers: (builder) => {

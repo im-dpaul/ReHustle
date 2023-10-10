@@ -3,8 +3,15 @@ import { StyleSheet, Text, TextInput, View } from "react-native";
 import AppColors from "../../constants/AppColors";
 import FontFamily from "../../constants/FontFamily";
 
-function CommonTextInput(props: { placeholder: string, errorText?: string, editable?: boolean, onChangeText: ((text: string) => void) }): JSX.Element {
-    const [inputValue, setInputValue] = useState('');
+interface TextInputProps {
+    value: string,
+    placeholder: string,
+    errorText?: string,
+    editable?: boolean,
+    onChangeText: ((text: string) => void)
+}
+
+function CommonTextInput(props: TextInputProps): JSX.Element {
     const [focus, setFocus] = useState(false);
 
     return (
@@ -18,8 +25,8 @@ function CommonTextInput(props: { placeholder: string, errorText?: string, edita
                 placeholder={props.placeholder}
                 underlineColorAndroid={AppColors.TRANSPARENT}
                 placeholderTextColor={AppColors.GRAY4}
-                value={inputValue}
-                onChangeText={(value) => { setInputValue(value), props.onChangeText(value) }}
+                value={props.value}
+                onChangeText={(value) => { props.onChangeText(value) }}
                 onFocus={() => { setFocus(true) }}
                 onBlur={() => { setFocus(false) }}
                 editable={props.editable}

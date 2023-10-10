@@ -111,6 +111,7 @@ const CreateEventService = ({ navigation }: CreateEventServiceProps): JSX.Elemen
                         <Text style={styles.title}>Name</Text>
                         <View style={{ height: 8 }}></View>
                         <CommonTextInput
+                            value={createEventServiceReducer.serviceName}
                             placeholder='Give it a name'
                             onChangeText={(name) => onNameChange(name)}
                         />
@@ -120,6 +121,7 @@ const CreateEventService = ({ navigation }: CreateEventServiceProps): JSX.Elemen
                         <Text style={styles.title}>Short Description</Text>
                         <View style={{ height: 8 }}></View>
                         <CommonTextInput
+                            value={createEventServiceReducer.serviceDescription}
                             placeholder='A little something to get people intigued'
                             onChangeText={(desc) => onChangeDescription(desc)}
                         />
@@ -133,6 +135,7 @@ const CreateEventService = ({ navigation }: CreateEventServiceProps): JSX.Elemen
                         <Text style={styles.title}>Video Event link (Zoom, Google Meet, Teams etc.)</Text>
                         <View style={{ height: 8 }}></View>
                         <CommonTextInput
+                            value={createEventServiceReducer.serviceEventUrl}
                             placeholder='https://zoom.us/j/xxxxxxxxx'
                             onChangeText={(url) => onLinkChange(url)}
                         />

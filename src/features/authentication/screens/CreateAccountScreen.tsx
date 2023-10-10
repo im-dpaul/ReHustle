@@ -83,9 +83,17 @@ function CreateAccountScreen({ route }: CreateAccountProps): JSX.Element {
                     </View>
                     <SignUpWithEmailText signIn={false} />
                     <View style={{ height: 36 }}></View>
-                    <CommonTextInput placeholder='Email address' onChangeText={((value) => onChangeEmailField(value))} />
+                    <CommonTextInput
+                        value={createAccountReducer.emailAddress}
+                        placeholder='Email address'
+                        onChangeText={((value) => onChangeEmailField(value))}
+                    />
                     <View style={{ height: 16 }}></View>
-                    <CommonTextInput placeholder='Password' onChangeText={((value) => onChangePasswordField(value))} />
+                    <CommonTextInput
+                        value={createAccountReducer.password}
+                        placeholder='Password'
+                        onChangeText={((value) => onChangePasswordField(value))}
+                    />
                     <View style={{ marginVertical: 24 }}>
                         {
                             createAccountReducer.loading

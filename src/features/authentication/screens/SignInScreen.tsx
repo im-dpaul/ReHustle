@@ -104,16 +104,22 @@ function SignInScreen({ navigation, route }: SignInProps): JSX.Element {
                     </View>
                     <SignUpWithEmailText signIn={true} />
                     <View style={{ height: 36 }}></View>
-                    <CommonTextInput placeholder='Email address' onChangeText={((value) => onChangeEmailField(value))} />
+                    <CommonTextInput
+                        value={signInReducer.emailAddress}
+                        placeholder='Email address'
+                        onChangeText={((value) => onChangeEmailField(value))}
+                    />
                     <View style={{ height: 16 }}></View>
-                    <CommonTextInput placeholder='Password' onChangeText={((value) => onChangePasswordField(value))} />
+                    <CommonTextInput
+                        value={signInReducer.password}
+                        placeholder='Password'
+                        onChangeText={((value) => onChangePasswordField(value))}
+                    />
                     <View style={{ height: 18 }}></View>
-
                     <View style={styles.checkBoxRow}>
                         <RememberMe setRememberMe={((value) => changeRememberMe(value))} />
                         <TextButton text='Forgot Password?' onPress={onForgetPasswordTap} />
                     </View>
-
                     <View style={{ marginVertical: 24 }}>
                         {
                             signInReducer.loading

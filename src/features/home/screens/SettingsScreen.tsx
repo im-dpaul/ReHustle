@@ -18,7 +18,7 @@ import CommonSnackbar, { SnackbarPosition } from '../../../components/snackbar/C
 const SettingsScreen = (): JSX.Element => {
     const settingsStore = useSelector((state: any) => state.settings);
     const dispatch = useDispatch<AppDispatch>()
-    console.log('settings store: ', settingsStore);
+    // console.log('settings store: ', settingsStore);
 
     const setAcName = (name: string) => {
         dispatch(setName(name))
@@ -81,6 +81,7 @@ const SettingsScreen = (): JSX.Element => {
                         <Text style={styles.title}>Account Holder Name</Text>
                         <View style={{ height: 8 }}></View>
                         <CommonTextInput
+                            value={settingsStore.accountName}
                             placeholder='Account Holder Name'
                             errorText={settingsStore.error.nameError}
                             onChangeText={(name) => { setAcName(name) }}
@@ -89,6 +90,7 @@ const SettingsScreen = (): JSX.Element => {
                         <Text style={styles.title}>IFSC Code</Text>
                         <View style={{ height: 8 }}></View>
                         <CommonTextInput
+                            value={settingsStore.ifsc}
                             placeholder='IFSC Code'
                             errorText={settingsStore.error.ifscError}
                             onChangeText={(ifsc) => { setAcIFSC(ifsc) }}
@@ -97,6 +99,7 @@ const SettingsScreen = (): JSX.Element => {
                         <Text style={styles.title}>Account Number</Text>
                         <View style={{ height: 8 }}></View>
                         <CommonTextInput
+                            value={settingsStore.accountNumber}
                             placeholder='Account Number'
                             errorText={settingsStore.error.accountNoError}
                             onChangeText={(acc) => { setAccountNo(acc) }}
@@ -105,6 +108,7 @@ const SettingsScreen = (): JSX.Element => {
                         <Text style={styles.title}>Verify Account Number</Text>
                         <View style={{ height: 8 }}></View>
                         <CommonTextInput
+                            value={settingsStore.verifyAccountNumber}
                             placeholder='Verify Account Number'
                             errorText={settingsStore.error.verifyAccountNoError}
                             onChangeText={(acc) => { verifyAccountNo(acc) }}
@@ -115,6 +119,7 @@ const SettingsScreen = (): JSX.Element => {
                         <Text style={styles.title}>Registered Email</Text>
                         <View style={{ height: 8 }}></View>
                         <CommonTextInput
+                            value=''
                             placeholder={settingsStore.emailAddress}
                             editable={false}
                             onChangeText={() => { }}
