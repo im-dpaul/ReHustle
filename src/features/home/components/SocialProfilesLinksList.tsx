@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import RemoveButton from "../../../components/buttons/RemoveButton";
 import { useSelector, useDispatch } from 'react-redux';
 import { ProfileState, removeSocialProfile, updateSocialProfile } from "../redux/profileSlice";
-import AllSocialProfileType, { SocialProfileDataType } from "../../../data/constants/AllSocialProfileType";
+import { SocialProfileDataType } from "../../../data/constants/AllSocialProfileType";
 import AppColors from "../../../constants/AppColors";
 import FontFamily from "../../../constants/FontFamily";
 import TextInputWithIcon from "../../../components/textInput/TextInputWithIcon";

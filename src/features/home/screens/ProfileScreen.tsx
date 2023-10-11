@@ -17,7 +17,8 @@ import CommonButton from '../../../components/buttons/CommonButton'
 import CommonSnackbar, { SnackbarPosition } from '../../../components/snackbar/CommonSnackbar'
 import SocialProfileLinks from '../components/SocialProfileLinks'
 import SocialProfilesLinksList from '../components/SocialProfilesLinksList'
-import LinkWithDescription from '../../authentication/components/LinkWithDescription'
+import ProfileLinkTitleDescription from '../components/ProfileLinkTitleDescription'
+import AddLinksList from '../components/AddLinksList'
 
 const ProfileScreen = (): JSX.Element => {
     const profileStore = useSelector((state: any) => state.profile)
@@ -109,9 +110,9 @@ const ProfileScreen = (): JSX.Element => {
                                 <View style={{ height: 8 }}></View>
                                 <SocialProfilesLinksList />
                                 <View style={{ height: 16 }}></View>
-                                <LinkWithDescription />
+                                <ProfileLinkTitleDescription />
                                 <View style={{ height: 8 }}></View>
-
+                                <AddLinksList />
                                 <View style={{ height: 24 }}></View>
                                 <Text style={[styles.title, { fontSize: 14, color: AppColors.GRAY1 }]}>Appearance</Text>
                                 <View style={{ height: 8 }}></View>

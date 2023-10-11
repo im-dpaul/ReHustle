@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, nanoid } from "@reduxjs/toolkit";
 import { authenticatedGetMethod, authenticatedPutMethod } from "../../../core/services/NetworkServices";
 import StorageDataTypes from "../../../constants/StorageDataTypes";
 import LocalStorage from "../../../data/local_storage/LocalStorage";
@@ -18,6 +18,13 @@ export interface ProfileState {
     showSnackbar: boolean;
     socialProfileIDs: string[];
     socialProfiles: SocialProfileDataType[];
+    customProfiles: CustomProfileType[]
+}
+
+export type CustomProfileType = {
+    id: string,
+    title: string,
+    url: string,
 }
 
 type errorType = {
@@ -25,13 +32,15 @@ type errorType = {
     linkError: string;
     message: string;
     profileLinkEmptyError: string;
+    customLinkEmptyError: string;
 }
 
 const noError: errorType = {
     nameError: '',
     linkError: '',
     message: '',
-    profileLinkEmptyError: ''
+    profileLinkEmptyError: '',
+    customLinkEmptyError: ''
 }
 
 const initialState: ProfileState = {
@@ -47,7 +56,8 @@ const initialState: ProfileState = {
     showSnackbar: false,
     validated: false,
     socialProfileIDs: [],
-    socialProfiles: []
+    socialProfiles: [],
+    customProfiles: []
 };
 
 export const getCurrentUserData = createAsyncThunk<any>(
@@ -90,7 +100,7 @@ export const updateProfile = createAsyncThunk<any>(
             "userName": stateValue.link,
             "description": stateValue.about == undefined ? '' : stateValue.about,
             "profileImage": stateValue.profileImage == '' ? null : stateValue.profileImage,
-            "profileUrls": [],
+            "profileUrls": stateValue.customProfiles,
             "socialLinks": stateValue.socialProfiles,
             "appearance": `{\"color\":\"\",\"bannerImage\":\"${bannerImg}\",\"profileImage\":\"${profileImg}\",\"buttonRounded\":\"\"}`
         };
@@ -114,6 +124,19 @@ export const updateProfile = createAsyncThunk<any>(
     }
 );
 
+const getPlaceholderValue = (title: string) => {
+    let placeholder: string = '';
+    if (title == 'appleMusic') {
+        placeholder = 'Apple Music'
+    } else if (title == 'productHunt') {
+        placeholder = 'Product Hunt'
+    } else {
+        let ch = title.charAt(0);
+        placeholder = ch.toUpperCase() + title.substring(1);
+    }
+    return placeholder
+}
+
 export const profileSlice = createSlice({
     name: 'profile',
     initialState: initialState,
@@ -129,6 +152,7 @@ export const profileSlice = createSlice({
         },
         setValidation: (state) => {
             let emptyProfileLinks: boolean = false;
+            let emptyCustomLinks: boolean = false;
             if (state.socialProfiles.length != 0) {
                 state.socialProfiles.forEach((profile) => {
                     if (profile.link == '') {
@@ -141,7 +165,19 @@ export const profileSlice = createSlice({
                     state.error.profileLinkEmptyError = ''
                 }
             }
-            if ((state.name != '') && (state.link != '') && !emptyProfileLinks) {
+            if (state.customProfiles.length != 0) {
+                state.customProfiles.forEach((profile) => {
+                    if (profile.title == '' || profile.url == '') {
+                        emptyCustomLinks = true;
+                    }
+                })
+                if (emptyCustomLinks) {
+                    state.error.customLinkEmptyError = 'All links values must be present'
+                } else {
+                    state.error.customLinkEmptyError = ''
+                }
+            }
+            if ((state.name != '') && (state.link != '') && !emptyProfileLinks && !emptyCustomLinks) {
                 state.validated = true
                 state.error = noError
             }
@@ -183,6 +219,27 @@ export const profileSlice = createSlice({
             });
             state.socialProfiles = profiles;
         },
+        addCustomProfile: (state) => {
+            const profile: CustomProfileType = {
+                id: nanoid(),
+                title: '',
+                url: '',
+            }
+            state.customProfiles.push(profile);
+        },
+        removeCustomProfile: (state, action) => {
+            state.customProfiles = state.customProfiles.filter((profile) => profile.id !== action.payload.id)
+        },
+        updateCustomProfile: (state, action) => {
+            const profiles: CustomProfileType[] = state.customProfiles.map((profile) => {
+                let localProfile: CustomProfileType = profile;
+                if (action.payload.id == localProfile.id) {
+                    localProfile = action.payload;
+                }
+                return localProfile;
+            });
+            state.customProfiles = profiles;
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(getCurrentUserData.pending, (state) => {
@@ -207,6 +264,36 @@ export const profileSlice = createSlice({
             else {
                 state.bannerImage = '';
             }
+
+            const customProfilesLocalData: { addedOn: string, url: string, title: string }[] = action.payload.profileUrls;
+            let customProfilesList: CustomProfileType[] = []
+            if (customProfilesLocalData.length) {
+                customProfilesLocalData.forEach((profile) => {
+                    let localSocialProfile: CustomProfileType = {
+                        id: nanoid(),
+                        title: profile.title,
+                        url: profile.url,
+                    };
+                    customProfilesList.push(localSocialProfile);
+                })
+                state.customProfiles = customProfilesList;
+            }
+
+            const socialLinksLocalData: { addedOn: string, link: string, title: string }[] = action.payload.socialLinks;
+            let socialProfilesList: SocialProfileDataType[] = []
+            if (socialLinksLocalData.length) {
+                socialLinksLocalData.forEach((profile) => {
+                    let localSocialProfile: SocialProfileDataType = {
+                        title: profile.title,
+                        placeholder: getPlaceholderValue(profile.title),
+                        link: profile.link,
+                    };
+                    socialProfilesList.push(localSocialProfile);
+                    state.socialProfileIDs.push(profile.title)
+                })
+                state.socialProfiles = socialProfilesList;
+            }
+
             state.name = action.payload.name;
             state.link = action.payload.userName;
             state.about = action.payload.description;
@@ -253,6 +340,18 @@ export const profileSlice = createSlice({
     },
 });
 
-export const { updateName, updateLink, updateAbout, setSnackbar, setValidation, addSocialProfile, removeSocialProfile, updateSocialProfile } = profileSlice.actions;
+export const {
+    updateName,
+    updateLink,
+    updateAbout,
+    setSnackbar,
+    setValidation,
+    addSocialProfile,
+    removeSocialProfile,
+    updateSocialProfile,
+    addCustomProfile,
+    removeCustomProfile,
+    updateCustomProfile
+} = profileSlice.actions;
 
 export default profileSlice.reducer;
