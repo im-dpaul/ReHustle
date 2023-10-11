@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View } from "react-native";
-import CustomTextInput from "../../../components/textInput/CustomTextInput";
 import RemoveButton from "../../../components/buttons/RemoveButton";
-import { FacebookIcon, InstagramIcon, TwitterIcon } from "../../../../assets/images";
 import { useSelector, useDispatch } from 'react-redux';
 import { ProfileState, removeSocialProfile, updateSocialProfile } from "../redux/profileSlice";
 import AllSocialProfileType, { SocialProfileDataType } from "../../../data/constants/AllSocialProfileType";
 import AppColors from "../../../constants/AppColors";
 import FontFamily from "../../../constants/FontFamily";
+import TextInputWithIcon from "../../../components/textInput/TextInputWithIcon";
+import { AppleMusicIcon, BehanceIcon, DribbleIcon, EmailIcon, FacebookIcon, GithubIcon, InstagramIcon, LinkedinIcon, ProductHuntIcon, SnapchatIcon, SpotifyIcon, TiktokIcon, TwitterIcon, WebsiteIcon, YoutubeIcon } from "../../../../assets/images/svg_index";
 
 function SocialProfilesLinksList(): JSX.Element {
     const dispatch = useDispatch();
@@ -15,6 +15,45 @@ function SocialProfilesLinksList(): JSX.Element {
     const onRemove = (socialMedia: SocialProfileDataType) => {
         if (profile.socialProfileIDs.includes(socialMedia.title)) {
             dispatch(removeSocialProfile(socialMedia.title));
+        }
+    }
+
+    const getIcon = (key: string) => {
+        switch (key) {
+            case 'website':
+                return <WebsiteIcon style={styles.prefixIconStyle} />
+            case 'twitter':
+                return <TwitterIcon style={styles.prefixIconStyle} />
+            case 'linkedin':
+                return <LinkedinIcon style={styles.prefixIconStyle} />
+            case 'instagram':
+                return <InstagramIcon style={styles.prefixIconStyle} />
+            case 'facebook':
+                return <FacebookIcon style={styles.prefixIconStyle} />
+            case 'twitter':
+                return <TwitterIcon style={styles.prefixIconStyle} />
+            case 'youtube':
+                return <YoutubeIcon style={styles.prefixIconStyle} />
+            case 'snapchat':
+                return <SnapchatIcon style={styles.prefixIconStyle} />
+            case 'spotify':
+                return <SpotifyIcon style={styles.prefixIconStyle} />
+            case 'appleMusic':
+                return <AppleMusicIcon style={styles.prefixIconStyle} />
+            case 'tiktok':
+                return <TiktokIcon style={styles.prefixIconStyle} />
+            case 'dribble':
+                return <DribbleIcon style={styles.prefixIconStyle} />
+            case 'behance':
+                return <BehanceIcon style={styles.prefixIconStyle} />
+            case 'github':
+                return <GithubIcon style={styles.prefixIconStyle} />
+            case 'productHunt':
+                return <ProductHuntIcon style={styles.prefixIconStyle} />
+            case 'email':
+                return <EmailIcon style={styles.prefixIconStyle} />
+            default:
+                return <WebsiteIcon style={styles.prefixIconStyle} />
         }
     }
 
@@ -35,12 +74,20 @@ function SocialProfilesLinksList(): JSX.Element {
                     <View key={socialProfile.title}>
                         <View>
                             <View style={styles.socialLinkAndRemove}>
-                                <CustomTextInput
-                                    onChangeText={(url) => onChangeUrl(url, socialProfile)}
-                                    placeholder={socialProfile.placeholder}
-                                    initialValue={socialProfile.link}
-                                    prefixIcon={FacebookIcon}
-                                />
+                                <View style={{ flex: 1 }}>
+                                    <TextInputWithIcon
+                                        placeholder={socialProfile.placeholder}
+                                        value={socialProfile.link}
+                                        prefixIcon={
+                                            <View>
+                                                {
+                                                    getIcon(socialProfile.title)
+                                                }
+                                            </View>
+                                        }
+                                        onChangeText={(url) => onChangeUrl(url, socialProfile)}
+                                    />
+                                </View>
                                 <View style={{ width: 14 }}></View>
                                 <RemoveButton onPress={() => onRemove(socialProfile)} />
                             </View>
@@ -72,6 +119,10 @@ const styles = StyleSheet.create({
         fontSize: 12,
         fontStyle: 'normal',
         fontWeight: '400'
+    },
+    prefixIconStyle: {
+        maxHeight: 28,
+        maxWidth: 28
     }
 });
 
