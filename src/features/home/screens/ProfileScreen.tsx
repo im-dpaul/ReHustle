@@ -24,7 +24,7 @@ const ProfileScreen = (): JSX.Element => {
     const profileStore = useSelector((state: any) => state.profile)
     const dispatch = useDispatch<AppDispatch>()
 
-    console.log("Profile store", profileStore);
+    // console.log("Profile store", profileStore);
 
     const setName = (name: string) => {
         dispatch(updateName(name))

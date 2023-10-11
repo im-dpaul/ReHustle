@@ -8,6 +8,8 @@ import UserIcon from './user_icon.svg';
 import UserActiveIcon from './user_active_icon.svg';
 import LogoutIcon from './logout_icon.svg';
 import BackButtonIcon from './back_button.svg'
+import CheckBoxFilled from './check_box.svg'
+import LinkIcon from './link_icon.svg'
 
 /// Menu bar icons
 import MenuIconSVG from './menu_icon.svg';
@@ -21,6 +23,7 @@ import SettingsIcon from './settings_icon.svg';
 import SettingsActiveIcon from './settings_active_icon.svg';
 import PriceIcon from './price_icon.svg'
 import HelpCircleIcon from './help_circle_icon.svg';
+import NoServicesImage from './no_services.svg'
 
 /// Service icons
 import ChatIcon from './chat_icon.svg'
@@ -32,6 +35,10 @@ import TimeIcon from './time_icon.svg'
 import UploadIcon from './upload_icon.svg'
 import VideoIcon from './video_icon.svg'
 
+/// Emoji Icons
+import DancingFigure from './dancing_figure.svg'
+import PartyingFace from './partying_face.svg'
+
 /// Social Profile icons
 import AppleMusicIcon from './apple_music_icon.svg'
 import BehanceIcon from './behance_icon.svg'
@@ -39,6 +46,7 @@ import DribbleIcon from './dribble_icon.svg'
 import EmailIcon from './email_icon.svg'
 import FacebookIcon from './facebook_icon.svg'
 import GithubIcon from './github_icon.svg'
+import GoogleIcon from './google_icon.svg'
 import InstagramIcon from './instagram_icon.svg'
 import LinkedinIcon from './linkedin_icon.svg'
 import ProductHuntIcon from './producthunt_icon.svg'
@@ -88,5 +96,11 @@ export {
     TiktokIcon,
     TwitterIcon,
     WebsiteIcon,
-    YoutubeIcon
+    YoutubeIcon,
+    NoServicesImage,
+    GoogleIcon,
+    CheckBoxFilled,
+    DancingFigure,
+    LinkIcon,
+    PartyingFace
 }

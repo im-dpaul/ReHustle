@@ -38,7 +38,7 @@ function SocialProfilesLinksList(): JSX.Element {
                 return <SnapchatIcon style={styles.prefixIconStyle} />
             case 'spotify':
                 return <SpotifyIcon style={styles.prefixIconStyle} />
-            case 'appleMusic':
+            case 'applemusic':
                 return <AppleMusicIcon style={styles.prefixIconStyle} />
             case 'tiktok':
                 return <TiktokIcon style={styles.prefixIconStyle} />
@@ -48,7 +48,7 @@ function SocialProfilesLinksList(): JSX.Element {
                 return <BehanceIcon style={styles.prefixIconStyle} />
             case 'github':
                 return <GithubIcon style={styles.prefixIconStyle} />
-            case 'productHunt':
+            case 'producthunt':
                 return <ProductHuntIcon style={styles.prefixIconStyle} />
             case 'email':
                 return <EmailIcon style={styles.prefixIconStyle} />

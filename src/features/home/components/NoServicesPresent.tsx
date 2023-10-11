@@ -1,13 +1,13 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import AppColors from '../../../constants/AppColors'
-import { NoServicesImage } from '../../../../assets/images'
 import FontFamily from '../../../constants/FontFamily'
+import { NoServicesImage } from '../../../../assets/images/svg_index'
 
 const NoServicesPresent = () => {
     return (
         <View style={styles.container}>
-            <Image style={styles.image} source={NoServicesImage} />
+            <NoServicesImage style={styles.image} />
             <View style={{ height: 24 }}></View>
             <Text style={styles.title}>No services present</Text>
             <View style={{ height: 8 }}></View>
@@ -21,8 +21,8 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     image: {
-        height: 238,
-        width: 238,
+        minHeight: 238,
+        minWidth: 238,
     },
     title: {
         color: AppColors.GRAY1,

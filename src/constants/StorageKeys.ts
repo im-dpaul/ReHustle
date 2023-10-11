@@ -1,4 +1,4 @@
-const StorageDataTypes = {
+const StorageKeys = {
     ID: 'id',
     TOKEN: 'token',
     EMAIL: 'email',
@@ -9,4 +9,4 @@ const StorageDataTypes = {
     REMEMBER_ME: 'remember_me'
 };
 
-export default StorageDataTypes;
+export default StorageKeys;

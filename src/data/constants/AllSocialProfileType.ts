@@ -62,7 +62,7 @@ const AllSocialProfileType: SocialProfileDataType[] = [
     },
     {
         placeholder: 'Apple Music',
-        title: "appleMusic",
+        title: "applemusic",
         link: "https://music.apple.com/",
     },
     {
@@ -93,7 +93,7 @@ const AllSocialProfileType: SocialProfileDataType[] = [
     },
     {
         placeholder: 'Product Hunt',
-        title: "productHunt",
+        title: "producthunt",
         link: "https://www.producthunt.com/",
 
     },

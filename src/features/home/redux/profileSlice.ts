@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, nanoid } from "@reduxjs/toolkit";
 import { authenticatedGetMethod, authenticatedPutMethod } from "../../../core/services/NetworkServices";
-import StorageDataTypes from "../../../constants/StorageDataTypes";
+import StorageKeys from "../../../constants/StorageKeys";
 import LocalStorage from "../../../data/local_storage/LocalStorage";
 import { SocialProfileDataType } from "../../../data/constants/AllSocialProfileType";
 
@@ -113,9 +113,9 @@ export const updateProfile = createAsyncThunk<any>(
             let userName = data.userName ?? "";
             let profileImage = data.profileImage ?? "";
 
-            await LocalStorage.SetData(StorageDataTypes.NAME, name);
-            await LocalStorage.SetData(StorageDataTypes.USER_NAME, userName);
-            await LocalStorage.SetData(StorageDataTypes.PROFILE_IMAGE, profileImage);
+            await LocalStorage.SetData(StorageKeys.NAME, name);
+            await LocalStorage.SetData(StorageKeys.USER_NAME, userName);
+            await LocalStorage.SetData(StorageKeys.PROFILE_IMAGE, profileImage);
 
             return data;
         } catch (e) {
@@ -284,12 +284,12 @@ export const profileSlice = createSlice({
             if (socialLinksLocalData.length) {
                 socialLinksLocalData.forEach((profile) => {
                     let localSocialProfile: SocialProfileDataType = {
-                        title: profile.title,
+                        title: profile.title.toLowerCase(),
                         placeholder: getPlaceholderValue(profile.title),
                         link: profile.link,
                     };
                     socialProfilesList.push(localSocialProfile);
-                    state.socialProfileIDs.push(profile.title)
+                    state.socialProfileIDs.push(profile.title.toLowerCase())
                 })
                 state.socialProfiles = socialProfilesList;
             }

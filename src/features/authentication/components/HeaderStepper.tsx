@@ -1,16 +1,16 @@
-import { Image, ImageSourcePropType, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { User } from "../../../../assets/images";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import AppColors from "../../../constants/AppColors";
 import FontFamily from "../../../constants/FontFamily";
 import { useState } from "react";
 import LocalStorage from "../../../data/local_storage/LocalStorage";
-import StorageDataTypes from "../../../constants/StorageDataTypes";
+import StorageKeys from "../../../constants/StorageKeys";
+import { UserAvatar } from "../../../../assets/images/svg_index";
 
-function HeaderStepper(props: { title: string, step: number, textSuffixImage?: ImageSourcePropType, skipButton?: boolean, skipBtnTap?: (() => void) }): JSX.Element {
+function HeaderStepper(props: { title: string, step: number, textSuffixImage?: any, skipButton?: boolean, skipBtnTap?: (() => void) }): JSX.Element {
 
     const [img, setImage] = useState('');
 
-    LocalStorage.GetData(StorageDataTypes.PROFILE_IMAGE).then((image) => {
+    LocalStorage.GetData(StorageKeys.PROFILE_IMAGE).then((image) => {
         if ((image != null) && (image.length != 0)) {
             setImage(image);
         }
@@ -20,9 +20,7 @@ function HeaderStepper(props: { title: string, step: number, textSuffixImage?: I
         <View style={styles.container}>
             {
                 (img.length == 0)
-                    ? <View style={styles.icon}>
-                        <Image style={styles.image} source={User} />
-                    </View>
+                    ? <UserAvatar />
                     : <Image style={styles.networkImage} source={{ uri: img }} />
             }
             <View style={{ width: 8 }}></View>
@@ -32,7 +30,7 @@ function HeaderStepper(props: { title: string, step: number, textSuffixImage?: I
                     <View style={{ width: 10 }}></View>
                     {
                         props.textSuffixImage
-                            ? <Image style={styles.image} source={props.textSuffixImage} />
+                            ? props.textSuffixImage
                             : null
                     }
                 </View>
@@ -61,17 +59,6 @@ const styles = StyleSheet.create({
         paddingVertical: 18,
         flex: 1,
         flexDirection: 'row',
-    },
-    icon: {
-        height: 40,
-        width: 40,
-        borderRadius: 20,
-        backgroundColor: AppColors.PRIMARY_COLOR,
-        padding: 10,
-    },
-    image: {
-        height: 20,
-        width: 20,
     },
     networkImage: {
         height: 40,

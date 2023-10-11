@@ -3,7 +3,7 @@ import CommonTextInput from "../../../components/textInput/CommonTextInput";
 import AppColors from "../../../constants/AppColors";
 import FontFamily from "../../../constants/FontFamily";
 import LocalStorage from "../../../data/local_storage/LocalStorage";
-import StorageDataTypes from "../../../constants/StorageDataTypes";
+import StorageKeys from "../../../constants/StorageKeys";
 import { useEffect, useState } from "react";
 
 function NameInput(props: { errorText?: string, onNameChange: (value: string) => void }) {
@@ -11,7 +11,7 @@ function NameInput(props: { errorText?: string, onNameChange: (value: string) =>
     const [inputValue, setInputValue] = useState('');
 
     useEffect(() => {
-        LocalStorage.GetData(StorageDataTypes.NAME).then((name) => {
+        LocalStorage.GetData(StorageKeys.NAME).then((name) => {
             if ((name != null) && (name.length != 0)) {
                 setInputValue(name);
             }

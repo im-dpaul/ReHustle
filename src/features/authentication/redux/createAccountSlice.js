@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { postMethod } from '../../../core/services/NetworkServices';
 import LocalStorage from '../../../data/local_storage/LocalStorage';
-import StorageDataTypes from '../../../constants/StorageDataTypes';
+import StorageKeys from '../../../constants/StorageKeys';
 
 const initialState = {
     data: null,
@@ -34,11 +34,11 @@ export const createAccount = createAsyncThunk('api/createAccount', async (arg, t
     let userId = data.result.userName ?? "";
     let profileImage = data.result.profileImage ?? "";
 
-    await LocalStorage.SetData(StorageDataTypes.TOKEN, token);
-    await LocalStorage.SetData(StorageDataTypes.EMAIL, email);
-    await LocalStorage.SetData(StorageDataTypes.NAME, name);
-    await LocalStorage.SetData(StorageDataTypes.USER_NAME, userId);
-    await LocalStorage.SetData(StorageDataTypes.PROFILE_IMAGE, profileImage);
+    await LocalStorage.SetData(StorageKeys.TOKEN, token);
+    await LocalStorage.SetData(StorageKeys.EMAIL, email);
+    await LocalStorage.SetData(StorageKeys.NAME, name);
+    await LocalStorage.SetData(StorageKeys.USER_NAME, userId);
+    await LocalStorage.SetData(StorageKeys.PROFILE_IMAGE, profileImage);
 
     // } catch (e) {
     //     console.log('Error -> ', e);

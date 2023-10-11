@@ -5,7 +5,7 @@ import IconWithTitleDescription from '../../../components/text/IconWithTitleDesc
 import CommonDivider from '../../../components/divider/CommonDivider'
 import FontFamily from '../../../constants/FontFamily'
 import { LogoutIcon, SlidersIcon, UserIcon, GridIcon, HelpCircleIcon, PreviewIcon, PriceIcon, SettingsIcon, PreviewActiveIcon, SlidersActiveIcon, UserActiveIcon, GridActiveIcon, SettingsActiveIcon, CrossIcon, UserAvatar } from '../../../../assets/images/svg_index'
-import StorageDataTypes from '../../../constants/StorageDataTypes'
+import StorageKeys from '../../../constants/StorageKeys'
 import LocalStorage from '../../../data/local_storage/LocalStorage'
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
@@ -84,12 +84,12 @@ const MenuOptionsModal = (props: {
         }
         Navigation.replace('SignIn', { 'fromHome': true });
 
-        await LocalStorage.DeleteData(StorageDataTypes.TOKEN);
-        await LocalStorage.DeleteData(StorageDataTypes.ID);
-        await LocalStorage.DeleteData(StorageDataTypes.NAME);
-        await LocalStorage.DeleteData(StorageDataTypes.EMAIL);
-        await LocalStorage.DeleteData(StorageDataTypes.PROFILE_IMAGE);
-        await LocalStorage.DeleteData(StorageDataTypes.SETUP_STAGE);
+        await LocalStorage.DeleteData(StorageKeys.TOKEN);
+        await LocalStorage.DeleteData(StorageKeys.ID);
+        await LocalStorage.DeleteData(StorageKeys.NAME);
+        await LocalStorage.DeleteData(StorageKeys.EMAIL);
+        await LocalStorage.DeleteData(StorageKeys.PROFILE_IMAGE);
+        await LocalStorage.DeleteData(StorageKeys.SETUP_STAGE);
     }
 
     return (

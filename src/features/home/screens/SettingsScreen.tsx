@@ -10,7 +10,7 @@ import { AppDispatch } from '../../../app/store'
 import { setEmailAddress, updateBankDetails, setName, setIFSC, setAccNo, setVerifyAccNo, setValidation, clearData, setSnackbar } from "../redux/settingsSlice";
 import FontFamily from '../../../constants/FontFamily'
 import LocalStorage from '../../../data/local_storage/LocalStorage'
-import StorageDataTypes from '../../../constants/StorageDataTypes'
+import StorageKeys from '../../../constants/StorageKeys'
 import CommonButton from '../../../components/buttons/CommonButton'
 import CommonTextInput from '../../../components/textInput/CommonTextInput'
 import CommonSnackbar, { SnackbarPosition } from '../../../components/snackbar/CommonSnackbar'
@@ -41,7 +41,7 @@ const SettingsScreen = (): JSX.Element => {
     }
 
     useEffect(() => {
-        LocalStorage.GetData(StorageDataTypes.EMAIL).then((value) => {
+        LocalStorage.GetData(StorageKeys.EMAIL).then((value) => {
             if (value != null && value != undefined) {
                 dispatch(setEmailAddress(value))
             }

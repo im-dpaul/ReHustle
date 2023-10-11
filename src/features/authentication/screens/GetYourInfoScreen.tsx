@@ -15,11 +15,11 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../App';
 import { useDispatch, useSelector } from 'react-redux';
 import TwitterProfileWithDescription from '../components/TwitterProfileWithDescription';
-import CustomTextInput from '../../../components/textInput/CustomTextInput';
-import { TwitterIcon } from '../../../../assets/images';
 import FontFamily from '../../../constants/FontFamily';
 import { AppDispatch } from '../../../app/store';
 import { addTwitterProfile, getTwitterProfile, saveProfile, skipProfile } from '../redux/getYourInfoSlice';
+import TextInputWithIcon from '../../../components/textInput/TextInputWithIcon';
+import { TwitterIcon } from '../../../../assets/images/svg_index';
 
 type GetYourInfoProps = NativeStackScreenProps<RootStackParamList, 'GetYourInfo'>;
 
@@ -30,9 +30,7 @@ function GetYouInfoScreen({ navigation }: GetYourInfoProps): JSX.Element {
     // console.log("getYourInfo store ", getYourInfoReducer);
 
     const onChangeTwitterProfile = (value: string) => {
-        let itemList = (value.split('/'));
-        let userName = itemList.at(itemList.length - 1);
-        dispatch(addTwitterProfile(userName));
+        dispatch(addTwitterProfile(value));
         dispatch(getTwitterProfile());
     }
 
@@ -67,11 +65,15 @@ function GetYouInfoScreen({ navigation }: GetYourInfoProps): JSX.Element {
                         <View style={{ height: 24 }}></View>
                         <Text style={styles.twitterText}>Twitter</Text>
                         <View style={{ height: 8 }}></View>
-                        <CustomTextInput
-                            onChangeText={(val) => { onChangeTwitterProfile(val) }}
+                        <TextInputWithIcon
                             placeholder='https://twitter.com/'
-                            initialValue='https://twitter.com/'
-                            prefixIcon={TwitterIcon}
+                            value={getYourInfoReducer.twitterProfile}
+                            prefixIcon={
+                                <View>
+                                    <TwitterIcon style={styles.prefixIconStyle} />
+                                </View>
+                            }
+                            onChangeText={(val) => { onChangeTwitterProfile(val) }}
                         />
                     </View>
                 </ScrollView>
@@ -104,6 +106,10 @@ const styles = StyleSheet.create({
         fontStyle: 'normal',
         fontWeight: '400',
     },
+    prefixIconStyle: {
+        maxHeight: 28,
+        maxWidth: 28
+    }
 });
 
 export default GetYouInfoScreen;

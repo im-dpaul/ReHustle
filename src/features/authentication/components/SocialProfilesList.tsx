@@ -1,10 +1,10 @@
 import { StyleSheet, View } from "react-native";
-import CustomTextInput from "../../../components/textInput/CustomTextInput";
 import RemoveButton from "../../../components/buttons/RemoveButton";
-import { FacebookIcon, InstagramIcon, TwitterIcon } from "../../../../assets/images";
+import { FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon, YoutubeIcon } from "../../../../assets/images/svg_index";
 import SocialMediaType from "../../../data/constants/SocialMediaType";
 import { useSelector, useDispatch } from 'react-redux';
 import { removeSocialProfile, updateSocialProfile } from '../redux/aboutYouSlice';
+import TextInputWithIcon from "../../../components/textInput/TextInputWithIcon";
 
 function SocialProfilesList(): JSX.Element {
     const dispatch = useDispatch();
@@ -36,18 +36,34 @@ function SocialProfilesList(): JSX.Element {
         return active;
     }
 
+    const linkUrl = (id: number) => {
+        let url = ''
+        aboutYou.socialProfiles.forEach((element: { ID: number; title: string; link: string; }) => {
+            if (element.ID == id) {
+                url = element.link;
+            }
+        });
+        return url;
+    }
+
     return (
         <View>
             {
                 (isActive(SocialMediaType[0].ID))
                     ? <View>
                         <View style={styles.socialLinkAndRemove}>
-                            <CustomTextInput
-                                onChangeText={(fbUrl) => onChangeUrl(fbUrl, SocialMediaType[0])}
-                                placeholder='https://www.facebook.com/'
-                                initialValue='https://www.facebook.com/'
-                                prefixIcon={FacebookIcon}
-                            />
+                            <View style={{ flex: 1 }}>
+                                <TextInputWithIcon
+                                    placeholder='https://www.facebook.com/'
+                                    value={linkUrl(SocialMediaType[0].ID)}
+                                    prefixIcon={
+                                        <View>
+                                            <FacebookIcon style={styles.prefixIconStyle} />
+                                        </View>
+                                    }
+                                    onChangeText={(fbUrl) => onChangeUrl(fbUrl, SocialMediaType[0])}
+                                />
+                            </View>
                             <View style={{ width: 14 }}></View>
                             <RemoveButton onPress={() => onSelection(SocialMediaType[0])} />
                         </View>
@@ -59,12 +75,18 @@ function SocialProfilesList(): JSX.Element {
                 (isActive(SocialMediaType[1].ID))
                     ? <View>
                         <View style={styles.socialLinkAndRemove}>
-                            <CustomTextInput
-                                onChangeText={(insta) => onChangeUrl(insta, SocialMediaType[1])}
-                                placeholder='https://www.instagram.com/'
-                                initialValue='https://www.instagram.com/'
-                                prefixIcon={InstagramIcon}
-                            />
+                            <View style={{ flex: 1 }}>
+                                <TextInputWithIcon
+                                    placeholder='https://www.instagram.com/'
+                                    value={linkUrl(SocialMediaType[1].ID)}
+                                    prefixIcon={
+                                        <View>
+                                            <InstagramIcon style={styles.prefixIconStyle} />
+                                        </View>
+                                    }
+                                    onChangeText={(insta) => onChangeUrl(insta, SocialMediaType[1])}
+                                />
+                            </View>
                             <View style={{ width: 14 }}></View>
                             <RemoveButton onPress={() => onSelection(SocialMediaType[1])} />
                         </View>
@@ -76,12 +98,18 @@ function SocialProfilesList(): JSX.Element {
                 (isActive(SocialMediaType[2].ID))
                     ? <View>
                         <View style={styles.socialLinkAndRemove}>
-                            <CustomTextInput
-                                onChangeText={(twitter) => onChangeUrl(twitter, SocialMediaType[2])}
-                                placeholder='https://twitter.com/'
-                                initialValue='https://twitter.com/'
-                                prefixIcon={TwitterIcon}
-                            />
+                            <View style={{ flex: 1 }}>
+                                <TextInputWithIcon
+                                    placeholder='https://twitter.com/'
+                                    value={linkUrl(SocialMediaType[2].ID)}
+                                    prefixIcon={
+                                        <View>
+                                            <TwitterIcon style={styles.prefixIconStyle} />
+                                        </View>
+                                    }
+                                    onChangeText={(insta) => onChangeUrl(insta, SocialMediaType[2])}
+                                />
+                            </View>
                             <View style={{ width: 14 }}></View>
                             <RemoveButton onPress={() => onSelection(SocialMediaType[2])} />
                         </View>
@@ -93,12 +121,18 @@ function SocialProfilesList(): JSX.Element {
                 (isActive(SocialMediaType[3].ID))
                     ? <View>
                         <View style={styles.socialLinkAndRemove}>
-                            <CustomTextInput
-                                onChangeText={(linkedin) => onChangeUrl(linkedin, SocialMediaType[3])}
-                                placeholder='https://www.linkedin.com/'
-                                initialValue='https://www.linkedin.com/'
-                                prefixIcon={TwitterIcon}
-                            />
+                            <View style={{ flex: 1 }}>
+                                <TextInputWithIcon
+                                    placeholder='https://www.linkedin.com/'
+                                    value={linkUrl(SocialMediaType[3].ID)}
+                                    prefixIcon={
+                                        <View>
+                                            <LinkedinIcon style={styles.prefixIconStyle} />
+                                        </View>
+                                    }
+                                    onChangeText={(insta) => onChangeUrl(insta, SocialMediaType[3])}
+                                />
+                            </View>
                             <View style={{ width: 14 }}></View>
                             <RemoveButton onPress={() => onSelection(SocialMediaType[3])} />
                         </View>
@@ -110,12 +144,18 @@ function SocialProfilesList(): JSX.Element {
                 (isActive(SocialMediaType[4].ID))
                     ? <View>
                         <View style={styles.socialLinkAndRemove}>
-                            <CustomTextInput
-                                onChangeText={(youtube) => onChangeUrl(youtube, SocialMediaType[4])}
-                                placeholder='https://www.youtube.com/'
-                                initialValue='https://www.youtube.com/'
-                                prefixIcon={TwitterIcon}
-                            />
+                            <View style={{ flex: 1 }}>
+                                <TextInputWithIcon
+                                    placeholder='https://www.youtube.com/'
+                                    value={linkUrl(SocialMediaType[4].ID)}
+                                    prefixIcon={
+                                        <View>
+                                            <YoutubeIcon style={styles.prefixIconStyle} />
+                                        </View>
+                                    }
+                                    onChangeText={(insta) => onChangeUrl(insta, SocialMediaType[4])}
+                                />
+                            </View>
                             <View style={{ width: 14 }}></View>
                             <RemoveButton onPress={() => onSelection(SocialMediaType[4])} />
                         </View>
@@ -133,6 +173,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center'
     },
+    prefixIconStyle: {
+        maxHeight: 28,
+        maxWidth: 28
+    }
 });
 
 export default SocialProfilesList;

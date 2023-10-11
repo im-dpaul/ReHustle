@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { authenticatedGetMethod, authenticatedPutMethod } from "../../../core/services/NetworkServices";
 import LocalStorage from "../../../data/local_storage/LocalStorage";
-import StorageDataTypes from "../../../constants/StorageDataTypes";
+import StorageKeys from "../../../constants/StorageKeys";
 
 const initialState = {
-    twitterProfile: '',
+    twitterProfile: 'https://twitter.com/',
     loading: false,
     twitterApiData: null,
     twitterApiError: null,
@@ -15,7 +15,8 @@ const initialState = {
 
 export const getTwitterProfile = createAsyncThunk('api/getTwitterProfile', async (arg, thunkAPI) => {
     const state = thunkAPI.getState().getYourInfo;
-    const twitterProfile = state.twitterProfile;
+    let twitterProfile = state.twitterProfile;
+    twitterProfile = twitterProfile.replace('https://twitter.com/', '')
     const url = `/social/p/${twitterProfile}`
     let data = null;
     // try {
@@ -24,7 +25,7 @@ export const getTwitterProfile = createAsyncThunk('api/getTwitterProfile', async
 
     let profileImage = data.result.profileImage ?? "";
 
-    await LocalStorage.SetData(StorageDataTypes.PROFILE_IMAGE, profileImage);
+    await LocalStorage.SetData(StorageKeys.PROFILE_IMAGE, profileImage);
 
     // } catch (e) {
     //     console.log('Error -> ', e);
@@ -36,9 +37,9 @@ export const saveProfile = createAsyncThunk('api/saveProfile', async (arg, thunk
     const state = thunkAPI.getState().getYourInfo;
     const twitterApiData = state.twitterApiData;
 
-    const emailID = await LocalStorage.GetData(StorageDataTypes.EMAIL);
-    const token = await LocalStorage.GetData(StorageDataTypes.TOKEN);
-    const id = await LocalStorage.GetData(StorageDataTypes.ID);
+    const emailID = await LocalStorage.GetData(StorageKeys.EMAIL);
+    const token = await LocalStorage.GetData(StorageKeys.TOKEN);
+    const id = await LocalStorage.GetData(StorageKeys.ID);
 
     let values;
 
@@ -85,10 +86,10 @@ export const saveProfile = createAsyncThunk('api/saveProfile', async (arg, thunk
     let userName = data.result.userName ?? "";
     let profileImage = data.result.profileImage ?? "";
 
-    await LocalStorage.SetData(StorageDataTypes.EMAIL, email);
-    await LocalStorage.SetData(StorageDataTypes.NAME, name);
-    await LocalStorage.SetData(StorageDataTypes.USER_NAME, userName);
-    await LocalStorage.SetData(StorageDataTypes.PROFILE_IMAGE, profileImage);
+    await LocalStorage.SetData(StorageKeys.EMAIL, email);
+    await LocalStorage.SetData(StorageKeys.NAME, name);
+    await LocalStorage.SetData(StorageKeys.USER_NAME, userName);
+    await LocalStorage.SetData(StorageKeys.PROFILE_IMAGE, profileImage);
 
     // } catch (e) {
     //     console.log('Error -> ', e);
@@ -116,12 +117,12 @@ export const skipProfile = createAsyncThunk('api/skipProfile', async (arg, thunk
     let id = data.result._id ?? "";
     let setupStage = `${data.result.setupStage}` ?? "";
 
-    await LocalStorage.SetData(StorageDataTypes.EMAIL, email);
-    await LocalStorage.SetData(StorageDataTypes.NAME, name);
-    await LocalStorage.SetData(StorageDataTypes.USER_NAME, userName);
-    await LocalStorage.SetData(StorageDataTypes.PROFILE_IMAGE, profileImage);
-    await LocalStorage.SetData(StorageDataTypes.ID, id);
-    await LocalStorage.SetData(StorageDataTypes.SETUP_STAGE, setupStage);
+    await LocalStorage.SetData(StorageKeys.EMAIL, email);
+    await LocalStorage.SetData(StorageKeys.NAME, name);
+    await LocalStorage.SetData(StorageKeys.USER_NAME, userName);
+    await LocalStorage.SetData(StorageKeys.PROFILE_IMAGE, profileImage);
+    await LocalStorage.SetData(StorageKeys.ID, id);
+    await LocalStorage.SetData(StorageKeys.SETUP_STAGE, setupStage);
 
     // } catch (e) {
     //     console.log('Error -> ', e);

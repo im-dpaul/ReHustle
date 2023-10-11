@@ -3,7 +3,7 @@ import AppColors from "../../../constants/AppColors";
 import FontFamily from "../../../constants/FontFamily";
 import CommonButton from "../../../components/buttons/CommonButton";
 import { useState } from "react";
-import StorageDataTypes from "../../../constants/StorageDataTypes";
+import StorageKeys from "../../../constants/StorageKeys";
 import LocalStorage from "../../../data/local_storage/LocalStorage";
 import { MenuIconSVG, UserAvatar } from "../../../../assets/images/svg_index";
 import MenuOptionsModal from "./MenuOptionsModal";
@@ -15,13 +15,13 @@ function HomeAppBar(props: { title: string }): JSX.Element {
     const [userName, setUserName] = useState('rehustle.co/');
     const [showMenu, setShowMenu] = useState(false);
 
-    LocalStorage.GetData(StorageDataTypes.PROFILE_IMAGE).then((image) => {
+    LocalStorage.GetData(StorageKeys.PROFILE_IMAGE).then((image) => {
         if ((image != null) && (image.length != 0)) {
             setAvatar(image);
         }
     })
 
-    LocalStorage.GetData(StorageDataTypes.USER_NAME).then((userName) => {
+    LocalStorage.GetData(StorageKeys.USER_NAME).then((userName) => {
         if ((userName != null) && (userName.length != 0)) {
             const uname = `rehustle.co/${userName}`
             setUserName(uname);

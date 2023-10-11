@@ -1,7 +1,7 @@
 import { Image, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import LocalStorage from '../../../data/local_storage/LocalStorage'
-import StorageDataTypes from '../../../constants/StorageDataTypes'
+import StorageKeys from '../../../constants/StorageKeys'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CommonStatusBar from '../../../components/layouts/CommonStatusBar'
 import ReHustleTitle from '../../../components/text/ReHustleTitle'
@@ -23,7 +23,7 @@ const SplashScreen = ({ navigation }: SplashProps) => {
 
     let userExist: any = null;
     if (splashReducer.userExist == null) {
-        LocalStorage.GetData(StorageDataTypes.TOKEN).then((value) => {
+        LocalStorage.GetData(StorageKeys.TOKEN).then((value) => {
             userExist = (value != null) ? true : false;
             dispatch(userExists(userExist));
         });
