@@ -1,14 +1,14 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import AppColors from "../../constants/AppColors";
 import FontFamily from "../../constants/FontFamily";
-import { Link2 } from "../../../assets/images";
+import { LinkIcon } from "../../../assets/images";
 
 function CopyLinkButton(props: { onCopyLink: (() => void) }): JSX.Element {
     return (
         <View>
             <TouchableOpacity onPress={() => props.onCopyLink()}>
                 <View style={styles.copyLinkBtn}>
-                    <Image style={styles.linkIcon} source={Link2} />
+                    <LinkIcon style={styles.linkIcon} />
                     <View style={{ width: 8 }}></View>
                     <Text style={styles.copyLinkText}>Copy Link</Text>
                 </View>
@@ -28,8 +28,8 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     linkIcon: {
-        height: 24,
-        width: 24
+        maxHeight: 24,
+        maxWidth: 24
     },
     copyLinkText: {
         color: AppColors.PRIMARY_COLOR,

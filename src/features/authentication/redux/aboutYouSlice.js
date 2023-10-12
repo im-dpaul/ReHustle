@@ -1,6 +1,6 @@
 import { createSlice, nanoid, createAsyncThunk } from "@reduxjs/toolkit";
 import { authenticatedPutMethod } from "../../../core/services/NetworkServices";
-import StorageDataTypes from "../../../constants/StorageDataTypes";
+import StorageKeys from "../../../constants/StorageKeys";
 import LocalStorage from "../../../data/local_storage/LocalStorage";
 
 const initialState = {
@@ -24,7 +24,7 @@ export const addProfileLinks = createAsyncThunk('api/addProfileLinks', async (ar
         updateName = state.name;
     }
     else {
-        const val = await LocalStorage.GetData(StorageDataTypes.NAME);
+        const val = await LocalStorage.GetData(StorageKeys.NAME);
         if (val != null) {
             updateName = val;
         }
@@ -62,8 +62,6 @@ export const addProfileLinks = createAsyncThunk('api/addProfileLinks', async (ar
         "socialLinks": localProfiles,
     };
 
-    console.log(values);
-
     const url = `/user/update`
     let data = null;
     // try {
@@ -77,12 +75,12 @@ export const addProfileLinks = createAsyncThunk('api/addProfileLinks', async (ar
     let id = data.result._id ?? "";
     let setupStage = `${data.result.setupStage}` ?? "";
 
-    await LocalStorage.SetData(StorageDataTypes.EMAIL, email);
-    await LocalStorage.SetData(StorageDataTypes.NAME, name);
-    await LocalStorage.SetData(StorageDataTypes.USER_NAME, userName);
-    await LocalStorage.SetData(StorageDataTypes.PROFILE_IMAGE, profileImage);
-    await LocalStorage.SetData(StorageDataTypes.ID, id);
-    await LocalStorage.SetData(StorageDataTypes.SETUP_STAGE, setupStage);
+    await LocalStorage.SetData(StorageKeys.EMAIL, email);
+    await LocalStorage.SetData(StorageKeys.NAME, name);
+    await LocalStorage.SetData(StorageKeys.USER_NAME, userName);
+    await LocalStorage.SetData(StorageKeys.PROFILE_IMAGE, profileImage);
+    await LocalStorage.SetData(StorageKeys.ID, id);
+    await LocalStorage.SetData(StorageKeys.SETUP_STAGE, setupStage);
 
     // } catch (e) {
     //     console.log('Error -> ', e);
@@ -110,12 +108,12 @@ export const skipAboutYou = createAsyncThunk('api/skipAboutYou', async (arg, thu
     let id = data.result._id ?? "";
     let setupStage = `${data.result.setupStage}` ?? "";
 
-    await LocalStorage.SetData(StorageDataTypes.EMAIL, email);
-    await LocalStorage.SetData(StorageDataTypes.NAME, name);
-    await LocalStorage.SetData(StorageDataTypes.USER_NAME, userName);
-    await LocalStorage.SetData(StorageDataTypes.PROFILE_IMAGE, profileImage);
-    await LocalStorage.SetData(StorageDataTypes.ID, id);
-    await LocalStorage.SetData(StorageDataTypes.SETUP_STAGE, setupStage);
+    await LocalStorage.SetData(StorageKeys.EMAIL, email);
+    await LocalStorage.SetData(StorageKeys.NAME, name);
+    await LocalStorage.SetData(StorageKeys.USER_NAME, userName);
+    await LocalStorage.SetData(StorageKeys.PROFILE_IMAGE, profileImage);
+    await LocalStorage.SetData(StorageKeys.ID, id);
+    await LocalStorage.SetData(StorageKeys.SETUP_STAGE, setupStage);
 
     // } catch (e) {
     //     console.log('Error -> ', e);

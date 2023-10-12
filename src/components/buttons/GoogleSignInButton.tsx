@@ -1,13 +1,13 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { GoogleIcon } from "../../../assets/images";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import AppColors from "../../constants/AppColors";
 import FontFamily from "../../constants/FontFamily";
+import { GoogleIcon } from "../../../assets/images";
 
 function GoogleSignInButton(props: { onPress: (() => void) }): JSX.Element {
     return (
         <TouchableOpacity onPress={() => { props.onPress() }}>
             <View style={styles.signInGoogleButton}>
-                <Image style={styles.imageStyle} source={GoogleIcon} />
+                <GoogleIcon style={styles.imageStyle} />
                 <Text style={styles.signInGoogleText}>
                     Sign up with Google
                 </Text>
@@ -35,8 +35,8 @@ const styles = StyleSheet.create({
         paddingLeft: 10
     },
     imageStyle: {
-        height: 18,
-        width: 18
+        minHeight: 18,
+        minWidth: 18
     },
 });
 

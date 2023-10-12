@@ -1,25 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import {
-    ActivityIndicator,
-    Image,
-    StyleSheet,
-    View,
-} from 'react-native';
+import { ActivityIndicator, StyleSheet, View, } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../App';
 import AppColors from '../../../constants/AppColors';
 import CommonStatusBar from '../../../components/layouts/CommonStatusBar';
 import HeaderStepper from '../components/HeaderStepper';
 import CommonDivider from '../../../components/divider/CommonDivider';
-import { CelebrationEmoji, DancingEmoji } from '../../../../assets/images';
 import ProfileLinkAndDescription from '../components/ProfileLinkAndDescription';
 import CommonButton from '../../../components/buttons/CommonButton';
 import CopyLinkButton from '../../../components/buttons/CopyLinkButton';
 import LocalStorage from '../../../data/local_storage/LocalStorage';
-import StorageDataTypes from '../../../constants/StorageDataTypes';
+import StorageKeys from '../../../constants/StorageKeys';
 import { finishCreation, clearData } from "../redux/finishAccountCreationSlice";
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../../app/store'
+import Clipboard from '@react-native-community/clipboard';
+import { DancingFigure, PartyingFace } from '../../../../assets/images';
 
 type FinishAccountCreationProps = NativeStackScreenProps<RootStackParamList, 'FinishAccountCreation'>;
 
@@ -28,10 +24,10 @@ function FinishAccountCreationScreen({ navigation }: FinishAccountCreationProps)
     const finishCreationReducer = useSelector((state: any) => state.finishAccountCreation);
     const dispatch = useDispatch<AppDispatch>();
 
-    console.log('FinishAccountCreation', finishCreationReducer);
+    // console.log('FinishAccountCreation', finishCreationReducer);
 
     const [userName, setUserName] = useState('rehustle.co/');
-    LocalStorage.GetData(StorageDataTypes.USER_NAME).then((value) => {
+    LocalStorage.GetData(StorageKeys.USER_NAME).then((value) => {
         let localVal = 'rehustle.co/';
         if (value != null) {
             localVal = `rehustle.co/${value}`;
@@ -43,17 +39,14 @@ function FinishAccountCreationScreen({ navigation }: FinishAccountCreationProps)
         dispatch(finishCreation());
     }
 
-    const skipBtnTap = () => {
-        // navigation.popToTop()
-        // navigation.replace('Home');
+    const copyLink = () => {
+        Clipboard.setString(`${userName}`)
     }
-
-    const copyLink = () => { }
 
     useEffect(() => {
         if (finishCreationReducer.data != null) {
             if (finishCreationReducer.data._id != "") {
-                navigation.replace('Home');
+                navigation.replace('Services');
                 dispatch(clearData(null));
             }
         }
@@ -64,12 +57,16 @@ function FinishAccountCreationScreen({ navigation }: FinishAccountCreationProps)
             <CommonStatusBar />
             <View style={{ flex: 1 }}>
                 <View style={{ height: 74 }}>
-                    <HeaderStepper title='You’re all set !' step={4} textSuffixImage={CelebrationEmoji} skipButton={false} skipBtnTap={() => skipBtnTap()} />
+                    <HeaderStepper
+                        title='You’re all set !'
+                        step={4}
+                        textSuffixImage={<View style={{ justifyContent: 'center' }}><PartyingFace /></View>}
+                        skipButton={false} />
                     <CommonDivider />
                 </View>
                 <View style={styles.mainBody}>
                     <View style={{ marginVertical: 24 }}>
-                        <Image style={styles.imageStyle} source={DancingEmoji} />
+                        <DancingFigure style={styles.imageStyle} />
                     </View>
                     <ProfileLinkAndDescription linkUrl={userName} />
                     <View style={{ height: 24 }}></View>
@@ -98,8 +95,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     imageStyle: {
-        height: 150,
-        width: 150,
+        maxHeight: 150,
+        maxWidth: 150,
     },
 });
 

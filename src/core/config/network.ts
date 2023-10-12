@@ -1,9 +1,9 @@
 import axios, { AxiosInstance } from 'axios'
 import LocalStorage from '../../data/local_storage/LocalStorage';
-import StorageDataTypes from '../../constants/StorageDataTypes';
+import StorageKeys from '../../constants/StorageKeys';
 
 const getAuthToken = async () => {
-    const token = await LocalStorage.GetData(StorageDataTypes.TOKEN);
+    const token = await LocalStorage.GetData(StorageKeys.TOKEN);
     return `Bearer ${token}`;
 };
 

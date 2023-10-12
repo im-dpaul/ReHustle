@@ -11,7 +11,7 @@ import SignUpWithEmailText from './../components/SignUpWithEmailText';
 import CommonTextInput from '../../../components/textInput/CommonTextInput';
 import CommonButton from '../../../components/buttons/CommonButton';
 import AlreadyHaveAccountLogin from './../components/AlreadyHaveAccountLogin';
-import CreateRehustleLink from '../components/CreateRehustleLink';
+import RehustleLinkTextInput from '../../../components/textInput/RehustleLinkTextInput';
 import RehustleTextAndDescription from '../components/RehustleTextAndDescription';
 import CommonStatusBar from '../../../components/layouts/CommonStatusBar';
 import CommonDivider from '../../../components/divider/CommonDivider';
@@ -76,16 +76,26 @@ function CreateAccountScreen({ route }: CreateAccountProps): JSX.Element {
                     <View style={{ height: 24 }}></View>
                     <RehustleTextAndDescription />
                     <View style={{ height: 18 }}></View>
-                    <CreateRehustleLink onChangeText={((value) => onChangeLinkField(value))} />
+                    <RehustleLinkTextInput
+                        value={createAccountReducer.userName}
+                        onChangeText={((value) => onChangeLinkField(value))} />
                     <View style={{ height: 22 }}></View>
                     <View style={{ marginVertical: 30 }}>
                         <GoogleSignInButton onPress={onGoogleSignIn} />
                     </View>
                     <SignUpWithEmailText signIn={false} />
                     <View style={{ height: 36 }}></View>
-                    <CommonTextInput placeholder='Email address' onChangeText={((value) => onChangeEmailField(value))} />
+                    <CommonTextInput
+                        value={createAccountReducer.emailAddress}
+                        placeholder='Email address'
+                        onChangeText={((value) => onChangeEmailField(value))}
+                    />
                     <View style={{ height: 16 }}></View>
-                    <CommonTextInput placeholder='Password' onChangeText={((value) => onChangePasswordField(value))} />
+                    <CommonTextInput
+                        value={createAccountReducer.password}
+                        placeholder='Password'
+                        onChangeText={((value) => onChangePasswordField(value))}
+                    />
                     <View style={{ marginVertical: 24 }}>
                         {
                             createAccountReducer.loading

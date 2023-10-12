@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import AppColors from "../../constants/AppColors";
 import FontFamily from "../../constants/FontFamily";
 
-function CommonChip(props: { name: string, active?: boolean, id?: number, onPress?: ((id: number) => void) }): JSX.Element {
+function CommonChip(props: { name: string, active?: boolean, id?: number | any, onPress?: ((id: number | any) => void) }): JSX.Element {
 
     return (
         <View>

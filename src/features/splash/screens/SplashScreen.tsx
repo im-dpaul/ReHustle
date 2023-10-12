@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import LocalStorage from '../../../data/local_storage/LocalStorage'
-import StorageDataTypes from '../../../constants/StorageDataTypes'
+import StorageKeys from '../../../constants/StorageKeys'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CommonStatusBar from '../../../components/layouts/CommonStatusBar'
 import ReHustleTitle from '../../../components/text/ReHustleTitle'
@@ -11,6 +11,7 @@ import AppColors from '../../../constants/AppColors';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../../app/store';
 import { getUserData, userExists } from '../redux/splashSlice';
+import { RehustleLogo } from '../../../../assets/images'
 
 type SplashProps = NativeStackScreenProps<RootStackParamList, 'Splash'>;
 
@@ -22,7 +23,7 @@ const SplashScreen = ({ navigation }: SplashProps) => {
 
     let userExist: any = null;
     if (splashReducer.userExist == null) {
-        LocalStorage.GetData(StorageDataTypes.TOKEN).then((value) => {
+        LocalStorage.GetData(StorageKeys.TOKEN).then((value) => {
             userExist = (value != null) ? true : false;
             dispatch(userExists(userExist));
         });
@@ -58,7 +59,7 @@ const SplashScreen = ({ navigation }: SplashProps) => {
                 navigation.replace('FinishAccountCreation');
             }
             else if (splashReducer.setupStage == '4') {
-                navigation.replace('Home');
+                navigation.replace('Services');
             }
             else {
                 navigation.replace('SignIn');
@@ -68,7 +69,7 @@ const SplashScreen = ({ navigation }: SplashProps) => {
 
     // setTimeout(() => {
     //     if (userExist) {
-    //         navigation.replace('Home');
+    //         navigation.replace('Services');
     //     }
     //     else {
     //         navigation.replace('SignIn');
@@ -79,6 +80,8 @@ const SplashScreen = ({ navigation }: SplashProps) => {
         <SafeAreaView style={{ backgroundColor: AppColors.WHITE, flex: 1 }}>
             <CommonStatusBar />
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Image style={{ height: 140, width: 140 }} source={RehustleLogo} />
+                <View style={{ height: 24 }}></View>
                 <ReHustleTitle />
             </View>
         </SafeAreaView>

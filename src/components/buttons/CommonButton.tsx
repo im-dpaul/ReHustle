@@ -15,7 +15,7 @@ function CommonButton(props: { title: string, height?: number, active?: boolean,
                 <Text style={[
                     styles.text,
                     (props.active != null)
-                        ? props.active ? { color: AppColors.WHITE } : { color: AppColors.GRAY2, }
+                        ? props.active ? { color: AppColors.WHITE } : { color: AppColors.GRAY3, }
                         : {}
                 ]}>
                     {props.title}

@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { postMethod } from "../../../core/services/NetworkServices";
 import LocalStorage from "../../../data/local_storage/LocalStorage";
-import StorageDataTypes from "../../../constants/StorageDataTypes";
+import StorageKeys from "../../../constants/StorageKeys";
 
 const initialState = {
     data: null,
@@ -35,12 +35,12 @@ export const signIn = createAsyncThunk('api/signIn', async (arg, thunkAPI) => {
         let profileImage = data.result.profileImage ?? "";
         let id = data.result._id ?? "";
 
-        await LocalStorage.SetData(StorageDataTypes.TOKEN, token);
-        await LocalStorage.SetData(StorageDataTypes.EMAIL, email);
-        await LocalStorage.SetData(StorageDataTypes.NAME, name);
-        await LocalStorage.SetData(StorageDataTypes.USER_NAME, userName);
-        await LocalStorage.SetData(StorageDataTypes.PROFILE_IMAGE, profileImage);
-        await LocalStorage.SetData(StorageDataTypes.ID, id);
+        await LocalStorage.SetData(StorageKeys.TOKEN, token);
+        await LocalStorage.SetData(StorageKeys.EMAIL, email);
+        await LocalStorage.SetData(StorageKeys.NAME, name);
+        await LocalStorage.SetData(StorageKeys.USER_NAME, userName);
+        await LocalStorage.SetData(StorageKeys.PROFILE_IMAGE, profileImage);
+        await LocalStorage.SetData(StorageKeys.ID, id);
         // }
         return data;
     } catch (e) {

@@ -21,7 +21,7 @@ import { addName, skipAboutYou, addProfileLinks, clearData } from '../redux/abou
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../../app/store';
 import LocalStorage from '../../../data/local_storage/LocalStorage';
-import StorageDataTypes from '../../../constants/StorageDataTypes';
+import StorageKeys from '../../../constants/StorageKeys';
 
 type AboutYouProps = NativeStackScreenProps<RootStackParamList, 'AboutYou'>;
 
@@ -42,7 +42,7 @@ function AboutYouScreen({ navigation }: AboutYouProps): JSX.Element {
             name = aboutYouReducer.name;
         }
         else {
-            const val = await LocalStorage.GetData(StorageDataTypes.NAME);
+            const val = await LocalStorage.GetData(StorageKeys.NAME);
             if (val != null) {
                 name = val;
             }

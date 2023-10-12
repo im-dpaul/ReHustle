@@ -1,9 +1,9 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import ServiceCard from './ServiceCard'
 import { useSelector, useDispatch } from 'react-redux';
 import { updateService, deleteService } from '../redux/addServicesSlice';
 import { AppDispatch } from '../../../app/store';
+import ServiceCard from '../../../components/card/ServiceCard';
 
 const ServicesList = () => {
     const servicesReducer = useSelector((state: any) => state.addServices);
