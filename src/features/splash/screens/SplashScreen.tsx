@@ -10,62 +10,67 @@ import { RootStackParamList } from '../../../App';
 import AppColors from '../../../constants/AppColors';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../../app/store';
-import { getUserData, userExists } from '../redux/splashSlice';
+import { SplashState, getUserData, userExists, clearData } from '../redux/splashSlice';
 import { RehustleLogo } from '../../../../assets/images'
 
 type SplashProps = NativeStackScreenProps<RootStackParamList, 'Splash'>;
 
 const SplashScreen = ({ navigation }: SplashProps) => {
 
-    const splashReducer = useSelector((state: any) => state.splash);
+    const splash: SplashState = useSelector((state: any) => state.splash);
     const dispatch = useDispatch<AppDispatch>();
-    // console.log("Splash store ", splashReducer);
+    // console.log("Splash store ", splash);
 
-    let userExist: any = null;
-    if (splashReducer.userExist == null) {
+    let userExist: boolean | null = null;
+    if (splash.userExist == null) {
         LocalStorage.GetData(StorageKeys.TOKEN).then((value) => {
             userExist = (value != null) ? true : false;
             dispatch(userExists(userExist));
         });
     }
+
     const goToPage = () => {
-        if (splashReducer.userExist == true) {
+        if (splash.userExist == true) {
             dispatch(getUserData());
         }
-        else if (splashReducer.userExist == false) {
+        else {
             navigation.replace('SignIn');
+            dispatch(clearData());
         }
     }
 
     useEffect(() => {
-        goToPage();
-    }, [splashReducer.userExist]);
+        if (splash.userExist != null) {
+            goToPage();
+        }
+    }, [splash.userExist]);
 
     useEffect(() => {
-        if (splashReducer.userExist != null && splashReducer.setupStage != null) {
-            if (splashReducer.setupStage == '') {
+        if (splash.userExist != null) {
+            if (splash.setupStage == -1) {
                 navigation.replace('SignIn');
             }
-            else if (splashReducer.setupStage == '0') {
+            else if (splash.setupStage == 0) {
                 navigation.replace('GetYourInfo');
             }
-            else if (splashReducer.setupStage == '1') {
+            else if (splash.setupStage == 1) {
                 navigation.replace('AboutYou');
             }
-            else if (splashReducer.setupStage == '2') {
+            else if (splash.setupStage == 2) {
                 navigation.replace('AddServices');
             }
-            else if (splashReducer.setupStage == '3') {
+            else if (splash.setupStage == 3) {
                 navigation.replace('FinishAccountCreation');
             }
-            else if (splashReducer.setupStage == '4') {
+            else if (splash.setupStage == 4) {
                 navigation.replace('Services');
             }
             else {
                 navigation.replace('SignIn');
             }
+            dispatch(clearData());
         }
-    }, [splashReducer.setupStage]);
+    }, [splash.setupStage]);
 
     // setTimeout(() => {
     //     if (userExist) {

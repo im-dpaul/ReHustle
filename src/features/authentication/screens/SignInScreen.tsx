@@ -36,7 +36,7 @@ function SignInScreen({ navigation, route }: SignInProps): JSX.Element {
     const dispatch = useDispatch<AppDispatch>();
     const signInReducer = useSelector((state: any) => state.signIn);
 
-    // console.log("Sign In store ", signInReducer);
+    console.log("Sign In store ", signInReducer);
 
     const changeRememberMe = (value: boolean) => {
         dispatch(setRememberMe(value));
