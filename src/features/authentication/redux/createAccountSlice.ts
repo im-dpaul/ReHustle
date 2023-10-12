@@ -1,16 +1,15 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { postMethod } from "../../../core/services/NetworkServices";
-import LocalStorage from "../../../data/local_storage/LocalStorage";
-import StorageKeys from "../../../constants/StorageKeys";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { postMethod } from '../../../core/services/NetworkServices';
+import LocalStorage from '../../../data/local_storage/LocalStorage';
+import StorageKeys from '../../../constants/StorageKeys';
 
-export interface SigninState {
+export interface CreateAccountState {
     data: any,
     loading: boolean,
     error: errorType,
     emailAddress: string,
     password: string,
-    rememberMe: boolean,
-    setupStage: number,
+    userName: string,
     validated: boolean
 }
 
@@ -18,44 +17,46 @@ type errorType = {
     message: string;
     emailError: string;
     passwordError: string;
+    userNameError: string;
 }
 
 const noError: errorType = {
     message: '',
     emailError: '',
     passwordError: '',
+    userNameError: ''
 }
 
-const initialState: SigninState = {
+const initialState: CreateAccountState = {
     data: null,
     loading: false,
     error: noError,
     emailAddress: "",
     password: "",
-    rememberMe: false,
-    setupStage: -2,
+    userName: "",
     validated: false
-};
+}
 
-export const signIn = createAsyncThunk<any>(
-    'api/signIn',
+export const createAccount = createAsyncThunk<any>(
+    'api/createAccount',
     async (_, thunkAPI) => {
         const state: any = thunkAPI.getState();
-        const stateValue: SigninState = state.signIn;
+        const stateValue: CreateAccountState = state.createAccount;
 
         const emailAddress = stateValue.emailAddress;
         const password = stateValue.password;
+        const userName = stateValue.userName;
 
         const authCredentials = {
             "email": emailAddress,
-            "password": password
+            "password": password,
+            "userName": userName,
         };
         let data = null;
         try {
-            const response = await postMethod('/auth/signin', authCredentials);
+            const response = await postMethod('/auth/signup', authCredentials);
             data = response.data.result;
 
-            // if (stateValue.rememberMe == true) {
             let name = data.name ?? "";
             let token = data.token ?? "";
             let email = data.email ?? "";
@@ -69,15 +70,15 @@ export const signIn = createAsyncThunk<any>(
             await LocalStorage.SetData(StorageKeys.USER_NAME, userName);
             await LocalStorage.SetData(StorageKeys.PROFILE_IMAGE, profileImage);
             await LocalStorage.SetData(StorageKeys.ID, id);
-            // }
+
             return data;
         } catch (e) {
-            return thunkAPI.rejectWithValue(e)
+            return thunkAPI.rejectWithValue(e);
         }
     });
 
-export const signInSlice = createSlice({
-    name: 'signIn',
+export const createAccountSlice = createSlice({
+    name: 'createAccount',
     initialState: initialState,
     reducers: {
         setEmailAddress: (state, action) => {
@@ -86,8 +87,8 @@ export const signInSlice = createSlice({
         setPassword: (state, action) => {
             state.password = action.payload;
         },
-        setRememberMe: (state, action) => {
-            state.rememberMe = action.payload;
+        setUserName: (state, action) => {
+            state.userName = action.payload;
         },
         clearData: (state) => {
             state.data = null
@@ -95,12 +96,11 @@ export const signInSlice = createSlice({
             state.error = noError
             state.emailAddress = ""
             state.password = ""
-            state.rememberMe = false
-            state.setupStage = -2,
-                state.validated = false
+            state.userName = ""
+            state.validated = false
         },
         checkValidation: (state) => {
-            if ((state.emailAddress != '') && (state.password != '')) {
+            if ((state.emailAddress != '') && (state.password != '') && (state.userName != '')) {
                 state.validated = true
                 state.error = noError
             }
@@ -115,21 +115,25 @@ export const signInSlice = createSlice({
                 } else {
                     state.error.passwordError = ''
                 }
+                if (state.userName == '') {
+                    state.error.userNameError = 'Username is required'
+                } else {
+                    state.error.userNameError = ''
+                }
                 state.validated = false
             }
         },
     },
     extraReducers: (builder) => {
-        builder.addCase(signIn.pending, (state) => {
+        builder.addCase(createAccount.pending, (state) => {
             state.loading = true;
             state.validated = false
         });
-        builder.addCase(signIn.fulfilled, (state, action) => {
+        builder.addCase(createAccount.fulfilled, (state, action) => {
             state.loading = false;
-            state.setupStage = action.payload.setupStage;
             state.data = action.payload;
         });
-        builder.addCase(signIn.rejected, (state, action) => {
+        builder.addCase(createAccount.rejected, (state, action) => {
             const error: any = action.payload;
             if (error.hasOwnProperty('errors')) {
                 if (error.errors.hasOwnProperty('email')) {
@@ -150,11 +154,10 @@ export const signInSlice = createSlice({
                 }
             }
             state.loading = false;
-            state.setupStage = -1;
         });
     },
-});
+})
 
-export const { setEmailAddress, setPassword, setRememberMe, clearData, checkValidation } = signInSlice.actions;
+export const { setEmailAddress, setPassword, setUserName, clearData, checkValidation } = createAccountSlice.actions;
 
-export default signInSlice.reducer;
+export default createAccountSlice.reducer;
