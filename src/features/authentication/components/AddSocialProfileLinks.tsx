@@ -4,14 +4,14 @@ import FontFamily from "../../../constants/FontFamily";
 import SocialMediaType from "../../../data/constants/SocialMediaType";
 import CommonChip from "../../../components/chip/CommonChip";
 import { useSelector, useDispatch } from 'react-redux';
-import { addSocialProfile, removeSocialProfile } from '../redux/aboutYouSlice';
+import { addSocialProfile, removeSocialProfile, AboutYouState } from '../redux/aboutYouSlice';
 
 function AddSocialProfile(): JSX.Element {
     const dispatch = useDispatch();
-    const aboutYou = useSelector((state: any) => state.aboutYou);
+    const aboutYou: AboutYouState = useSelector((state: any) => state.aboutYou);
 
-    const onSelection = (socialMedia: { ID: number; title: string; link: string }) => {
-        if (aboutYou.socialProfileIDs.includes(socialMedia.ID)) {
+    const onSelection = (socialMedia: { id: number; title: string; link: string }) => {
+        if (aboutYou.socialProfileIDs.includes(socialMedia.id)) {
             dispatch(removeSocialProfile(socialMedia));
         }
         else {
@@ -37,10 +37,10 @@ function AddSocialProfile(): JSX.Element {
                 {
                     SocialMediaType.map((socialMedia) =>
                         <CommonChip
-                            key={socialMedia.ID}
+                            key={socialMedia.id}
                             name={socialMedia.title}
-                            id={socialMedia.ID}
-                            active={isActive(socialMedia.ID)}
+                            id={socialMedia.id}
+                            active={isActive(socialMedia.id)}
                             onPress={() => onSelection(socialMedia)}
                         />
                     )

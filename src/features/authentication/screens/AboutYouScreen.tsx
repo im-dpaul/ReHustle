@@ -1,59 +1,38 @@
 import React, { useEffect, useState } from 'react';
-import {
-    ActivityIndicator,
-    ScrollView,
-    StyleSheet,
-    View,
-} from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View, } from 'react-native';
 import CommonButton from '../../../components/buttons/CommonButton';
 import CommonStatusBar from '../../../components/layouts/CommonStatusBar';
 import CommonDivider from '../../../components/divider/CommonDivider';
 import HeaderStepper from '../components/HeaderStepper';
 import AppColors from '../../../constants/AppColors';
 import AddSocialProfile from '../components/AddSocialProfileLinks';
-import NameInput from '../components/NameInput';
 import LinkWithDescription from '../components/LinkWithDescription';
 import SocialProfilesList from '../components/SocialProfilesList';
 import AddCustomLinkList from '../components/AddCustomLinkList';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../App';
-import { addName, skipAboutYou, addProfileLinks, clearData } from '../redux/aboutYouSlice';
+import { addName, skipAboutYou, addProfileLinks, clearData, AboutYouState, checkValidation } from '../redux/aboutYouSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../../app/store';
 import LocalStorage from '../../../data/local_storage/LocalStorage';
 import StorageKeys from '../../../constants/StorageKeys';
+import CommonTextInput from '../../../components/textInput/CommonTextInput';
+import FontFamily from '../../../constants/FontFamily';
 
 type AboutYouProps = NativeStackScreenProps<RootStackParamList, 'AboutYou'>;
 
 function AboutYouScreen({ navigation }: AboutYouProps): JSX.Element {
-    const aboutYouReducer = useSelector((state: any) => state.aboutYou);
+    const aboutYou: AboutYouState = useSelector((state: any) => state.aboutYou);
     const dispatch = useDispatch<AppDispatch>();
-    const [err, setError] = useState('');
 
-    // console.log('About You store', aboutYouReducer);
+    // console.log('About You store', aboutYou);
 
     const onChangeNameField = (name: string) => {
         dispatch(addName(name));
     }
 
-    const onContinueTap = async () => {
-        let name = ''
-        if (aboutYouReducer.name != '') {
-            name = aboutYouReducer.name;
-        }
-        else {
-            const val = await LocalStorage.GetData(StorageKeys.NAME);
-            if (val != null) {
-                name = val;
-            }
-        }
-        if (name == '') {
-            setError('Name is required');
-        }
-        else {
-            setError('');
-            dispatch(addProfileLinks());
-        }
+    const onContinueTap = () => {
+        dispatch(checkValidation())
     }
 
     const skipBtnTap = () => {
@@ -62,13 +41,25 @@ function AboutYouScreen({ navigation }: AboutYouProps): JSX.Element {
     }
 
     useEffect(() => {
-        if (aboutYouReducer.data != null) {
-            if (aboutYouReducer.data.message == "OK") {
-                navigation.replace('AddServices');
-                dispatch(clearData(null));
-            }
+        if (aboutYou.validated == true) {
+            dispatch(addProfileLinks());
         }
-    }, [aboutYouReducer.data])
+    }, [aboutYou.validated])
+
+    useEffect(() => {
+        if (aboutYou.data != null) {
+            navigation.replace('AddServices');
+            dispatch(clearData());
+        }
+    }, [aboutYou.data])
+
+    useEffect(() => {
+        LocalStorage.GetData(StorageKeys.NAME).then((name) => {
+            if (name != null) {
+                dispatch(addName(name));
+            }
+        });
+    }, [])
 
     return (
         <View style={{ flex: 1, backgroundColor: AppColors.WHITE }}>
@@ -80,7 +71,16 @@ function AboutYouScreen({ navigation }: AboutYouProps): JSX.Element {
                 </View>
                 <ScrollView>
                     <View style={[styles.mainBody,]}>
-                        <NameInput errorText={err} onNameChange={((value) => onChangeNameField(value))} />
+                        <View>
+                            <Text style={styles.name}>Name</Text>
+                            <View style={{ height: 8 }}></View>
+                            <CommonTextInput
+                                value={aboutYou.name}
+                                errorText={aboutYou.error.nameError}
+                                placeholder='Your Name'
+                                onChangeText={(value) => { onChangeNameField(value) }}
+                            />
+                        </View>
                         <View style={{ height: 24 }}></View>
                         <AddSocialProfile />
                         <View style={{ height: 16 }}></View>
@@ -95,7 +95,7 @@ function AboutYouScreen({ navigation }: AboutYouProps): JSX.Element {
                     <CommonDivider />
                     <View style={{ margin: 24 }}>
                         {
-                            aboutYouReducer.loading
+                            aboutYou.loading
                                 ? <ActivityIndicator size={'large'} color={AppColors.PRIMARY_COLOR} />
                                 : <CommonButton title='Continue' onPress={onContinueTap} />
                         }
@@ -113,6 +113,13 @@ const styles = StyleSheet.create({
         paddingVertical: 24,
         flex: 1,
         color: AppColors.WHITE
+    },
+    name: {
+        color: AppColors.GRAY1,
+        fontFamily: FontFamily.GILROY_BOLD,
+        fontSize: 12,
+        fontStyle: 'normal',
+        fontWeight: '400',
     },
 });
 

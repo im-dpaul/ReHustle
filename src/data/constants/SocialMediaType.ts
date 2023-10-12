@@ -1,26 +1,32 @@
-const SocialMediaType = [
+export type SocialMediaDataType = {
+    id: number,
+    title: string,
+    link: string,
+}
+
+const SocialMediaType: SocialMediaDataType[] = [
     {
-        ID: 1,
+        id: 1,
         title: 'Facebook',
         link: 'https://www.facebook.com/'
     },
     {
-        ID: 2,
+        id: 2,
         title: 'Instagram',
         link: 'https://www.instagram.com/'
     },
     {
-        ID: 3,
+        id: 3,
         title: 'Twitter',
         link: 'https://twitter.com/'
     },
     {
-        ID: 4,
+        id: 4,
         title: 'LinkedIn',
         link: 'https://www.linkedin.com/'
     },
     {
-        ID: 5,
+        id: 5,
         title: 'Youtube',
         link: 'https://www.youtube.com/'
     },
