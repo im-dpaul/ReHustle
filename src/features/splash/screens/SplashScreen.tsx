@@ -1,5 +1,5 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { Image, StyleSheet, View } from 'react-native'
+import React, { useEffect } from 'react'
 import LocalStorage from '../../../data/local_storage/LocalStorage'
 import StorageKeys from '../../../constants/StorageKeys'
 import { SafeAreaView } from 'react-native-safe-area-context'
