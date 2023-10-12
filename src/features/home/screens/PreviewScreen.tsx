@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { AppDispatch } from '../../../app/store'
 import { getCurrentUserData } from './../redux/profileSlice'
 import FontFamily from '../../../constants/FontFamily'
-import { UserActiveIcon } from '../../../../assets/images/svg_index'
+import { UserActiveIcon } from '../../../../assets/images'
 
 const PreviewScreen = (): JSX.Element => {
     const profileStore = useSelector((state: any) => state.profile)

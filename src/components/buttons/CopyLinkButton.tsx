@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import AppColors from "../../constants/AppColors";
 import FontFamily from "../../constants/FontFamily";
-import { LinkIcon } from "../../../assets/images/svg_index";
+import { LinkIcon } from "../../../assets/images";
 
 function CopyLinkButton(props: { onCopyLink: (() => void) }): JSX.Element {
     return (

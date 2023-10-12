@@ -19,7 +19,7 @@ import FontFamily from '../../../constants/FontFamily';
 import { AppDispatch } from '../../../app/store';
 import { addTwitterProfile, getTwitterProfile, saveProfile, skipProfile } from '../redux/getYourInfoSlice';
 import TextInputWithIcon from '../../../components/textInput/TextInputWithIcon';
-import { TwitterIcon } from '../../../../assets/images/svg_index';
+import { TwitterIcon } from '../../../../assets/images';
 
 type GetYourInfoProps = NativeStackScreenProps<RootStackParamList, 'GetYourInfo'>;
 

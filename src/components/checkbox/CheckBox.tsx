@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import AppColors from "../../constants/AppColors";
-import { CheckBoxFilled } from "../../../assets/images/svg_index";
+import { CheckBoxFilled } from "../../../assets/images";
 
 function CheckBox(props: { onChangeValue: ((value: boolean) => void) }): JSX.Element {
 

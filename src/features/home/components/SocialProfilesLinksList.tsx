@@ -6,7 +6,7 @@ import { SocialProfileDataType } from "../../../data/constants/AllSocialProfileT
 import AppColors from "../../../constants/AppColors";
 import FontFamily from "../../../constants/FontFamily";
 import TextInputWithIcon from "../../../components/textInput/TextInputWithIcon";
-import { AppleMusicIcon, BehanceIcon, DribbleIcon, EmailIcon, FacebookIcon, GithubIcon, InstagramIcon, LinkedinIcon, ProductHuntIcon, SnapchatIcon, SpotifyIcon, TiktokIcon, TwitterIcon, WebsiteIcon, YoutubeIcon } from "../../../../assets/images/svg_index";
+import { AppleMusicIcon, BehanceIcon, DribbleIcon, EmailIcon, FacebookIcon, GithubIcon, InstagramIcon, LinkedinIcon, ProductHuntIcon, SnapchatIcon, SpotifyIcon, TiktokIcon, TwitterIcon, WebsiteIcon, YoutubeIcon } from "../../../../assets/images";
 
 function SocialProfilesLinksList(): JSX.Element {
     const dispatch = useDispatch();

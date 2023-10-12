@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Android",
+            "request": "launch",
+            "type": "reactnative",
+            "cwd": "${workspaceFolder}",
+            "platform": "android"
+        },
+        {
+            "name": "Debug Android Hermes",
+            "request": "launch",
+            "type": "reactnativedirect",
+            "cwd": "${workspaceFolder}",
+            "platform": "android"
+        }
+    ]
+}

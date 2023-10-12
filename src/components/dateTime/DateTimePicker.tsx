@@ -1,8 +1,8 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import AppColors from '../../constants/AppColors'
 import FontFamily from '../../constants/FontFamily'
-import { ChevronDown } from '../../../assets/images'
+import { ArrowDown } from '../../../assets/images'
 
 const DateTimePicker = (props: { onDateChange: (date: string) => void, onTimeChange: (time: string) => void, }): JSX.Element => {
     return (
@@ -17,14 +17,14 @@ const DateTimePicker = (props: { onDateChange: (date: string) => void, onTimeCha
                     onPress={() => props.onDateChange('01/01/2024')}
                     style={styles.itemBox}>
                     <Text style={styles.dateTimeText}>01/01/2024</Text>
-                    <Image style={{ width: 16, height: 16 }} source={ChevronDown} />
+                    <ArrowDown style={styles.arrowStyle} />
                 </TouchableOpacity>
                 <View style={{ width: 1, backgroundColor: AppColors.GRAY6 }}></View>
                 <TouchableOpacity
                     onPress={() => props.onTimeChange('09:30 AM')}
                     style={styles.itemBox}>
                     <Text style={styles.dateTimeText}>09:30 AM</Text>
-                    <Image style={{ width: 16, height: 16 }} source={ChevronDown} />
+                    <ArrowDown style={styles.arrowStyle} />
                 </TouchableOpacity>
             </View>
         </View>
@@ -63,5 +63,9 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontStyle: 'normal',
         fontWeight: '400',
+    },
+    arrowStyle: {
+        maxWidth: 16,
+        maxHeight: 16
     }
 })

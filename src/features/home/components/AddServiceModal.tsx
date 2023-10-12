@@ -10,7 +10,7 @@ import IconWithTitleDescription from '../../../components/text/IconWithTitleDesc
 import CommonStatusBar from '../../../components/layouts/CommonStatusBar'
 import { RootStackParamList } from '../../../App';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { EventIcon, TimeIcon, ChatIcon, CrossIcon, DocumentIcon } from '../../../../assets/images/svg_index'
+import { EventIcon, TimeIcon, ChatIcon, CrossIcon, DocumentIcon } from '../../../../assets/images'
 
 type ServicesProps = NativeStackScreenProps<RootStackParamList, 'Services'>;
 

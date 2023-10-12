@@ -4,7 +4,7 @@ import FontFamily from "../../../constants/FontFamily";
 import { useState } from "react";
 import LocalStorage from "../../../data/local_storage/LocalStorage";
 import StorageKeys from "../../../constants/StorageKeys";
-import { UserAvatar } from "../../../../assets/images/svg_index";
+import { UserAvatar } from "../../../../assets/images";
 
 function HeaderStepper(props: { title: string, step: number, textSuffixImage?: any, skipButton?: boolean, skipBtnTap?: (() => void) }): JSX.Element {
 

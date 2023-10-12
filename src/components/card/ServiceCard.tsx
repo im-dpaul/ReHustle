@@ -1,13 +1,28 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import Moment from 'moment';
-import { CalendarIcon, ClockIcon, EditIcon, HalfCalender, HalfStar, MoreIcon, PriceGroup, TrashIcon, VideoIcon } from '../../../assets/images'
 import AppColors from '../../constants/AppColors';
 import FontFamily from '../../constants/FontFamily';
 import CommonButton from '../buttons/CommonButton';
 import CommonDivider from '../divider/CommonDivider';
+import { CalenderHalf, CalenderIcon, ClockIcon, EditIcon, MoreIcon, PriceIcon, StarHalf, TrashIcon, VideoIcon } from '../../../assets/images';
 
-const ServiceCard = (props: { title: string, description: string, bannerImage: string, serviceType: string, duration: string, date: string, price: string, active: boolean, onHidePage: (() => void), onEditService: (() => void), onDeleteService: (() => void), onMoreTap: (() => void) }) => {
+interface ServiceCardProps {
+    title: string,
+    description: string,
+    bannerImage: string,
+    serviceType: string,
+    duration: string,
+    date: string,
+    price: string,
+    active: boolean,
+    onHidePage: (() => void),
+    onEditService: (() => void),
+    onDeleteService: (() => void),
+    onMoreTap: (() => void)
+}
+
+const ServiceCard = (props: ServiceCardProps) => {
     let service = '';
     if (props.serviceType == 'call') {
         service = 'Video Call'
@@ -35,8 +50,8 @@ const ServiceCard = (props: { title: string, description: string, bannerImage: s
                 {
                     (props.bannerImage == '')
                         ? <View style={{ alignItems: 'center', justifyContent: 'flex-end', marginTop: 'auto' }}>
-                            <Image style={{ height: 134, width: 216 }} source={HalfCalender} />
-                            <Image style={{ height: 42, width: 66, position: 'absolute' }} source={HalfStar} />
+                            <CalenderHalf style={{ maxHeight: 134, maxWidth: 216 }} />
+                            <StarHalf style={{ maxHeight: 42, maxWidth: 66, position: 'absolute' }} />
                         </View>
                         : <Image style={styles.imageContainer} source={{ uri: props.bannerImage }} />
                 }
@@ -49,26 +64,26 @@ const ServiceCard = (props: { title: string, description: string, bannerImage: s
                 <View style={styles.iconAndTextRow}>
                     <View>
                         <View style={styles.iconAndText}>
-                            <Image style={styles.imageIcon} source={VideoIcon} />
+                            <VideoIcon style={styles.imageIcon} />
                             <View style={{ width: 8 }}></View>
                             <Text style={styles.iconText}>{service}</Text>
                         </View>
                         <View style={{ height: 16 }}></View>
                         <View style={styles.iconAndText}>
-                            <Image style={styles.imageIcon} source={ClockIcon} />
+                            <ClockIcon style={styles.imageIcon} />
                             <View style={{ width: 8 }}></View>
                             <Text style={styles.iconText}>{props.duration} minutes</Text>
                         </View>
                     </View>
                     <View>
                         <View style={styles.iconAndText}>
-                            <Image style={styles.imageIcon} source={PriceGroup} />
+                            <PriceIcon style={styles.imageIcon} />
                             <View style={{ width: 8 }}></View>
                             <Text style={styles.iconText}>₹ {props.price}</Text>
                         </View>
                         <View style={{ height: 16 }}></View>
                         <View style={styles.iconAndText}>
-                            <Image style={styles.imageIcon} source={CalendarIcon} />
+                            <CalenderIcon style={styles.imageIcon} />
                             <View style={{ width: 8 }}></View>
                             <Text style={styles.iconText}>{date}</Text>
                         </View>
@@ -82,15 +97,15 @@ const ServiceCard = (props: { title: string, description: string, bannerImage: s
                 </View>
                 <View style={{ marginLeft: 'auto' }}></View>
                 <TouchableOpacity onPress={() => { props.onEditService() }}>
-                    <Image style={styles.imageIcon} source={EditIcon} />
+                    <EditIcon style={styles.imageIcon} />
                 </TouchableOpacity>
                 <View style={{ width: 12 }}></View>
                 <TouchableOpacity onPress={() => { props.onDeleteService() }}>
-                    <Image style={styles.imageIcon} source={TrashIcon} />
+                    <TrashIcon style={styles.imageIcon} />
                 </TouchableOpacity>
                 <View style={{ width: 12 }}></View>
                 <TouchableOpacity onPress={() => { props.onMoreTap() }}>
-                    <Image style={styles.imageIcon} source={MoreIcon} />
+                    <MoreIcon style={styles.imageIcon} />
                 </TouchableOpacity>
             </View>
         </View>
@@ -138,8 +153,8 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     imageIcon: {
-        height: 20,
-        width: 20,
+        maxHeight: 20,
+        maxWidth: 20,
     },
     iconAndTextRow: {
         flexDirection: 'row',

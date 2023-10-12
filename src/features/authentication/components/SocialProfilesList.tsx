@@ -1,6 +1,6 @@
 import { StyleSheet, View } from "react-native";
 import RemoveButton from "../../../components/buttons/RemoveButton";
-import { FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon, YoutubeIcon } from "../../../../assets/images/svg_index";
+import { FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon, YoutubeIcon } from "../../../../assets/images";
 import SocialMediaType from "../../../data/constants/SocialMediaType";
 import { useSelector, useDispatch } from 'react-redux';
 import { removeSocialProfile, updateSocialProfile } from '../redux/aboutYouSlice';

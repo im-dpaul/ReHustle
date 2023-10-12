@@ -2,7 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import AppColors from '../../constants/AppColors'
 import FontFamily from '../../constants/FontFamily'
-import { UploadIcon } from '../../../assets/images/svg_index'
+import { UploadIcon } from '../../../assets/images'
 
 const UploadButton = (props: { onPress: () => void }) => {
     return (

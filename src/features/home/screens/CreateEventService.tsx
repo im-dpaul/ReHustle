@@ -6,7 +6,6 @@ import CommonStatusBar from '../../../components/layouts/CommonStatusBar'
 import CreateServiceAppBar from '../components/CreateServiceAppBar'
 import { RootStackParamList } from '../../../App'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { HalfCalender, HalfStar } from '../../../../assets/images'
 import FontFamily from '../../../constants/FontFamily'
 import UploadButton from '../../../components/buttons/UploadButton'
 import CommonTextInput from '../../../components/textInput/CommonTextInput'
@@ -18,6 +17,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import ToggleTabButton from '../../../components/buttons/ToggleTabButton'
 import TimeDurationTextInput from '../../../components/textInput/TimeDurationTextInput'
 import DateTimePicker from '../../../components/dateTime/DateTimePicker'
+import { CalenderHalf, StarHalf } from '../../../../assets/images'
 
 type CreateEventServiceProps = NativeStackScreenProps<RootStackParamList, 'CreateEventService'>
 
@@ -96,8 +96,8 @@ const CreateEventService = ({ navigation }: CreateEventServiceProps): JSX.Elemen
                                 (true)
                                     ?
                                     <View style={{ alignItems: 'center', justifyContent: 'flex-end', marginTop: 'auto' }}>
-                                        <Image style={{ height: 134, width: 216 }} source={HalfCalender} />
-                                        <Image style={{ height: 42, width: 66, position: 'absolute' }} source={HalfStar} />
+                                        <CalenderHalf style={{ maxHeight: 134, maxWidth: 216 }} />
+                                        <StarHalf style={{ maxHeight: 42, maxWidth: 66, position: 'absolute' }} />
                                     </View>
                                     : <Image style={styles.imageContainer} source={{ uri: '' }} />
                             }

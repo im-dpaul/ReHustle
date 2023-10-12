@@ -4,7 +4,7 @@ import AppColors from '../../../constants/AppColors'
 import IconWithTitleDescription from '../../../components/text/IconWithTitleDescription'
 import CommonDivider from '../../../components/divider/CommonDivider'
 import FontFamily from '../../../constants/FontFamily'
-import { LogoutIcon, SlidersIcon, UserIcon, GridIcon, HelpCircleIcon, PreviewIcon, PriceIcon, SettingsIcon, PreviewActiveIcon, SlidersActiveIcon, UserActiveIcon, GridActiveIcon, SettingsActiveIcon, CrossIcon, UserAvatar } from '../../../../assets/images/svg_index'
+import { LogoutIcon, SlidersIcon, UserIcon, GridIcon, HelpCircleIcon, PreviewIcon, PriceIcon, SettingsIcon, PreviewActiveIcon, SlidersActiveIcon, UserActiveIcon, GridActiveIcon, SettingsActiveIcon, CrossIcon, UserAvatar } from '../../../../assets/images'
 import StorageKeys from '../../../constants/StorageKeys'
 import LocalStorage from '../../../data/local_storage/LocalStorage'
 import { useNavigation } from '@react-navigation/native';

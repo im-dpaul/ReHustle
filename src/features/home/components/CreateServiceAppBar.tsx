@@ -3,7 +3,7 @@ import React from 'react'
 import CommonButton from '../../../components/buttons/CommonButton'
 import AppColors from '../../../constants/AppColors'
 import FontFamily from '../../../constants/FontFamily'
-import { BackButtonIcon } from '../../../../assets/images/svg_index'
+import { BackButtonIcon } from '../../../../assets/images'
 
 const CreateServiceAppBar = (props: { title: string, onCreate: () => void, onBackPress: () => void }) => {
 

@@ -5,7 +5,7 @@ import CommonButton from "../../../components/buttons/CommonButton";
 import { useState } from "react";
 import StorageKeys from "../../../constants/StorageKeys";
 import LocalStorage from "../../../data/local_storage/LocalStorage";
-import { MenuIconSVG, UserAvatar } from "../../../../assets/images/svg_index";
+import { MenuIconSVG, UserAvatar } from "../../../../assets/images";
 import MenuOptionsModal from "./MenuOptionsModal";
 import Clipboard from '@react-native-community/clipboard'
 

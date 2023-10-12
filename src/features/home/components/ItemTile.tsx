@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import AppColors from '../../../constants/AppColors'
 import FontFamily from '../../../constants/FontFamily'
-import { VideoIcon } from '../../../../assets/images/svg_index'
+import { VideoIcon } from '../../../../assets/images'
 
 const ItemTile = (props: { product: any }) => {
 

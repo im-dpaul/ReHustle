@@ -15,7 +15,7 @@ import { finishCreation, clearData } from "../redux/finishAccountCreationSlice";
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../../app/store'
 import Clipboard from '@react-native-community/clipboard';
-import { DancingFigure, PartyingFace } from '../../../../assets/images/svg_index';
+import { DancingFigure, PartyingFace } from '../../../../assets/images';
 
 type FinishAccountCreationProps = NativeStackScreenProps<RootStackParamList, 'FinishAccountCreation'>;
 

@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import AppColors from "../../constants/AppColors";
 import FontFamily from "../../constants/FontFamily";
-import { GoogleIcon } from "../../../assets/images/svg_index";
+import { GoogleIcon } from "../../../assets/images";
 
 function GoogleSignInButton(props: { onPress: (() => void) }): JSX.Element {
     return (

@@ -11,7 +11,7 @@ import AppColors from '../../../constants/AppColors';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../../app/store';
 import { getUserData, userExists } from '../redux/splashSlice';
-import { RehustleLogo } from '../../../../assets/images/svg_index'
+import { RehustleLogo } from '../../../../assets/images'
 
 type SplashProps = NativeStackScreenProps<RootStackParamList, 'Splash'>;
 
