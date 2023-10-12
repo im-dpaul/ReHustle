@@ -1,11 +1,5 @@
 import React, { useEffect } from 'react';
-import {
-    ActivityIndicator,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View, } from 'react-native';
 import CommonButton from '../../../components/buttons/CommonButton';
 import CommonStatusBar from '../../../components/layouts/CommonStatusBar';
 import CommonDivider from '../../../components/divider/CommonDivider';
@@ -17,17 +11,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import TwitterProfileWithDescription from '../components/TwitterProfileWithDescription';
 import FontFamily from '../../../constants/FontFamily';
 import { AppDispatch } from '../../../app/store';
-import { addTwitterProfile, getTwitterProfile, saveProfile, skipProfile } from '../redux/getYourInfoSlice';
+import { GetYourInfoState, addTwitterProfile, getTwitterProfile, saveProfile, skipProfile, clearData } from '../redux/getYourInfoSlice';
 import TextInputWithIcon from '../../../components/textInput/TextInputWithIcon';
 import { TwitterIcon } from '../../../../assets/images';
 
 type GetYourInfoProps = NativeStackScreenProps<RootStackParamList, 'GetYourInfo'>;
 
 function GetYouInfoScreen({ navigation }: GetYourInfoProps): JSX.Element {
-    const getYourInfoReducer = useSelector((state: any) => state.getYourInfo);
+    const getYourInfo: GetYourInfoState = useSelector((state: any) => state.getYourInfo);
     const dispatch = useDispatch<AppDispatch>();
 
-    // console.log("getYourInfo store ", getYourInfoReducer);
+    // console.log("getYourInfo store ", getYourInfo);
 
     const onChangeTwitterProfile = (value: string) => {
         dispatch(addTwitterProfile(value));
@@ -41,15 +35,15 @@ function GetYouInfoScreen({ navigation }: GetYourInfoProps): JSX.Element {
     const skipBtnTap = async () => {
         dispatch(skipProfile());
         navigation.replace('AboutYou');
+        dispatch(clearData())
     }
 
     useEffect(() => {
-        if (getYourInfoReducer.data != null) {
-            if (getYourInfoReducer.data._id != null) {
-                navigation.replace('AboutYou');
-            }
+        if (getYourInfo.data != null) {
+            navigation.replace('AboutYou');
+            dispatch(clearData())
         }
-    }, [getYourInfoReducer.data])
+    }, [getYourInfo.data])
 
     return (
         <View style={{ flex: 1, backgroundColor: AppColors.WHITE }}>
@@ -67,7 +61,8 @@ function GetYouInfoScreen({ navigation }: GetYourInfoProps): JSX.Element {
                         <View style={{ height: 8 }}></View>
                         <TextInputWithIcon
                             placeholder='https://twitter.com/'
-                            value={getYourInfoReducer.twitterProfile}
+                            value={getYourInfo.twitterProfile}
+                            errorText={getYourInfo.error.twitterApiError}
                             prefixIcon={
                                 <View>
                                     <TwitterIcon style={styles.prefixIconStyle} />
@@ -81,7 +76,7 @@ function GetYouInfoScreen({ navigation }: GetYourInfoProps): JSX.Element {
                     <CommonDivider />
                     <View style={{ margin: 24 }}>
                         {
-                            getYourInfoReducer.loading
+                            getYourInfo.loading
                                 ? <ActivityIndicator size={'large'} color={AppColors.PRIMARY_COLOR} />
                                 : <CommonButton title='Continue' onPress={onContinueTap} />
                         }
