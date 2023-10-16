@@ -1,4 +1,6 @@
-export const PersonalTrainerServices = [
+import { ServicesDataType } from "../constants/ServiceType";
+
+export const PersonalTrainerServices: ServicesDataType[] = [
     {
         "title": "Virtual Training",
         "description": "30 min training on any of the chosen workout and tips to master it",

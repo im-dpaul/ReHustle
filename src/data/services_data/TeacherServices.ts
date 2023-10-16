@@ -1,4 +1,6 @@
-export const TeacherServices = [
+import { ServicesDataType } from "../constants/ServiceType";
+
+export const TeacherServices: ServicesDataType[] = [
     {
         "title": "Online Workshop",
         "description": "Workshop on mastering the skills and improve your career growth path",

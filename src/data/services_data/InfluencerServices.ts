@@ -1,4 +1,6 @@
-export const InfluencerServices = [
+import { ServicesDataType } from "../constants/ServiceType";
+
+export const InfluencerServices: ServicesDataType[] = [
     {
         "title": "15 min Live Chit-Chat",
         "description": "Get a link to come live with me for chit-chat for 10 mins",

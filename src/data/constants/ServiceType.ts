@@ -11,7 +11,33 @@ import { PodcasterServices } from "../services_data/PodcasterServices";
 import { TeacherServices } from "../services_data/TeacherServices";
 import { WriterServices } from "../services_data/WriterServices";
 
-const ServiceType = [
+export type ServicesDataType = {
+    _id?: string;
+    title: string;
+    description: string;
+    bannerImage: string;
+    paymentMode: string;
+    service: {
+        scheduleType?: string;
+        duration: string;
+        serviceType: string;
+        date?: string;
+        url?: string;
+    };
+    isActive: boolean;
+    price: {
+        amount: number,
+        currency: string
+    }
+}
+
+export type ServiceTypeDataType = {
+    ID: number,
+    ROLE: string,
+    SERVICES: ServicesDataType[]
+}
+
+const ServiceType: ServiceTypeDataType[] = [
     {
         ID: 1,
         ROLE: 'Artist',

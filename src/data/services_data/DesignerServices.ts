@@ -1,4 +1,6 @@
-export const DesignerServices = [
+import { ServicesDataType } from "../constants/ServiceType";
+
+export const DesignerServices: ServicesDataType[] = [
     {
         "title": "UX Research Workshop",
         "description": "Workshop to know how to enter into UX field and get started",

@@ -1,23 +1,22 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native'
+import { FlatList, StyleSheet, View } from 'react-native'
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux';
-import { updateService, deleteService } from '../redux/addServicesSlice';
+import { updateService, deleteService, AddServicesState } from '../redux/addServicesSlice';
 import { AppDispatch } from '../../../app/store';
 import ServiceCard from '../../../components/card/ServiceCard';
+import { ServicesDataType } from "../../../data/constants/ServiceType";
 
 const ServicesList = () => {
-    const servicesReducer = useSelector((state: any) => state.addServices);
+    const addServicesR: AddServicesState = useSelector((state: any) => state.addServices);
     const dispatch = useDispatch<AppDispatch>();
 
-    const onHidePage = (service: any) => {
+    const onHidePage = (service: ServicesDataType) => {
         let updatedService;
         updatedService = {
             "_id": service._id,
             "bannerImage": service.bannerImage,
-            "chronicalOrder": service.chronicalOrder,
             "description": service.description,
             "isActive": !service.isActive,
-            "pId": service.pId,
             "paymentMode": service.paymentMode,
             "price": service.price,
             "service": service.service,
@@ -29,8 +28,10 @@ const ServicesList = () => {
 
     const onEditService = () => { }
 
-    const onDeleteService = (id: string) => {
-        dispatch(deleteService(id));
+    const onDeleteService = (id: string | undefined) => {
+        if (id != undefined) {
+            dispatch(deleteService(id));
+        }
     }
 
     const onMoreTap = () => { }
@@ -38,7 +39,7 @@ const ServicesList = () => {
     return (
         <View style={styles.list}>
             <FlatList
-                data={servicesReducer.servicesData}
+                data={addServicesR.servicesData}
                 scrollEnabled={false}
                 renderItem={
                     (item) =>
@@ -50,7 +51,7 @@ const ServicesList = () => {
                                 serviceType={item.item.service.serviceType}
                                 duration={item.item.service.duration}
                                 date={item.item.service.date}
-                                price={item.item.price.amount}
+                                price={`${item.item.price.amount}`}
                                 active={item.item.isActive}
                                 onHidePage={() => { onHidePage(item.item) }}
                                 onEditService={() => { onEditService() }}
