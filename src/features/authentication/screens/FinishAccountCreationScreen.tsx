@@ -11,7 +11,7 @@ import CommonButton from '../../../components/buttons/CommonButton';
 import CopyLinkButton from '../../../components/buttons/CopyLinkButton';
 import LocalStorage from '../../../data/local_storage/LocalStorage';
 import StorageKeys from '../../../constants/StorageKeys';
-import { finishCreation, clearData } from "../redux/finishAccountCreationSlice";
+import { finishCreation, clearData, FinishAccountCreationState } from "../redux/finishAccountCreationSlice";
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../../app/store'
 import Clipboard from '@react-native-community/clipboard';
@@ -21,10 +21,10 @@ type FinishAccountCreationProps = NativeStackScreenProps<RootStackParamList, 'Fi
 
 function FinishAccountCreationScreen({ navigation }: FinishAccountCreationProps): JSX.Element {
 
-    const finishCreationReducer = useSelector((state: any) => state.finishAccountCreation);
+    const finishCreationR: FinishAccountCreationState = useSelector((state: any) => state.finishAccountCreation);
     const dispatch = useDispatch<AppDispatch>();
 
-    // console.log('FinishAccountCreation', finishCreationReducer);
+    // console.log('FinishAccountCreation', finishCreationR);
 
     const [userName, setUserName] = useState('rehustle.co/');
     LocalStorage.GetData(StorageKeys.USER_NAME).then((value) => {
@@ -44,13 +44,12 @@ function FinishAccountCreationScreen({ navigation }: FinishAccountCreationProps)
     }
 
     useEffect(() => {
-        if (finishCreationReducer.data != null) {
-            if (finishCreationReducer.data._id != "") {
-                navigation.replace('Services');
-                dispatch(clearData(null));
-            }
+        if (finishCreationR.data != null) {
+            navigation.replace('Services');
+            dispatch(clearData());
+
         }
-    }, [finishCreationReducer.data])
+    }, [finishCreationR.data])
 
     return (
         <View style={{ flex: 1, backgroundColor: AppColors.WHITE }}>
@@ -76,7 +75,7 @@ function FinishAccountCreationScreen({ navigation }: FinishAccountCreationProps)
                     <CommonDivider />
                     <View style={{ margin: 24 }}>
                         {
-                            finishCreationReducer.loading
+                            finishCreationR.loading
                                 ? <ActivityIndicator size={'large'} color={AppColors.PRIMARY_COLOR} />
                                 : <CommonButton title='Finish' onPress={onFinishTap} />
                         }

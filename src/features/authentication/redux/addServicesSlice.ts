@@ -11,7 +11,6 @@ export interface AddServicesState {
     loading: boolean,
     screenLoading: boolean,
     servicesData: ServicesDataType[],
-    servicesError: any[],
 }
 
 type errorType = {
@@ -28,8 +27,7 @@ const initialState: AddServicesState = {
     error: noError,
     loading: false,
     screenLoading: false,
-    servicesData: [],
-    servicesError: [],
+    servicesData: []
 }
 
 export const getAllServices = createAsyncThunk<any>(
