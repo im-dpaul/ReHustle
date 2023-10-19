@@ -83,7 +83,10 @@ function SignInScreen({ navigation, route }: SignInProps): JSX.Element {
         dispatch(clearData());
     }
 
-    const onForgetPasswordTap = () => { }
+    const onForgetPasswordTap = () => {
+        navigation.replace('ForgetPassword')
+        dispatch(clearData());
+    }
 
     return (
         <SafeAreaView style={{ backgroundColor: AppColors.WHITE, flex: 1 }}>

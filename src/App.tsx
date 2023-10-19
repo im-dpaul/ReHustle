@@ -15,10 +15,12 @@ import PreviewScreen from './features/home/screens/PreviewScreen';
 import InsightsScreen from './features/home/screens/InsightsScreen';
 import ProfileScreen from './features/home/screens/ProfileScreen';
 import SettingsScreen from './features/home/screens/SettingsScreen';
+import ForgetPasswordScreen from './features/authentication/screens/ForgetPasswordScreen';
 
 export type RootStackParamList = {
   Splash: undefined;
   SignIn: any;
+  ForgetPassword: any;
   CreateAccount: undefined;
   GetYourInfo: undefined;
   AboutYou: undefined;
@@ -46,6 +48,10 @@ function App(): JSX.Element {
         <Stack.Screen
           name='SignIn'
           component={SignInScreen}
+        />
+        <Stack.Screen
+          name='ForgetPassword'
+          component={ForgetPasswordScreen}
         />
         <Stack.Screen
           name='CreateAccount'
