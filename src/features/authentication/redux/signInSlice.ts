@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { postMethod } from "../../../core/services/NetworkServices";
 import LocalStorage from "../../../data/local_storage/LocalStorage";
 import StorageKeys from "../../../constants/StorageKeys";
+import { ValidateEmail } from "../../../utils";
 
 export interface SigninState {
     data: any,
@@ -100,13 +101,16 @@ export const signInSlice = createSlice({
                 state.validated = false
         },
         checkValidation: (state) => {
-            if ((state.emailAddress != '') && (state.password != '')) {
+            let isEmail = ValidateEmail(state.emailAddress)
+            if (isEmail && (state.password != '')) {
                 state.validated = true
                 state.error = noError
             }
             else {
                 if (state.emailAddress == '') {
                     state.error.emailError = 'Email is required'
+                } else if (!isEmail) {
+                    state.error.emailError = 'Please provide a valid Email Address'
                 } else {
                     state.error.emailError = ''
                 }
