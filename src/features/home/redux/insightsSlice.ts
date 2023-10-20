@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { authenticatedGetMethod } from "../../../core/services/NetworkServices";
 
-interface ProfileState {
+interface InsightsState {
     data: any;
     error: any;
     loading: boolean;
@@ -11,7 +11,7 @@ interface ProfileState {
     weeklySales: number;
 }
 
-const initialState: ProfileState = {
+const initialState: InsightsState = {
     data: null,
     loading: false,
     error: null,

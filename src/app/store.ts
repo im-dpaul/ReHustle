@@ -12,6 +12,7 @@ import createEventServiceReducer from '../features/home/redux/createEventService
 import profileReducer from '../features/home/redux/profileSlice'
 import insightsReducer from "../features/home/redux/insightsSlice";
 import settingsReducer from '../features/home/redux/settingsSlice'
+import forgetPasswordReducer from '../features/authentication/redux/forgetPasswordSlice'
 
 export const store = configureStore({
     reducer: {
@@ -19,6 +20,7 @@ export const store = configureStore({
         addServices: addServicesReducer,
         aboutYou: aboutYouReducer,
         signIn: signInReducer,
+        forgetPassword: forgetPasswordReducer,
         createAccount: createAccountReducer,
         getYourInfo: getYourInfoReducer,
         finishAccountCreation: finishAccountCreationReducer,

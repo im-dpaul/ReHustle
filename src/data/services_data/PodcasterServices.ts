@@ -1,4 +1,6 @@
-export const PodcasterServices = [
+import { ServicesDataType } from "../constants/ServiceType";
+
+export const PodcasterServices: ServicesDataType[] = [
     {
         "title": "1-1 Virtual Coffee",
         "description": "Choose a slot in my calendar and Ask me anything",

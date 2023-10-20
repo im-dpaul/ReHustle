@@ -1,4 +1,6 @@
-export const ArtistServices = [
+import { ServicesDataType } from "../constants/ServiceType";
+
+export const ArtistServices: ServicesDataType[] = [
     {
         "title": "Virtual Coffee",
         "description": "Choose a slot in my calendar and Ask me anything",

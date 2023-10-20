@@ -1,11 +1,5 @@
 import React, { useEffect } from 'react';
-import {
-    ActivityIndicator,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    View,
-} from 'react-native';
+import { ActivityIndicator, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import ReHustleTitle from '../../../components/text/ReHustleTitle';
 import SignInText from '../components/SignInText';
 import GoogleSignInButton from './../../../components/buttons/GoogleSignInButton';
@@ -20,23 +14,24 @@ import AppColors from '../../../constants/AppColors';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../App';
 import { useSelector, useDispatch } from 'react-redux';
-import { signIn, setEmailAddress, setPassword, setRememberMe, clearData } from '../redux/signInSlice';
+import { signIn, setEmailAddress, setPassword, setRememberMe, clearData, SigninState, checkValidation } from '../redux/signInSlice';
 import { AppDispatch } from '../../../app/store';
+import FontFamily from '../../../constants/FontFamily';
 
 type SignInProps = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
 
 function SignInScreen({ navigation, route }: SignInProps): JSX.Element {
 
-    let routeParams = route.params;
-    let fromHome: boolean;
-    if (routeParams != undefined) {
-        fromHome = routeParams.fromHome;
-    }
+    // let routeParams = route.params;
+    // let fromHome: boolean;
+    // if (routeParams != undefined) {
+    //     fromHome = routeParams.fromHome;
+    // }
 
     const dispatch = useDispatch<AppDispatch>();
-    const signInReducer = useSelector((state: any) => state.signIn);
+    const signInR: SigninState = useSelector((state: any) => state.signIn);
 
-    // console.log("Sign In store ", signInReducer);
+    // console.log("Sign In store ", signInR);
 
     const changeRememberMe = (value: boolean) => {
         dispatch(setRememberMe(value));
@@ -53,43 +48,45 @@ function SignInScreen({ navigation, route }: SignInProps): JSX.Element {
     const onGoogleSignIn = () => { }
 
     const onSignIn = () => {
-        dispatch(signIn());
+        dispatch(checkValidation())
     }
 
     useEffect(() => {
-
-        if (signInReducer.data != null) {
-            if (signInReducer.data.message == "OK") {
-                if (signInReducer.setupStage == '') {
-                    navigation.replace('SignIn');
-                }
-                else if (signInReducer.setupStage == '0') {
-                    navigation.replace('GetYourInfo');
-                }
-                else if (signInReducer.setupStage == '1') {
-                    navigation.replace('AboutYou');
-                }
-                else if (signInReducer.setupStage == '2') {
-                    navigation.replace('AddServices');
-                }
-                else if (signInReducer.setupStage == '3') {
-                    navigation.replace('FinishAccountCreation');
-                }
-                else if (signInReducer.setupStage == '4') {
-                    navigation.replace('Services');
-                }
-                else {
-                    navigation.replace('SignIn');
-                }
-                dispatch(clearData(null));
-            }
+        if (signInR.validated == true) {
+            dispatch(signIn());
         }
+    }, [signInR.validated])
 
-    }, [signInReducer.setupStage]);
+    useEffect(() => {
+        if (signInR.data != null) {
+            if (signInR.setupStage == 0) {
+                navigation.replace('GetYourInfo');
+            }
+            else if (signInR.setupStage == 1) {
+                navigation.replace('AboutYou');
+            }
+            else if (signInR.setupStage == 2) {
+                navigation.replace('AddServices');
+            }
+            else if (signInR.setupStage == 3) {
+                navigation.replace('FinishAccountCreation');
+            }
+            else if (signInR.setupStage == 4) {
+                navigation.replace('Services');
+            }
+            dispatch(clearData());
+        }
+    }, [signInR.setupStage]);
 
-    const onRegisterTap = () => { navigation.replace('CreateAccount') }
+    const onRegisterTap = () => {
+        navigation.replace('CreateAccount')
+        dispatch(clearData());
+    }
 
-    const onForgetPasswordTap = () => { }
+    const onForgetPasswordTap = () => {
+        navigation.replace('ForgetPassword')
+        dispatch(clearData());
+    }
 
     return (
         <SafeAreaView style={{ backgroundColor: AppColors.WHITE, flex: 1 }}>
@@ -105,28 +102,37 @@ function SignInScreen({ navigation, route }: SignInProps): JSX.Element {
                     <SignUpWithEmailText signIn={true} />
                     <View style={{ height: 36 }}></View>
                     <CommonTextInput
-                        value={signInReducer.emailAddress}
+                        value={signInR.emailAddress}
                         placeholder='Email address'
+                        errorText={signInR.error.emailError}
                         onChangeText={((value) => onChangeEmailField(value))}
                     />
                     <View style={{ height: 16 }}></View>
                     <CommonTextInput
-                        value={signInReducer.password}
+                        value={signInR.password}
                         placeholder='Password'
+                        errorText={signInR.error.passwordError}
                         onChangeText={((value) => onChangePasswordField(value))}
                     />
                     <View style={{ height: 18 }}></View>
                     <View style={styles.checkBoxRow}>
-                        <RememberMe setRememberMe={((value) => changeRememberMe(value))} />
+                        {/* <RememberMe setRememberMe={((value) => changeRememberMe(value))} /> */}
                         <TextButton text='Forgot Password?' onPress={onForgetPasswordTap} />
                     </View>
-                    <View style={{ marginVertical: 24 }}>
-                        {
-                            signInReducer.loading
-                                ? <ActivityIndicator size={'large'} color={AppColors.PRIMARY_COLOR} />
-                                : <CommonButton title='Sign In' onPress={onSignIn} />
-                        }
-                    </View>
+                    <View style={{ height: 24 }}></View>
+                    {
+                        signInR.loading
+                            ? <ActivityIndicator size={'large'} color={AppColors.PRIMARY_COLOR} />
+                            : <CommonButton title='Sign In' onPress={onSignIn} />
+                    }
+                    {
+                        (signInR.error.message != '')
+                            ? <View style={{ marginTop: 8 }}>
+                                <Text style={styles.error}>{signInR.error.message}</Text>
+                            </View>
+                            : null
+                    }
+                    <View style={{ height: 24 }}></View>
                     <DontHaveAccountRegister onPress={onRegisterTap} />
                 </View>
             </ScrollView>
@@ -145,8 +151,15 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-end',
     },
+    error: {
+        color: AppColors.RED,
+        fontFamily: FontFamily.GILROY_BOLD,
+        fontSize: 12,
+        fontStyle: 'normal',
+        fontWeight: '400'
+    }
 });
 
 export default SignInScreen;

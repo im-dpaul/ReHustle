@@ -1,4 +1,6 @@
-export const DeveloperServices = [
+import { ServicesDataType } from "../constants/ServiceType";
+
+export const DeveloperServices: ServicesDataType[] = [
     {
         "title": "Code Review",
         "description": "30 min session to review your code live and resolve bugs",

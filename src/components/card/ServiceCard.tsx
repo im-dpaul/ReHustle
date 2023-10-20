@@ -13,7 +13,7 @@ interface ServiceCardProps {
     bannerImage: string,
     serviceType: string,
     duration: string,
-    date: string,
+    date: string | undefined,
     price: string,
     active: boolean,
     onHidePage: (() => void),

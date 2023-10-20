@@ -14,6 +14,9 @@ function HeaderStepper(props: { title: string, step: number, textSuffixImage?: a
         if ((image != null) && (image.length != 0)) {
             setImage(image);
         }
+        else {
+            setImage('')
+        }
     })
 
     return (

@@ -1,4 +1,6 @@
-export const MarketerServices = [
+import { ServicesDataType } from "../constants/ServiceType";
+
+export const MarketerServices: ServicesDataType[] = [
     {
         "title": "Virtual Coffee",
         "description": "Choose a slot in my calendar and Ask me anything",

@@ -1,4 +1,6 @@
-export const MusicianServices = [
+import { ServicesDataType } from "../constants/ServiceType";
+
+export const MusicianServices: ServicesDataType[] = [
     {
         "title": "Play a song",
         "description":

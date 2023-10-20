@@ -1,4 +1,6 @@
-export const OtherServices = [
+import { ServicesDataType } from "../constants/ServiceType";
+
+export const OtherServices: ServicesDataType[] = [
     {
         "title": "Virtual Coffee",
         "description": "Choose a slot in my calendar and Ask me anything",
