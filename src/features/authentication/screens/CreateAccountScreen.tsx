@@ -1,12 +1,5 @@
 import React, { useEffect } from 'react';
-import {
-    ActivityIndicator,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native';
+import { ActivityIndicator, SafeAreaView, ScrollView, StyleSheet, Text, View, } from 'react-native';
 import GoogleSignInButton from '../../../components/buttons/GoogleSignInButton';
 import SignUpWithEmailText from './../components/SignUpWithEmailText';
 import CommonTextInput from '../../../components/textInput/CommonTextInput';
@@ -23,12 +16,12 @@ import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../../../App';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../../app/store';
-import { createAccount, setEmailAddress, setPassword, setUserName, clearData, CreateAccountState, checkValidation } from "../redux/createAccountSlice";
+import { createAccount, setEmailAddress, setPassword, setUserName, clearData, CreateAccountState, checkValidation, googleSignup, userNameValidation } from "../redux/createAccountSlice";
 import FontFamily from '../../../constants/FontFamily';
 
 type CreateAccountProps = NativeStackScreenProps<RootStackParamList, 'CreateAccount'>;
 
-function CreateAccountScreen({ route }: CreateAccountProps): JSX.Element {
+function CreateAccountScreen({ route }: CreateAccountProps): React.JSX.Element {
 
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
@@ -49,7 +42,12 @@ function CreateAccountScreen({ route }: CreateAccountProps): JSX.Element {
         dispatch(setUserName(userName));
     }
 
-    const onGoogleSignIn = () => { }
+    const onGoogleSignUp = () => {
+        dispatch(userNameValidation())
+        if (createAccountR.userName != '') {
+            dispatch(googleSignup())
+        }
+    }
 
     const onSignUp = () => {
         dispatch(checkValidation())
@@ -92,7 +90,14 @@ function CreateAccountScreen({ route }: CreateAccountProps): JSX.Element {
                     />
                     <View style={{ height: 22 }}></View>
                     <View style={{ marginVertical: 30 }}>
-                        <GoogleSignInButton onPress={onGoogleSignIn} />
+                        <GoogleSignInButton signin={false} onPress={onGoogleSignUp} />
+                        {
+                            (createAccountR.error.googleSignUpError != '')
+                                ? <View style={{ marginTop: 8 }}>
+                                    <Text style={styles.error}>{createAccountR.error.googleSignUpError}</Text>
+                                </View>
+                                : null
+                        }
                     </View>
                     <SignUpWithEmailText signIn={false} />
                     <View style={{ height: 36 }}></View>

@@ -3,6 +3,7 @@ import { postMethod } from '../../../core/services/NetworkServices';
 import LocalStorage from '../../../data/local_storage/LocalStorage';
 import StorageKeys from '../../../constants/StorageKeys';
 import { ValidateEmail } from '../../../utils';
+import { GoogleSignin, User, statusCodes } from '@react-native-google-signin/google-signin';
 
 export interface CreateAccountState {
     data: any,
@@ -19,13 +20,15 @@ type errorType = {
     emailError: string;
     passwordError: string;
     userNameError: string;
+    googleSignUpError: string
 }
 
 const noError: errorType = {
     message: '',
     emailError: '',
     passwordError: '',
-    userNameError: ''
+    userNameError: '',
+    googleSignUpError: ''
 }
 
 const initialState: CreateAccountState = {
@@ -37,6 +40,85 @@ const initialState: CreateAccountState = {
     userName: "",
     validated: false
 }
+
+export const googleSignup = createAsyncThunk<any>(
+    'api/googleSignup',
+    async (_, thunkAPI) => {
+        const state: any = thunkAPI.getState();
+        const stateValue: CreateAccountState = state.createAccount;
+
+        let data = null;
+        GoogleSignin.configure({
+            offlineAccess: true,
+            webClientId: '91194681066-qk09a4hci98arje9v0hfltn8ut0innia.apps.googleusercontent.com',
+        });
+        const hasPlayServices = await GoogleSignin.hasPlayServices();
+        let errors: errorType = {
+            userNameError: '',
+            emailError: '',
+            googleSignUpError: '',
+            message: '',
+            passwordError: ''
+        };
+
+        if (hasPlayServices) {
+            try {
+                await GoogleSignin.signOut()
+                const user: User = await GoogleSignin.signIn()
+                if (user != null) {
+                    const token: { idToken: string; accessToken: string } = await GoogleSignin.getTokens()
+
+                    // console.log('Access Token -', token.accessToken);
+
+                    const url = '/auth/social/g/signup'
+                    const userId = stateValue.userName;
+                    const payload = {
+                        "access_token": token.accessToken,
+                        "userName": userId
+                    }
+
+                    const response = await postMethod(url, payload);
+                    data = response.data.result;
+
+                    let name = data.name ?? "";
+                    let userToken = data.token ?? "";
+                    let email = data.email ?? "";
+                    let userName = data.userName ?? "";
+                    let profileImage = data.profileImage ?? "";
+                    let id = data._id ?? "";
+
+                    await LocalStorage.SetData(StorageKeys.TOKEN, userToken);
+                    await LocalStorage.SetData(StorageKeys.EMAIL, email);
+                    await LocalStorage.SetData(StorageKeys.NAME, name);
+                    await LocalStorage.SetData(StorageKeys.USER_NAME, userName);
+                    await LocalStorage.SetData(StorageKeys.PROFILE_IMAGE, profileImage);
+                    await LocalStorage.SetData(StorageKeys.ID, id);
+
+                    return data;
+                }
+                errors.googleSignUpError = 'Something went wrong.'
+                return thunkAPI.rejectWithValue(errors)
+            }
+            catch (e: any) {
+                if (e.code === statusCodes.SIGN_IN_CANCELLED) {
+                    errors.googleSignUpError = 'Sign in cancelled.'
+                } else if (e.code === statusCodes.IN_PROGRESS) {
+                    errors.googleSignUpError = 'Sign in inprogress already.'
+                } else if (e.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+                    errors.googleSignUpError = 'Google Play services not available or outdated.'
+                } else if (e.hasOwnProperty('message')) {
+                    errors.message = e.message
+                } else {
+                    errors.message = 'Something went wrong.'
+                }
+                return thunkAPI.rejectWithValue(errors)
+            }
+        } else {
+            errors.googleSignUpError = 'Google Play services not available.'
+            return thunkAPI.rejectWithValue(errors)
+        }
+    }
+);
 
 export const createAccount = createAsyncThunk<any>(
     'api/createAccount',
@@ -100,6 +182,14 @@ export const createAccountSlice = createSlice({
             state.userName = ""
             state.validated = false
         },
+        userNameValidation: (state) => {
+            if (state.userName == '') {
+                state.error.userNameError = 'Username is required'
+            }
+            else {
+                state.error.userNameError = ''
+            }
+        },
         checkValidation: (state) => {
             let isEmail = ValidateEmail(state.emailAddress)
             if (isEmail && (state.password != '') && (state.userName != '')) {
@@ -136,6 +226,7 @@ export const createAccountSlice = createSlice({
         builder.addCase(createAccount.fulfilled, (state, action) => {
             state.loading = false;
             state.data = action.payload;
+            state.error = noError
         });
         builder.addCase(createAccount.rejected, (state, action) => {
             const error: any = action.payload;
@@ -158,10 +249,32 @@ export const createAccountSlice = createSlice({
                 }
             }
             state.loading = false;
+            state.data = null
+        });
+        builder.addCase(googleSignup.pending, (state) => {
+            state.loading = true;
+            state.validated = false
+            state.error = noError
+        });
+        builder.addCase(googleSignup.fulfilled, (state, action) => {
+            state.loading = false;
+            state.data = action.payload;
+            state.error = noError
+        });
+        builder.addCase(googleSignup.rejected, (state, action) => {
+            const errors: any = action.payload
+            if (errors.message != '') {
+                state.error.message = errors.message
+            }
+            if (errors.googleSignUpError != '') {
+                state.error.googleSignUpError = errors.googleSignUpError
+            }
+            state.loading = false;
+            state.data = null
         });
     },
 })
 
-export const { setEmailAddress, setPassword, setUserName, clearData, checkValidation } = createAccountSlice.actions;
+export const { setEmailAddress, setPassword, setUserName, clearData, checkValidation, userNameValidation } = createAccountSlice.actions;
 
 export default createAccountSlice.reducer;

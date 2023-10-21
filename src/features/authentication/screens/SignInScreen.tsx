@@ -20,7 +20,7 @@ import FontFamily from '../../../constants/FontFamily';
 
 type SignInProps = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
 
-function SignInScreen({ navigation, route }: SignInProps): JSX.Element {
+function SignInScreen({ navigation, route }: SignInProps): React.JSX.Element {
 
     // let routeParams = route.params;
     // let fromHome: boolean;
@@ -99,7 +99,7 @@ function SignInScreen({ navigation, route }: SignInProps): JSX.Element {
                     <View style={{ height: 34 }}></View>
                     <SignInText />
                     <View style={{ marginVertical: 30 }}>
-                        <GoogleSignInButton onPress={onGoogleSignIn} />
+                        <GoogleSignInButton signin={true} onPress={onGoogleSignIn} />
                         {
                             (signInR.error.googleSigninError != '')
                                 ? <View style={{ marginTop: 8 }}>

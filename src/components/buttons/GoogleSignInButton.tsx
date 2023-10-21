@@ -3,13 +3,19 @@ import AppColors from "../../constants/AppColors";
 import FontFamily from "../../constants/FontFamily";
 import { GoogleIcon } from "../../../assets/images";
 
-function GoogleSignInButton(props: { onPress: (() => void) }): JSX.Element {
+type GoogleSignInButtonProps = { signin: boolean, onPress: (() => void) }
+
+function GoogleSignInButton(props: GoogleSignInButtonProps): JSX.Element {
     return (
         <TouchableOpacity onPress={() => { props.onPress() }}>
             <View style={styles.signInGoogleButton}>
                 <GoogleIcon style={styles.imageStyle} />
                 <Text style={styles.signInGoogleText}>
-                    Sign up with Google
+                    {
+                        props.signin
+                            ? 'Sign In with Google'
+                            : 'Sign Up with Google'
+                    }
                 </Text>
             </View>
         </TouchableOpacity>
