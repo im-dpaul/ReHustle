@@ -8,7 +8,7 @@ import getYourInfoReducer from '../features/authentication/redux/getYourInfoSlic
 import splashReducer from '../features/splash/redux/splashSlice';
 import finishAccountCreationReducer from '../features/authentication/redux/finishAccountCreationSlice';
 import servicesReducer from "../features/home/redux/servicesSlice";
-import createEventServiceReducer from '../features/home/redux/createEventServiceSlice'
+import createEventServiceReducer from '../features/services/redux/createEventServiceSlice'
 import profileReducer from '../features/home/redux/profileSlice'
 import insightsReducer from "../features/home/redux/insightsSlice";
 import settingsReducer from '../features/home/redux/settingsSlice'

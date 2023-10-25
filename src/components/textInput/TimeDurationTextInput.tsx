@@ -15,24 +15,34 @@ const TimeDurationTextInput = (
     const [focus, setFocus] = useState(false);
 
     return (
-        <View style={[styles.textBox, focus ? { borderColor: AppColors.GRAY4 } : {},]}>
-            <TextInput
-
-                style={[
-                    styles.textInputBox,
-                    ((props.errorText ?? 0) != 0) ? { borderColor: AppColors.RED } : {},
-                ]}
-                placeholder={props.placeholder}
-                underlineColorAndroid={AppColors.TRANSPARENT}
-                placeholderTextColor={AppColors.GRAY4}
-                value={props.value}
-                onChangeText={(value) => { props.onChangeText(value) }}
-                onFocus={() => { setFocus(true) }}
-                onBlur={() => { setFocus(false) }}
-            />
-            <View style={styles.suffixTextBox}>
-                <Text style={styles.suffixText}>minutes</Text>
+        <View>
+            <View style={[
+                styles.textBox,
+                focus ? { borderColor: AppColors.GRAY4 } : {},
+                ((props.errorText ?? 0) != 0) ? { borderColor: AppColors.RED } : {},
+            ]}>
+                <TextInput
+                    style={styles.textInputBox}
+                    placeholder={props.placeholder}
+                    underlineColorAndroid={AppColors.TRANSPARENT}
+                    placeholderTextColor={AppColors.GRAY4}
+                    value={props.value}
+                    keyboardType='numeric'
+                    onChangeText={(value) => { props.onChangeText(value) }}
+                    onFocus={() => { setFocus(true) }}
+                    onBlur={() => { setFocus(false) }}
+                />
+                <View style={styles.suffixTextBox}>
+                    <Text style={styles.suffixText}>minutes</Text>
+                </View>
             </View>
+            {
+                ((props.errorText ?? 0) != 0)
+                    ? <View style={{ marginTop: 4 }}>
+                        <Text style={styles.error}>{props.errorText}</Text>
+                    </View>
+                    : null
+            }
         </View>
     )
 }
@@ -68,4 +78,11 @@ const styles = StyleSheet.create({
         fontStyle: 'normal',
         fontWeight: '400'
     },
+    error: {
+        color: AppColors.RED,
+        fontFamily: FontFamily.GILROY_BOLD,
+        fontSize: 12,
+        fontStyle: 'normal',
+        fontWeight: '400'
+    }
 })

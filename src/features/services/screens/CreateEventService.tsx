@@ -1,4 +1,4 @@
-import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import AppColors from '../../../constants/AppColors'
@@ -11,7 +11,7 @@ import UploadButton from '../../../components/buttons/UploadButton'
 import CommonTextInput from '../../../components/textInput/CommonTextInput'
 import CommonDivider from '../../../components/divider/CommonDivider'
 import PriceTextInput from '../../../components/textInput/PriceTextInput'
-import { setName, setDescription, setPrice, clearData, setEventUrl, setPaymentType, setEventDuration, setDate, setTime, addNewService } from "../redux/createEventServiceSlice";
+import { setName, setDescription, setPrice, clearData, setEventUrl, setPaymentType, setEventDuration, setDate, setTime, addNewService, CreateEventServiceState, checkValidation } from "../redux/createEventServiceSlice";
 import { AppDispatch } from '../../../app/store'
 import { useDispatch, useSelector } from 'react-redux'
 import ToggleTabButton from '../../../components/buttons/ToggleTabButton'
@@ -21,31 +21,32 @@ import { CalenderHalf, StarHalf } from '../../../../assets/images'
 
 type CreateEventServiceProps = NativeStackScreenProps<RootStackParamList, 'CreateEventService'>
 
-const CreateEventService = ({ navigation }: CreateEventServiceProps): JSX.Element => {
-    const createEventServiceReducer = useSelector((state: any) => state.createEventService)
+const CreateEventService = ({ navigation }: CreateEventServiceProps): React.JSX.Element => {
+    const createEventServiceR: CreateEventServiceState = useSelector((state: any) => state.createEventService)
     const dispatch = useDispatch<AppDispatch>();
 
-    // console.log("Create event service store", createEventServiceReducer);
+    console.log("Create event service store", createEventServiceR);
 
     const onCreate = () => {
-        dispatch(addNewService());
+        dispatch(checkValidation())
     }
 
     const onBackPress = () => {
-        navigation.pop();
+        dispatch(clearData())
+        navigation.pop()
     }
     const onImageUpload = () => { }
 
     const onNameChange = (name: string) => {
-        dispatch(setName(name));
+        dispatch(setName(name))
     }
 
     const onChangeDescription = (desc: string) => {
-        dispatch(setDescription(desc));
+        dispatch(setDescription(desc))
     }
 
     const onLinkChange = (url: string) => {
-        dispatch(setEventUrl(url));
+        dispatch(setEventUrl(url))
     }
 
     const onPriceChange = (price: string) => {
@@ -65,19 +66,23 @@ const CreateEventService = ({ navigation }: CreateEventServiceProps): JSX.Elemen
     }
 
     const onPaymentTypeSelection = (type: string) => {
-        if (createEventServiceReducer.servicePaymentType != type) {
+        if (createEventServiceR.servicePaymentType != type) {
             dispatch(setPaymentType(type))
         }
     }
 
     useEffect(() => {
-        if (createEventServiceReducer.data != null) {
-            if (createEventServiceReducer.data._id != '') {
-                dispatch(clearData({}));
-                navigation.navigate('Services', { refresh: true })
-            }
+        if (createEventServiceR.validated == true) {
+            dispatch(addNewService())
         }
-    }, [createEventServiceReducer.data])
+    }, [createEventServiceR.validated])
+
+    useEffect(() => {
+        if (createEventServiceR.data != null) {
+            dispatch(clearData())
+            navigation.navigate('Services', { refresh: true })
+        }
+    }, [createEventServiceR.data])
 
     return (
         <SafeAreaView style={{ backgroundColor: AppColors.WHITE, flex: 1 }}>
@@ -111,8 +116,9 @@ const CreateEventService = ({ navigation }: CreateEventServiceProps): JSX.Elemen
                         <Text style={styles.title}>Name</Text>
                         <View style={{ height: 8 }}></View>
                         <CommonTextInput
-                            value={createEventServiceReducer.serviceName}
+                            value={createEventServiceR.serviceName}
                             placeholder='Give it a name'
+                            errorText={createEventServiceR.error.nameError}
                             onChangeText={(name) => onNameChange(name)}
                         />
                     </View>
@@ -121,12 +127,13 @@ const CreateEventService = ({ navigation }: CreateEventServiceProps): JSX.Elemen
                         <Text style={styles.title}>Short Description</Text>
                         <View style={{ height: 8 }}></View>
                         <CommonTextInput
-                            value={createEventServiceReducer.serviceDescription}
+                            value={createEventServiceR.serviceDescription}
                             placeholder='A little something to get people intigued'
+                            errorText={createEventServiceR.error.descriptionError}
                             onChangeText={(desc) => onChangeDescription(desc)}
                         />
                         <View style={{ height: 8 }}></View>
-                        <Text style={styles.wordCount}>{createEventServiceReducer.serviceDescription.length}/250</Text>
+                        <Text style={styles.wordCount}>{createEventServiceR.serviceDescription.length}/250</Text>
                     </View>
                     <View style={{ marginVertical: 24 }}>
                         <CommonDivider />
@@ -135,8 +142,9 @@ const CreateEventService = ({ navigation }: CreateEventServiceProps): JSX.Elemen
                         <Text style={styles.title}>Video Event link (Zoom, Google Meet, Teams etc.)</Text>
                         <View style={{ height: 8 }}></View>
                         <CommonTextInput
-                            value={createEventServiceReducer.serviceEventUrl}
+                            value={createEventServiceR.serviceEventUrl}
                             placeholder='https://zoom.us/j/xxxxxxxxx'
+                            errorText={createEventServiceR.error.eventLinkError}
                             onChangeText={(url) => onLinkChange(url)}
                         />
                     </View>
@@ -155,7 +163,8 @@ const CreateEventService = ({ navigation }: CreateEventServiceProps): JSX.Elemen
                         <View style={{ height: 8 }}></View>
                         <TimeDurationTextInput
                             placeholder=''
-                            value={createEventServiceReducer.serviceEventDuration}
+                            errorText={createEventServiceR.error.durationError}
+                            value={createEventServiceR.serviceEventDuration}
                             onChangeText={(duration) => onDurationChange(duration)}
                         />
                     </View>
@@ -170,7 +179,7 @@ const CreateEventService = ({ navigation }: CreateEventServiceProps): JSX.Elemen
                         <ToggleTabButton
                             firstButtonName='Free'
                             secondButtonName='Paid'
-                            selectedButton={createEventServiceReducer.servicePaymentType}
+                            selectedButton={createEventServiceR.servicePaymentType}
                             onPress={(value) => onPaymentTypeSelection(value)}
                         />
                         <View style={{ height: 24 }}></View>
@@ -178,8 +187,9 @@ const CreateEventService = ({ navigation }: CreateEventServiceProps): JSX.Elemen
                         <View style={{ height: 8 }}></View>
                         <PriceTextInput
                             placeholder='0'
-                            value={createEventServiceReducer.servicePrice}
-                            editable={createEventServiceReducer.servicePaymentType == 'Paid' ? true : false}
+                            errorText={createEventServiceR.error.priceError}
+                            value={createEventServiceR.servicePrice}
+                            editable={createEventServiceR.servicePaymentType == 'Paid' ? true : false}
                             onChangeText={(price) => onPriceChange(price)}
                         />
                     </View>
@@ -216,4 +226,11 @@ const styles = StyleSheet.create({
         fontWeight: '400',
         textAlign: 'right'
     },
+    error: {
+        color: AppColors.RED,
+        fontFamily: FontFamily.GILROY_BOLD,
+        fontSize: 12,
+        fontStyle: 'normal',
+        fontWeight: '400'
+    }
 })

@@ -9,7 +9,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ServicesScreen from './features/home/screens/ServicesScreen';
 import SplashScreen from './features/splash/screens/SplashScreen';
 import GetYourInfoScreen from './features/authentication/screens/GetYourInfoScreen';
-import CreateEventService from './features/home/screens/CreateEventService';
+import CreateEventService from './features/services/screens/CreateEventService';
 import PayoutsScreen from './features/home/screens/PayoutsScreen';
 import PreviewScreen from './features/home/screens/PreviewScreen';
 import InsightsScreen from './features/home/screens/InsightsScreen';
