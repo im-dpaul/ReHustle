@@ -3,7 +3,6 @@ import React, { useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import AppColors from '../../../constants/AppColors'
 import CommonStatusBar from '../../../components/layouts/CommonStatusBar'
-import CreateServiceAppBar from '../components/CreateServiceAppBar'
 import { RootStackParamList } from '../../../App'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import FontFamily from '../../../constants/FontFamily'
@@ -16,8 +15,8 @@ import { AppDispatch } from '../../../app/store'
 import { useDispatch, useSelector } from 'react-redux'
 import ToggleTabButton from '../../../components/buttons/ToggleTabButton'
 import TimeDurationTextInput from '../../../components/textInput/TimeDurationTextInput'
-import DateTimePicker from '../../../components/dateTime/DateTimePicker'
-import { CalenderHalf, StarHalf } from '../../../../assets/images'
+import { CreateServiceAppBar, EventBannerImage } from '../components'
+import { CommonDateTimePicker } from '../../../components'
 
 type CreateEventServiceProps = NativeStackScreenProps<RootStackParamList, 'CreateEventService'>
 
@@ -25,7 +24,7 @@ const CreateEventService = ({ navigation }: CreateEventServiceProps): React.JSX.
     const createEventServiceR: CreateEventServiceState = useSelector((state: any) => state.createEventService)
     const dispatch = useDispatch<AppDispatch>();
 
-    console.log("Create event service store", createEventServiceR);
+    // console.log("Create event service store", createEventServiceR);
 
     const onCreate = () => {
         dispatch(checkValidation())
@@ -53,11 +52,11 @@ const CreateEventService = ({ navigation }: CreateEventServiceProps): React.JSX.
         dispatch(setPrice(price))
     }
 
-    const onDateChange = (date: string) => {
+    const onDateChange = (date: number) => {
         dispatch(setDate(date))
     }
 
-    const onTimeChange = (time: string) => {
+    const onTimeChange = (time: number) => {
         dispatch(setTime(time))
     }
 
@@ -70,6 +69,12 @@ const CreateEventService = ({ navigation }: CreateEventServiceProps): React.JSX.
             dispatch(setPaymentType(type))
         }
     }
+
+    useEffect(() => {
+        const d = new Date()
+        dispatch(setDate(d.getTime()))
+        dispatch(setTime(d.getTime()))
+    }, [])
 
     useEffect(() => {
         if (createEventServiceR.validated == true) {
@@ -99,11 +104,7 @@ const CreateEventService = ({ navigation }: CreateEventServiceProps): React.JSX.
                         <View style={styles.imageContainer}>
                             {
                                 (true)
-                                    ?
-                                    <View style={{ alignItems: 'center', justifyContent: 'flex-end', marginTop: 'auto' }}>
-                                        <CalenderHalf style={{ maxHeight: 134, maxWidth: 216 }} />
-                                        <StarHalf style={{ maxHeight: 42, maxWidth: 66, position: 'absolute' }} />
-                                    </View>
+                                    ? <EventBannerImage />
                                     : <Image style={styles.imageContainer} source={{ uri: '' }} />
                             }
                         </View>
@@ -154,7 +155,9 @@ const CreateEventService = ({ navigation }: CreateEventServiceProps): React.JSX.
                     <View>
                         <Text style={[styles.title, { fontSize: 14 }]}>Time and date</Text>
                         <View style={{ height: 8 }}></View>
-                        <DateTimePicker
+                        <CommonDateTimePicker
+                            date={createEventServiceR.serviceDate}
+                            time={createEventServiceR.serviceTime}
                             onDateChange={(date) => onDateChange(date)}
                             onTimeChange={(time) => onTimeChange(time)}
                         />

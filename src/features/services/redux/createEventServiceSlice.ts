@@ -61,7 +61,18 @@ export const addNewService = createAsyncThunk<any>(
         const state: any = thunkAPI.getState();
         const stateValue: CreateEventServiceState = state.createEventService;
 
+        // Set price
         let price = (stateValue.servicePrice != '') ? Number(stateValue.servicePrice) : 250;
+
+        // Set TimeStamp from date & time
+        let d = new Date(stateValue.serviceDate)
+        let t = new Date(stateValue.serviceTime)
+        let day = d.getDate()
+        let month = d.getMonth()
+        let year = d.getFullYear()
+        let hour = t.getHours()
+        let minute = t.getMinutes()
+        let dateTimeStamp = new Date(year, month, day, hour, minute).getTime()
 
         const url = `/p/product`
         let data: any = null;
@@ -73,7 +84,7 @@ export const addNewService = createAsyncThunk<any>(
             "isActive": true,
             "service": {
                 "serviceType": "event",
-                "date": 1704112200000,
+                "date": dateTimeStamp,
                 "duration": stateValue.serviceEventDuration == "" ? "45" : stateValue.serviceEventDuration,
                 "url": stateValue.serviceEventUrl == "" ? "https://meet.google.com/" : stateValue.serviceEventUrl,
             },
@@ -143,10 +154,24 @@ export const createEventServiceSlice = createSlice({
             state.error.durationError = ''
         },
         setDate: (state, action) => {
+            // let d = new Date(action.payload)
+            // let date = d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear()
             state.serviceDate = action.payload;
         },
         setTime: (state, action) => {
-            state.serviceTime = action.payload;
+            let d = new Date(action.payload)
+            if (d.getMinutes() > 0 && d.getMinutes() < 16) {
+                d.setMinutes(15)
+            } else if (d.getMinutes() > 15 && d.getMinutes() < 31) {
+                d.setMinutes(30)
+            } else if (d.getMinutes() > 30 && d.getMinutes() < 46) {
+                d.setMinutes(45)
+            } else if (d.getMinutes() > 45) {
+                let h = d.getHours()
+                d.setHours(h + 1)
+                d.setMinutes(0)
+            }
+            state.serviceTime = d.toISOString();
         },
         checkValidation: (state) => {
             if (state.serviceName != '' && state.serviceDescription != '' && state.serviceEventUrl != '' && state.serviceEventDuration != '' && state.servicePrice != '') {
