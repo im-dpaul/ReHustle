@@ -14,13 +14,13 @@ import AppColors from '../../../constants/AppColors';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../App';
 import { useSelector, useDispatch } from 'react-redux';
-import { signIn, setEmailAddress, setPassword, setRememberMe, clearData, SigninState, checkValidation } from '../redux/signInSlice';
+import { signIn, setEmailAddress, setPassword, setRememberMe, clearData, SigninState, checkValidation, googleSignin } from '../redux/signInSlice';
 import { AppDispatch } from '../../../app/store';
 import FontFamily from '../../../constants/FontFamily';
 
 type SignInProps = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
 
-function SignInScreen({ navigation, route }: SignInProps): JSX.Element {
+function SignInScreen({ navigation, route }: SignInProps): React.JSX.Element {
 
     // let routeParams = route.params;
     // let fromHome: boolean;
@@ -45,7 +45,9 @@ function SignInScreen({ navigation, route }: SignInProps): JSX.Element {
         dispatch(setPassword(password));
     }
 
-    const onGoogleSignIn = () => { }
+    const onGoogleSignIn = () => {
+        dispatch(googleSignin())
+    }
 
     const onSignIn = () => {
         dispatch(checkValidation())
@@ -97,7 +99,14 @@ function SignInScreen({ navigation, route }: SignInProps): JSX.Element {
                     <View style={{ height: 34 }}></View>
                     <SignInText />
                     <View style={{ marginVertical: 30 }}>
-                        <GoogleSignInButton onPress={onGoogleSignIn} />
+                        <GoogleSignInButton signin={true} onPress={onGoogleSignIn} />
+                        {
+                            (signInR.error.googleSigninError != '')
+                                ? <View style={{ marginTop: 8 }}>
+                                    <Text style={styles.error}>{signInR.error.googleSigninError}</Text>
+                                </View>
+                                : null
+                        }
                     </View>
                     <SignUpWithEmailText signIn={true} />
                     <View style={{ height: 36 }}></View>

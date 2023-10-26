@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "91194681066",
+    "project_id": "rehustle-grorapid",
+    "storage_bucket": "rehustle-grorapid.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:91194681066:android:ee69d55f9e8a680648d993",
+        "android_client_info": {
+          "package_name": "com.rehustle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "91194681066-4isr7ehpa7vl3o3q0bo45ub3drldrsdd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rehustle",
+            "certificate_hash": "134de61eebef3c6df3b80555661201ba28772ab6"
+          }
+        },
+        {
+          "client_id": "91194681066-ctkvh7383qs0ndd3m7mgidkho452gtbk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rehustle",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "91194681066-denk1dr8h93dirg8u1b0f7pvfhmgdprm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rehustle",
+            "certificate_hash": "7e4d0df5fd505c43c893c4b5d89042b14969e48f"
+          }
+        },
+        {
+          "client_id": "91194681066-k2ktngtc7h51v7ucpmpk1148jo4nblnm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTvBBSAqWvUoDmk1Mf9-Lnd3Cdi4nsy2A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "91194681066-k2ktngtc7h51v7ucpmpk1148jo4nblnm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
