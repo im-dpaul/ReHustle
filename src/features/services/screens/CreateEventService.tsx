@@ -14,7 +14,7 @@ import { setName, setDescription, setPrice, clearData, setPaymentType, setDate, 
 import { AppDispatch } from '../../../app/store'
 import { useDispatch, useSelector } from 'react-redux'
 import ToggleTabButton from '../../../components/buttons/ToggleTabButton'
-import { AddEventDetails, CreateServiceAppBar } from '../components'
+import { AddEventDetails, AddProductDetails, CreateServiceAppBar } from '../components'
 import { ServiceBannerImage } from '../../../components'
 import { AddServiceType } from '../../../constants'
 
@@ -24,7 +24,7 @@ const CreateEventService = ({ navigation, route }: CreateEventServiceProps): Rea
     const createEventServiceR: CreateEventServiceState = useSelector((state: any) => state.createEventService)
     const dispatch = useDispatch<AppDispatch>();
 
-    // console.log("Create event service store", createEventServiceR);
+    console.log("Create event service store", createEventServiceR);
 
     const onCreate = () => {
         dispatch(checkValidation())
@@ -153,7 +153,9 @@ const CreateEventService = ({ navigation, route }: CreateEventServiceProps): Rea
                     {
                         createEventServiceR.serviceType == AddServiceType.EVENT
                             ? <AddEventDetails />
-                            : null
+                            : createEventServiceR.serviceType == AddServiceType.DIGITAL_PRODUCT
+                                ? <AddProductDetails />
+                                : null
                     }
                     <View style={{ marginVertical: 24 }}>
                         <CommonDivider />

@@ -12,6 +12,7 @@ import CheckBoxFilled from './check_box.svg'
 import LinkIcon from './link_icon.svg'
 import ArrowDown from './arrow_down.svg'
 import NoServicesImage from './no_services.svg'
+import RadioButton from './radio_button'
 
 /// Menu bar icons
 import MenuIconSVG from './menu_icon.svg';
@@ -35,6 +36,7 @@ import TimeIcon from './time_icon.svg'
 /// Create Services icons
 import UploadIcon from './upload_icon.svg'
 import VideoIcon from './video_icon.svg'
+import AddFile from './add_file.svg'
 
 /// Service card icons
 import TrashIcon from './trash_icon.svg'
@@ -126,5 +128,7 @@ export {
     BannerChat,
     BannerEvent,
     BannerProduct,
-    BannerTime
+    BannerTime,
+    RadioButton,
+    AddFile
 }

@@ -3,11 +3,13 @@ import AppColors from "./AppColors";
 import FontFamily from "./FontFamily";
 import MenuOptions from './MenuOptions'
 import StorageKeys from "./StorageKeys";
+import FileType from "./FileType";
 
 export {
     AddServiceType,
     AppColors,
     FontFamily,
     MenuOptions,
-    StorageKeys
+    StorageKeys,
+    FileType
 }

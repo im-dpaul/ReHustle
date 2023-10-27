@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { authenticatedPostMethod } from "../../../core/services/NetworkServices";
-import { AddServiceType } from "../../../constants";
+import { AddServiceType, FileType } from "../../../constants";
 
 export interface CreateEventServiceState {
     serviceType: string
@@ -8,15 +8,24 @@ export interface CreateEventServiceState {
     error: ErrorType;
     loading: boolean;
     screenLoading: boolean;
+    validated: boolean
+
+    /// Service details
     serviceName: string;
     serviceDescription: string,
     servicePrice: string,
-    serviceEventUrl: string,
     servicePaymentType: string,
+
+    /// Event Services
+    serviceEventUrl: string,
     serviceEventDuration: string,
     serviceDate: string,
     serviceTime: string,
-    validated: boolean
+
+    /// Sell Product Services
+    fileType: string
+    externalFileUrl: string
+    uploadFileUrl: string
 }
 
 type ErrorType = {
@@ -27,6 +36,8 @@ type ErrorType = {
     timeError: string;
     durationError: string;
     priceError: string;
+    uploadFileUrlError: string;
+    externalFileUrlError: string;
     message: string;
 }
 
@@ -38,6 +49,8 @@ const noError: ErrorType = {
     timeError: '',
     durationError: '',
     priceError: '',
+    uploadFileUrlError: '',
+    externalFileUrlError: '',
     message: ''
 }
 
@@ -47,15 +60,24 @@ const initialState: CreateEventServiceState = {
     error: noError,
     loading: false,
     screenLoading: true,
+    validated: false,
+
+    /// Service details
     serviceName: '',
     serviceDescription: '',
     servicePrice: '',
-    serviceEventUrl: '',
     servicePaymentType: 'Paid',
+
+    /// Event Services
+    serviceEventUrl: '',
     serviceEventDuration: '',
     serviceDate: '',
     serviceTime: '',
-    validated: false
+
+    /// Sell Product Services
+    fileType: FileType.INTERNAL,
+    externalFileUrl: '',
+    uploadFileUrl: 'https://rehustle-user-assets.s3.amazonaws.com/products/65322107bc14c6028a50126c_1698397690988'
 }
 
 export const addNewService = createAsyncThunk<any>(
@@ -67,15 +89,47 @@ export const addNewService = createAsyncThunk<any>(
         // Set price
         let price = (stateValue.servicePrice != '') ? Number(stateValue.servicePrice) : 250;
 
-        // Set TimeStamp from date & time
-        let d = new Date(stateValue.serviceDate)
-        let t = new Date(stateValue.serviceTime)
-        let day = d.getDate()
-        let month = d.getMonth()
-        let year = d.getFullYear()
-        let hour = t.getHours()
-        let minute = t.getMinutes()
-        let dateTimeStamp = new Date(year, month, day, hour, minute).getTime()
+        // Set Service Details
+        let service = {}
+        /// Event service
+        if (stateValue.serviceType == AddServiceType.EVENT) {
+            // Set TimeStamp from date & time
+            let d = new Date(stateValue.serviceDate)
+            let t = new Date(stateValue.serviceTime)
+            let day = d.getDate()
+            let month = d.getMonth()
+            let year = d.getFullYear()
+            let hour = t.getHours()
+            let minute = t.getMinutes()
+            let dateTimeStamp = new Date(year, month, day, hour, minute).getTime()
+
+            service = {
+                "serviceType": AddServiceType.EVENT,
+                "date": dateTimeStamp,
+                "duration": stateValue.serviceEventDuration == "" ? "45" : stateValue.serviceEventDuration,
+                "url": stateValue.serviceEventUrl == "" ? "https://meet.google.com/" : stateValue.serviceEventUrl,
+            }
+        }
+        /// Sell Product service
+        if (stateValue.serviceType == AddServiceType.DIGITAL_PRODUCT) {
+            if (stateValue.fileType == FileType.INTERNAL) {
+                service = {
+                    "serviceType": AddServiceType.DIGITAL_PRODUCT,
+                    "assets": {
+                        "fileType": stateValue.fileType,
+                        "file": stateValue.uploadFileUrl
+                    }
+                }
+            } else {
+                service = {
+                    "serviceType": AddServiceType.DIGITAL_PRODUCT,
+                    "assets": {
+                        "fileType": stateValue.fileType,
+                        "url": stateValue.externalFileUrl
+                    }
+                }
+            }
+        }
 
         const url = `/p/product`
         let data: any = null;
@@ -85,12 +139,7 @@ export const addNewService = createAsyncThunk<any>(
             "description": stateValue.serviceDescription == "" ? "Event description" : stateValue.serviceDescription,
             "paymentMode": stateValue.servicePaymentType.toLowerCase(),
             "isActive": true,
-            "service": {
-                "serviceType": "event",
-                "date": dateTimeStamp,
-                "duration": stateValue.serviceEventDuration == "" ? "45" : stateValue.serviceEventDuration,
-                "url": stateValue.serviceEventUrl == "" ? "https://meet.google.com/" : stateValue.serviceEventUrl,
-            },
+            "service": service,
             "price": {
                 "currency": "INR",
                 "amount": Number.isNaN(price) ? 150 : price,
@@ -111,6 +160,7 @@ export const createEventServiceSlice = createSlice({
     name: 'createEventService',
     initialState,
     reducers: {
+        /// Common functions
         setServiceType: (state, action) => {
             state.serviceType = action.payload
         },
@@ -129,6 +179,9 @@ export const createEventServiceSlice = createSlice({
             state.serviceDate = ''
             state.serviceTime = ''
             state.validated = false
+            state.fileType = FileType.INTERNAL
+            state.externalFileUrl = ''
+            state.uploadFileUrl = 'https://rehustle-user-assets.s3.amazonaws.com/products/65322107bc14c6028a50126c_1698397690988'
         },
         setName: (state, action) => {
             state.serviceName = action.payload;
@@ -142,10 +195,6 @@ export const createEventServiceSlice = createSlice({
             state.servicePrice = action.payload.replace(/[^0-9]/g, '')
             state.error.priceError = ''
         },
-        setEventUrl: (state, action) => {
-            state.serviceEventUrl = action.payload;
-            state.error.eventLinkError = ''
-        },
         setPaymentType: (state, action) => {
             if (action.payload == 'Free') {
                 state.servicePrice = '0';
@@ -155,6 +204,12 @@ export const createEventServiceSlice = createSlice({
                 state.servicePrice = ''
             }
             state.servicePaymentType = action.payload;
+        },
+
+        /// Event Services functions
+        setEventUrl: (state, action) => {
+            state.serviceEventUrl = action.payload;
+            state.error.eventLinkError = ''
         },
         setEventDuration: (state, action) => {
             state.serviceEventDuration = action.payload;
@@ -180,6 +235,16 @@ export const createEventServiceSlice = createSlice({
             }
             state.serviceTime = d.toISOString();
         },
+
+        /// Sell Product Services functions
+        setFileType: (state, action) => {
+            state.fileType = action.payload
+        },
+        setExternalFileUrl: (state, action) => {
+            state.externalFileUrl = action.payload
+        },
+
+        /// Validation check function
         checkValidation: (state) => {
             if (state.serviceName != '' && state.serviceDescription != '' && state.servicePrice != '') {
                 if (state.serviceType == AddServiceType.EVENT) {
@@ -198,6 +263,25 @@ export const createEventServiceSlice = createSlice({
                             state.error.durationError = 'This field is mandatory.'
                         }
                         state.validated = false
+                    }
+                }
+                if (state.serviceType == AddServiceType.DIGITAL_PRODUCT) {
+                    if (state.fileType == FileType.INTERNAL) {
+                        if (state.uploadFileUrl != '') {
+                            state.error.uploadFileUrlError = ''
+                            state.validated = true
+                        } else {
+                            state.error.uploadFileUrlError = 'Please add 1 file.'
+                            state.validated = false
+                        }
+                    } else {
+                        if (state.externalFileUrl != '') {
+                            state.error.externalFileUrlError = ''
+                            state.validated = true
+                        } else {
+                            state.error.externalFileUrlError = 'This field is mandatory.'
+                            state.validated = false
+                        }
                     }
                 }
             }
@@ -251,7 +335,7 @@ export const createEventServiceSlice = createSlice({
                             state.error.eventLinkError = e.errors.service.url
                         }
                         if (e.errors.service.hasOwnProperty('assets.url')) {
-                            // state.error.eventLinkError = e.errors.service.assets.url
+                            state.error.externalFileUrlError = e.errors.service['assets.url']
                         }
                     }
                 }
@@ -261,6 +345,6 @@ export const createEventServiceSlice = createSlice({
     }
 });
 
-export const { clearData, setName, setDescription, setPrice, setEventUrl, setPaymentType, setEventDuration, setDate, setTime, checkValidation, setServiceType } = createEventServiceSlice.actions;
+export const { clearData, setName, setDescription, setPrice, setEventUrl, setPaymentType, setEventDuration, setDate, setTime, checkValidation, setServiceType, setFileType, setExternalFileUrl } = createEventServiceSlice.actions;
 
 export default createEventServiceSlice.reducer;
