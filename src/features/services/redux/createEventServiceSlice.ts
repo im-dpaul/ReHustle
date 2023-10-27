@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { authenticatedPostMethod } from "../../../core/services/NetworkServices";
+import { AddServiceType } from "../../../constants";
 
 export interface CreateEventServiceState {
     serviceType: string
@@ -180,9 +181,25 @@ export const createEventServiceSlice = createSlice({
             state.serviceTime = d.toISOString();
         },
         checkValidation: (state) => {
-            if (state.serviceName != '' && state.serviceDescription != '' && state.serviceEventUrl != '' && state.serviceEventDuration != '' && state.servicePrice != '') {
-                state.validated = true
-                state.error = noError
+            if (state.serviceName != '' && state.serviceDescription != '' && state.servicePrice != '') {
+                if (state.serviceType == AddServiceType.EVENT) {
+                    if (state.serviceEventUrl != '' && state.serviceEventDuration != '') {
+                        state.validated = true
+                        state.error = noError
+                    } else {
+                        if (state.serviceEventUrl != '') {
+                            state.error.eventLinkError = ''
+                        } else {
+                            state.error.eventLinkError = 'This field is mandatory.'
+                        }
+                        if (state.serviceEventDuration != '') {
+                            state.error.durationError = ''
+                        } else {
+                            state.error.durationError = 'This field is mandatory.'
+                        }
+                        state.validated = false
+                    }
+                }
             }
             else {
                 if (state.serviceName != '') {
@@ -194,16 +211,6 @@ export const createEventServiceSlice = createSlice({
                     state.error.descriptionError = ''
                 } else {
                     state.error.descriptionError = 'This field is required'
-                }
-                if (state.serviceEventUrl != '') {
-                    state.error.eventLinkError = ''
-                } else {
-                    state.error.eventLinkError = 'This field is mandatory.'
-                }
-                if (state.serviceEventDuration != '') {
-                    state.error.durationError = ''
-                } else {
-                    state.error.durationError = 'This field is mandatory.'
                 }
                 if (state.servicePaymentType != 'Free') {
                     if (state.servicePrice != '' && state.servicePrice != '0') {

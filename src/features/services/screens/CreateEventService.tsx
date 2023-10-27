@@ -10,13 +10,12 @@ import UploadButton from '../../../components/buttons/UploadButton'
 import CommonTextInput from '../../../components/textInput/CommonTextInput'
 import CommonDivider from '../../../components/divider/CommonDivider'
 import PriceTextInput from '../../../components/textInput/PriceTextInput'
-import { setName, setDescription, setPrice, clearData, setEventUrl, setPaymentType, setEventDuration, setDate, setTime, addNewService, CreateEventServiceState, checkValidation, setServiceType } from "../redux/createEventServiceSlice";
+import { setName, setDescription, setPrice, clearData, setPaymentType, setDate, setTime, addNewService, CreateEventServiceState, checkValidation, setServiceType } from "../redux/createEventServiceSlice";
 import { AppDispatch } from '../../../app/store'
 import { useDispatch, useSelector } from 'react-redux'
 import ToggleTabButton from '../../../components/buttons/ToggleTabButton'
-import TimeDurationTextInput from '../../../components/textInput/TimeDurationTextInput'
-import { CreateServiceAppBar } from '../components'
-import { CommonDateTimePicker, ServiceBannerImage } from '../../../components'
+import { AddEventDetails, CreateServiceAppBar } from '../components'
+import { ServiceBannerImage } from '../../../components'
 import { AddServiceType } from '../../../constants'
 
 type CreateEventServiceProps = NativeStackScreenProps<RootStackParamList, 'CreateEventService'>
@@ -45,24 +44,8 @@ const CreateEventService = ({ navigation, route }: CreateEventServiceProps): Rea
         dispatch(setDescription(desc))
     }
 
-    const onLinkChange = (url: string) => {
-        dispatch(setEventUrl(url))
-    }
-
     const onPriceChange = (price: string) => {
         dispatch(setPrice(price))
-    }
-
-    const onDateChange = (date: number) => {
-        dispatch(setDate(date))
-    }
-
-    const onTimeChange = (time: number) => {
-        dispatch(setTime(time))
-    }
-
-    const onDurationChange = (duration: string) => {
-        dispatch(setEventDuration(duration))
     }
 
     const onPaymentTypeSelection = (type: string) => {
@@ -71,14 +54,37 @@ const CreateEventService = ({ navigation, route }: CreateEventServiceProps): Rea
         }
     }
 
+    const getTitle = () => {
+        let title = ''
+        switch (createEventServiceR.serviceType) {
+            case AddServiceType.EVENT:
+                title = 'Organise an event'
+                break;
+            case AddServiceType.DIGITAL_PRODUCT:
+                title = 'Sell a product'
+                break;
+            case AddServiceType.CALL:
+                title = 'Sell your time'
+                break;
+            case AddServiceType.CHAT:
+                title = 'Chat services'
+                break;
+            default:
+                break;
+        }
+        return title
+    }
+
     useEffect(() => {
         const routeParams = route.params
         const serviceType = routeParams.serviceType
         dispatch(setServiceType(serviceType))
 
-        const d = new Date()
-        dispatch(setDate(d.getTime()))
-        dispatch(setTime(d.getTime()))
+        if (serviceType == AddServiceType.EVENT) {
+            const d = new Date()
+            dispatch(setDate(d.getTime()))
+            dispatch(setTime(d.getTime()))
+        }
     }, [])
 
     useEffect(() => {
@@ -98,7 +104,7 @@ const CreateEventService = ({ navigation, route }: CreateEventServiceProps): Rea
         <SafeAreaView style={{ backgroundColor: AppColors.WHITE, flex: 1 }}>
             <CommonStatusBar />
             <CreateServiceAppBar
-                title='Organise an event'
+                title={getTitle()}
                 onCreate={() => onCreate()}
                 onBackPress={() => onBackPress()}
             />
@@ -109,7 +115,7 @@ const CreateEventService = ({ navigation, route }: CreateEventServiceProps): Rea
                         <View style={styles.imageContainer}>
                             {
                                 (true)
-                                    ? <ServiceBannerImage serviceType={AddServiceType.EVENT} />
+                                    ? <ServiceBannerImage serviceType={createEventServiceR.serviceType} />
                                     : <Image style={styles.imageContainer} source={{ uri: '' }} />
                             }
                         </View>
@@ -144,38 +150,11 @@ const CreateEventService = ({ navigation, route }: CreateEventServiceProps): Rea
                     <View style={{ marginVertical: 24 }}>
                         <CommonDivider />
                     </View>
-                    <View>
-                        <Text style={styles.title}>Video Event link (Zoom, Google Meet, Teams etc.)</Text>
-                        <View style={{ height: 8 }}></View>
-                        <CommonTextInput
-                            value={createEventServiceR.serviceEventUrl}
-                            placeholder='https://zoom.us/j/xxxxxxxxx'
-                            errorText={createEventServiceR.error.eventLinkError}
-                            onChangeText={(url) => onLinkChange(url)}
-                        />
-                    </View>
-                    <View style={{ marginVertical: 24 }}>
-                        <CommonDivider />
-                    </View>
-                    <View>
-                        <Text style={[styles.title, { fontSize: 14 }]}>Time and date</Text>
-                        <View style={{ height: 8 }}></View>
-                        <CommonDateTimePicker
-                            date={createEventServiceR.serviceDate}
-                            time={createEventServiceR.serviceTime}
-                            onDateChange={(date) => onDateChange(date)}
-                            onTimeChange={(time) => onTimeChange(time)}
-                        />
-                        <View style={{ height: 24 }}></View>
-                        <Text style={styles.title}>Duration</Text>
-                        <View style={{ height: 8 }}></View>
-                        <TimeDurationTextInput
-                            placeholder=''
-                            errorText={createEventServiceR.error.durationError}
-                            value={createEventServiceR.serviceEventDuration}
-                            onChangeText={(duration) => onDurationChange(duration)}
-                        />
-                    </View>
+                    {
+                        createEventServiceR.serviceType == AddServiceType.EVENT
+                            ? <AddEventDetails />
+                            : null
+                    }
                     <View style={{ marginVertical: 24 }}>
                         <CommonDivider />
                     </View>
