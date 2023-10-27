@@ -35,8 +35,6 @@ import TimeIcon from './time_icon.svg'
 /// Create Services icons
 import UploadIcon from './upload_icon.svg'
 import VideoIcon from './video_icon.svg'
-import StarHalf from './star_half.svg'
-import CalenderHalf from './calender_half.svg'
 
 /// Service card icons
 import TrashIcon from './trash_icon.svg'
@@ -44,6 +42,12 @@ import EditIcon from './edit_icon.svg'
 import MoreIcon from './more_icon.svg'
 import CalenderIcon from './calender_icon.svg'
 import ClockIcon from './clock_icon.svg'
+
+/// Service banner
+import BannerChat from './banner_chat.svg'
+import BannerEvent from './banner_event.svg'
+import BannerProduct from './banner_product.svg'
+import BannerTime from './banner_time.svg'
 
 /// Emoji Icons
 import DancingFigure from './dancing_figure.svg'
@@ -114,11 +118,13 @@ export {
     LinkIcon,
     PartyingFace,
     ArrowDown,
-    CalenderHalf,
-    StarHalf,
     EditIcon,
     MoreIcon,
     TrashIcon,
     CalenderIcon,
-    ClockIcon
+    ClockIcon,
+    BannerChat,
+    BannerEvent,
+    BannerProduct,
+    BannerTime
 }

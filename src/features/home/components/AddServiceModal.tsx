@@ -11,6 +11,7 @@ import CommonStatusBar from '../../../components/layouts/CommonStatusBar'
 import { RootStackParamList } from '../../../App';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { EventIcon, TimeIcon, ChatIcon, CrossIcon, DocumentIcon } from '../../../../assets/images'
+import { AddServiceType } from '../../../constants'
 
 type ServicesProps = NativeStackScreenProps<RootStackParamList, 'Services'>;
 
@@ -24,19 +25,19 @@ const AddServiceModal = ({ navigation }: ServicesProps) => {
 
     const addEventService = () => {
         modalVisibility(false)
-        navigation.push('CreateEventService')
+        navigation.push('CreateEventService', { serviceType: AddServiceType.EVENT })
     }
     const addSellProductService = () => {
         modalVisibility(false)
-        navigation.push('CreateEventService')
+        navigation.push('CreateEventService', { serviceType: AddServiceType.DIGITAL_PRODUCT })
     }
     const addSellTimeService = () => {
         modalVisibility(false)
-        navigation.push('CreateEventService')
+        navigation.push('CreateEventService', { serviceType: AddServiceType.CALL })
     }
     const addChatService = () => {
         modalVisibility(false)
-        navigation.push('CreateEventService')
+        navigation.push('CreateEventService', { serviceType: AddServiceType.CHAT })
     }
 
     return (

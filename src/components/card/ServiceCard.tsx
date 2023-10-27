@@ -5,7 +5,9 @@ import AppColors from '../../constants/AppColors';
 import FontFamily from '../../constants/FontFamily';
 import CommonButton from '../buttons/CommonButton';
 import CommonDivider from '../divider/CommonDivider';
-import { CalenderHalf, CalenderIcon, ClockIcon, EditIcon, MoreIcon, PriceIcon, StarHalf, TrashIcon, VideoIcon } from '../../../assets/images';
+import { CalenderIcon, ClockIcon, EditIcon, MoreIcon, PriceIcon, TrashIcon, VideoIcon } from '../../../assets/images';
+import { ServiceBannerImage } from '..';
+import { AddServiceType } from '../../constants';
 
 interface ServiceCardProps {
     title: string,
@@ -49,10 +51,7 @@ const ServiceCard = (props: ServiceCardProps) => {
             <View style={styles.imageContainer}>
                 {
                     (props.bannerImage == '')
-                        ? <View style={{ alignItems: 'center', justifyContent: 'flex-end', marginTop: 'auto' }}>
-                            <CalenderHalf style={{ maxHeight: 134, maxWidth: 216 }} />
-                            <StarHalf style={{ maxHeight: 42, maxWidth: 66, position: 'absolute' }} />
-                        </View>
+                        ? <ServiceBannerImage serviceType={props.serviceType} />
                         : <Image style={styles.imageContainer} source={{ uri: props.bannerImage }} />
                 }
             </View>
@@ -103,10 +102,10 @@ const ServiceCard = (props: ServiceCardProps) => {
                 <TouchableOpacity onPress={() => { props.onDeleteService() }}>
                     <TrashIcon style={styles.imageIcon} />
                 </TouchableOpacity>
-                <View style={{ width: 12 }}></View>
+                {/* <View style={{ width: 12 }}></View>
                 <TouchableOpacity onPress={() => { props.onMoreTap() }}>
                     <MoreIcon style={styles.imageIcon} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
         </View>
     )

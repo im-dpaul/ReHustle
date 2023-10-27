@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { authenticatedPostMethod } from "../../../core/services/NetworkServices";
 
 export interface CreateEventServiceState {
+    serviceType: string
     data: any;
     error: ErrorType;
     loading: boolean;
@@ -40,6 +41,7 @@ const noError: ErrorType = {
 }
 
 const initialState: CreateEventServiceState = {
+    serviceType: '',
     data: null,
     error: noError,
     loading: false,
@@ -108,7 +110,11 @@ export const createEventServiceSlice = createSlice({
     name: 'createEventService',
     initialState,
     reducers: {
+        setServiceType: (state, action) => {
+            state.serviceType = action.payload
+        },
         clearData: (state) => {
+            state.serviceType = ''
             state.data = null
             state.error = noError
             state.loading = false
@@ -248,6 +254,6 @@ export const createEventServiceSlice = createSlice({
     }
 });
 
-export const { clearData, setName, setDescription, setPrice, setEventUrl, setPaymentType, setEventDuration, setDate, setTime, checkValidation } = createEventServiceSlice.actions;
+export const { clearData, setName, setDescription, setPrice, setEventUrl, setPaymentType, setEventDuration, setDate, setTime, checkValidation, setServiceType } = createEventServiceSlice.actions;
 
 export default createEventServiceSlice.reducer;

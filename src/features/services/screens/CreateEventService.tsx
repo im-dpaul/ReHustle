@@ -10,17 +10,18 @@ import UploadButton from '../../../components/buttons/UploadButton'
 import CommonTextInput from '../../../components/textInput/CommonTextInput'
 import CommonDivider from '../../../components/divider/CommonDivider'
 import PriceTextInput from '../../../components/textInput/PriceTextInput'
-import { setName, setDescription, setPrice, clearData, setEventUrl, setPaymentType, setEventDuration, setDate, setTime, addNewService, CreateEventServiceState, checkValidation } from "../redux/createEventServiceSlice";
+import { setName, setDescription, setPrice, clearData, setEventUrl, setPaymentType, setEventDuration, setDate, setTime, addNewService, CreateEventServiceState, checkValidation, setServiceType } from "../redux/createEventServiceSlice";
 import { AppDispatch } from '../../../app/store'
 import { useDispatch, useSelector } from 'react-redux'
 import ToggleTabButton from '../../../components/buttons/ToggleTabButton'
 import TimeDurationTextInput from '../../../components/textInput/TimeDurationTextInput'
-import { CreateServiceAppBar, EventBannerImage } from '../components'
-import { CommonDateTimePicker } from '../../../components'
+import { CreateServiceAppBar } from '../components'
+import { CommonDateTimePicker, ServiceBannerImage } from '../../../components'
+import { AddServiceType } from '../../../constants'
 
 type CreateEventServiceProps = NativeStackScreenProps<RootStackParamList, 'CreateEventService'>
 
-const CreateEventService = ({ navigation }: CreateEventServiceProps): React.JSX.Element => {
+const CreateEventService = ({ navigation, route }: CreateEventServiceProps): React.JSX.Element => {
     const createEventServiceR: CreateEventServiceState = useSelector((state: any) => state.createEventService)
     const dispatch = useDispatch<AppDispatch>();
 
@@ -71,6 +72,10 @@ const CreateEventService = ({ navigation }: CreateEventServiceProps): React.JSX.
     }
 
     useEffect(() => {
+        const routeParams = route.params
+        const serviceType = routeParams.serviceType
+        dispatch(setServiceType(serviceType))
+
         const d = new Date()
         dispatch(setDate(d.getTime()))
         dispatch(setTime(d.getTime()))
@@ -104,7 +109,7 @@ const CreateEventService = ({ navigation }: CreateEventServiceProps): React.JSX.
                         <View style={styles.imageContainer}>
                             {
                                 (true)
-                                    ? <EventBannerImage />
+                                    ? <ServiceBannerImage serviceType={AddServiceType.EVENT} />
                                     : <Image style={styles.imageContainer} source={{ uri: '' }} />
                             }
                         </View>

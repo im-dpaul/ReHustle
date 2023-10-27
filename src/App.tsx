@@ -27,7 +27,7 @@ export type RootStackParamList = {
   AddServices: undefined;
   FinishAccountCreation: undefined;
   Services: any;
-  CreateEventService: undefined;
+  CreateEventService: { serviceType: string, serviceData?: any };
   Payouts: undefined;
   Preview: undefined;
   Insights: undefined;
