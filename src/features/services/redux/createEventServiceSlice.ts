@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { authenticatedPostMethod } from "../../../core/services/NetworkServices";
 import { AddServiceType, FileType, ScheduleType, StorageKeys } from "../../../constants";
 import LocalStorage from "../../../data/local_storage/LocalStorage";
+import { MessagingServicePlatformType } from '../../../data'
 
 export interface CreateEventServiceState {
     serviceType: string
@@ -34,6 +35,20 @@ export interface CreateEventServiceState {
     videoCallUrl: string
     calendlyUrl: string
     meetingDuration: string
+
+    /// Chat Services
+    platformIdsList: string[]
+    platformList: MessagingServicePlatformType[]
+}
+
+type PlatformLinkError = {
+    sms: string
+    email: string
+    messenger: string
+    whatsapp: string
+    signal: string
+    telegram: string
+    other: string
 }
 
 type ErrorType = {
@@ -50,7 +65,19 @@ type ErrorType = {
     emailError: string
     videoCallUrlError: string
     calendlyUrlError: string
+    platformLinksError: string
+    platformLinkError: PlatformLinkError
     message: string;
+}
+
+const noPlatformLinkError = {
+    sms: '',
+    email: '',
+    messenger: '',
+    whatsapp: '',
+    signal: '',
+    telegram: '',
+    other: '',
 }
 
 const noError: ErrorType = {
@@ -67,6 +94,8 @@ const noError: ErrorType = {
     emailError: "",
     videoCallUrlError: "",
     calendlyUrlError: "",
+    platformLinksError: '',
+    platformLinkError: noPlatformLinkError,
     message: ''
 }
 
@@ -100,7 +129,11 @@ const initialState: CreateEventServiceState = {
     meetingDuration: '',
     email: '',
     videoCallUrl: '',
-    calendlyUrl: ''
+    calendlyUrl: '',
+
+    /// Chat Services
+    platformIdsList: [],
+    platformList: []
 }
 
 export const addNewService = createAsyncThunk<any>(
@@ -177,6 +210,18 @@ export const addNewService = createAsyncThunk<any>(
             }
         }
 
+        /// Chat service
+        if (stateValue.serviceType == AddServiceType.CHAT) {
+            let links: { [key: string]: string; } = {}
+            stateValue.platformList.forEach((platform) => {
+                links[platform.title] = platform.link
+            })
+            service = {
+                "serviceType": AddServiceType.CHAT,
+                "links": links
+            }
+        }
+
         const url = `/p/product`
         let data: any = null;
         let values: any = {
@@ -233,6 +278,8 @@ export const createEventServiceSlice = createSlice({
             state.email = ''
             state.calendlyUrl = ''
             state.videoCallUrl = ''
+            state.platformIdsList = []
+            state.platformList = []
         },
         setName: (state, action) => {
             state.serviceName = action.payload;
@@ -312,6 +359,33 @@ export const createEventServiceSlice = createSlice({
             state.calendlyUrl = action.payload
         },
 
+        /// Chat Services
+        addPlatforms: (state, action) => {
+            let platform: MessagingServicePlatformType = action.payload
+
+            state.platformIdsList.push(platform.title)
+            state.platformList.push(platform)
+        },
+        removePlatforms: (state, action) => {
+            state.platformIdsList = state.platformIdsList.filter((platform) => platform !== action.payload)
+            state.platformList = state.platformList.filter((platform) => platform.title !== action.payload)
+            state.error.platformLinksError = ''
+            state.error.platformLinkError = noPlatformLinkError
+        },
+        setPlatformValue: (state, action) => {
+            let platforms: MessagingServicePlatformType[];
+            platforms = state.platformList.map((platform) => {
+                let localplatform: MessagingServicePlatformType = platform;
+                if (action.payload.title == localplatform.title) {
+                    localplatform = action.payload;
+                }
+                return localplatform;
+            });
+            state.platformList = platforms;
+            state.error.platformLinksError = ''
+            state.error.platformLinkError = noPlatformLinkError
+        },
+
         /// Validation check function
         checkValidation: (state) => {
             if (state.serviceName != '' && state.serviceDescription != '' && state.servicePrice != '') {
@@ -386,7 +460,27 @@ export const createEventServiceSlice = createSlice({
                             state.error.meetingDuration = 'This field is mandatory.'
                         }
                     }
-
+                }
+                if (state.serviceType == AddServiceType.CHAT) {
+                    if (state.platformList.length == 0) {
+                        state.validated = false
+                        state.error.platformLinksError = 'Please add at least 1 link'
+                    } else {
+                        let v = true
+                        state.platformList.forEach((platform) => {
+                            if (platform.link.length == 0) {
+                                v = false
+                                return
+                            }
+                        })
+                        if (v) {
+                            state.validated = true
+                            state.error = noError
+                        } else {
+                            state.validated = false
+                            state.error.platformLinksError = 'Please provide all link'
+                        }
+                    }
                 }
             }
             else {
@@ -452,6 +546,27 @@ export const createEventServiceSlice = createSlice({
                         if (e.errors.service.hasOwnProperty('email')) {
                             state.error.emailError = e.errors.service.email
                         }
+                        if (e.errors.service.hasOwnProperty('links.email')) {
+                            state.error.platformLinkError.email = e.errors.service['links.email']
+                        }
+                        if (e.errors.service.hasOwnProperty('links.messenger')) {
+                            state.error.platformLinkError.messenger = e.errors.service['links.messenger']
+                        }
+                        if (e.errors.service.hasOwnProperty('links.telegram')) {
+                            state.error.platformLinkError.telegram = e.errors.service['links.telegram']
+                        }
+                        if (e.errors.service.hasOwnProperty('links.sms')) {
+                            state.error.platformLinkError.sms = e.errors.service['links.sms']
+                        }
+                        if (e.errors.service.hasOwnProperty('links.whatsapp')) {
+                            state.error.platformLinkError.whatsapp = e.errors.service['links.whatsapp']
+                        }
+                        if (e.errors.service.hasOwnProperty('links.signal')) {
+                            state.error.platformLinkError.signal = e.errors.service['links.signal']
+                        }
+                        if (e.errors.service.hasOwnProperty('links.other')) {
+                            state.error.platformLinkError.other = e.errors.service['links.other']
+                        }
                     }
                 }
                 state.screenLoading = false;
@@ -460,6 +575,6 @@ export const createEventServiceSlice = createSlice({
     }
 });
 
-export const { clearData, setName, setDescription, setPrice, setEventUrl, setPaymentType, setEventDuration, setDate, setTime, checkValidation, setServiceType, setFileType, setExternalFileUrl, setScheduleType, setMeetingDuration, setCalendlyUrl, setEmail, setVideoCallUrl } = createEventServiceSlice.actions;
+export const { clearData, setName, setDescription, setPrice, setEventUrl, setPaymentType, setEventDuration, setDate, setTime, checkValidation, setServiceType, setFileType, setExternalFileUrl, setScheduleType, setMeetingDuration, setCalendlyUrl, setEmail, setVideoCallUrl, addPlatforms, removePlatforms, setPlatformValue } = createEventServiceSlice.actions;
 
 export default createEventServiceSlice.reducer;

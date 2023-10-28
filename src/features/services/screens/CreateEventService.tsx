@@ -14,7 +14,7 @@ import { setName, setDescription, setPrice, clearData, setPaymentType, setDate, 
 import { AppDispatch } from '../../../app/store'
 import { useDispatch, useSelector } from 'react-redux'
 import ToggleTabButton from '../../../components/buttons/ToggleTabButton'
-import { AddEventDetails, AddMeetingDetails, AddProductDetails, CreateServiceAppBar } from '../components'
+import { AddEventDetails, AddMeetingDetails, AddMessagingDetails, AddProductDetails, CreateServiceAppBar } from '../components'
 import { ServiceBannerImage } from '../../../components'
 import { AddServiceType, StorageKeys } from '../../../constants'
 import LocalStorage from '../../../data/local_storage/LocalStorage'
@@ -25,7 +25,7 @@ const CreateEventService = ({ navigation, route }: CreateEventServiceProps): Rea
     const createEventServiceR: CreateEventServiceState = useSelector((state: any) => state.createEventService)
     const dispatch = useDispatch<AppDispatch>();
 
-    console.log("Create event service store", createEventServiceR);
+    // console.log("Create event service store", createEventServiceR);
 
     const onCreate = () => {
         dispatch(checkValidation())
@@ -165,7 +165,9 @@ const CreateEventService = ({ navigation, route }: CreateEventServiceProps): Rea
                                 ? <AddProductDetails />
                                 : createEventServiceR.serviceType == AddServiceType.CALL
                                     ? <AddMeetingDetails />
-                                    : null
+                                    : createEventServiceR.serviceType == AddServiceType.CHAT
+                                        ? <AddMessagingDetails />
+                                        : null
                     }
                     <View style={{ marginVertical: 24 }}>
                         <CommonDivider />
