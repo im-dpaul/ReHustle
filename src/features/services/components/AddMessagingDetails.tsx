@@ -8,7 +8,7 @@ import TextInputWithIcon from '../../../components/textInput/TextInputWithIcon'
 import { MessagingServicePlatforms, MessagingServicePlatformType } from '../../../data'
 import CommonChip from '../../../components/chip/CommonChip'
 import RemoveButton from '../../../components/buttons/RemoveButton'
-import { EmailIcon, WebsiteIcon } from '../../../../assets/images'
+import { EmailIcon, WebsiteIcon, WhatsappIcon } from '../../../../assets/images'
 
 const AddMessagingDetails = (): React.JSX.Element => {
     const createEventServiceR: CreateEventServiceState = useSelector((state: any) => state.createEventService)
@@ -40,17 +40,17 @@ const AddMessagingDetails = (): React.JSX.Element => {
     const getPlatformIcon = (platform: string) => {
         switch (platform) {
             case 'sms':
-                return <EmailIcon style={styles.prefixIconStyle} />
+                return <WebsiteIcon style={styles.prefixIconStyle} />
             case 'email':
                 return <EmailIcon style={styles.prefixIconStyle} />
             case 'messenger':
-                return <EmailIcon style={styles.prefixIconStyle} />
+                return <WebsiteIcon style={styles.prefixIconStyle} />
             case 'whatsapp':
-                return <EmailIcon style={styles.prefixIconStyle} />
+                return <WhatsappIcon style={styles.prefixIconStyle} />
             case 'signal':
-                return <EmailIcon style={styles.prefixIconStyle} />
+                return <WebsiteIcon style={styles.prefixIconStyle} />
             case 'telegram':
-                return <EmailIcon style={styles.prefixIconStyle} />
+                return <WebsiteIcon style={styles.prefixIconStyle} />
             default:
                 return <WebsiteIcon style={styles.prefixIconStyle} />
         }

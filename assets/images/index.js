@@ -44,6 +44,7 @@ import EditIcon from './edit_icon.svg'
 import MoreIcon from './more_icon.svg'
 import CalenderIcon from './calender_icon.svg'
 import ClockIcon from './clock_icon.svg'
+import AttachmentClip from './attachment_clip.svg'
 
 /// Service banner
 import BannerChat from './banner_chat.svg'
@@ -72,6 +73,7 @@ import TiktokIcon from './tiktok_icon.svg'
 import TwitterIcon from './twitter_icon.svg'
 import WebsiteIcon from './website_icon.svg'
 import YoutubeIcon from './youtube_icon.svg'
+import WhatsappIcon from './whatsapp_icon.svg'
 
 export {
     RehustleLogo,
@@ -130,5 +132,7 @@ export {
     BannerProduct,
     BannerTime,
     RadioButton,
-    AddFile
+    AddFile,
+    WhatsappIcon,
+    AttachmentClip
 }
