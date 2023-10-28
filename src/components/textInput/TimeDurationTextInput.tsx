@@ -65,7 +65,8 @@ const styles = StyleSheet.create({
         height: 40,
         color: AppColors.BLACK,
         paddingRight: 12,
-        marginRight: 50
+        marginRight: 50,
+        flex: 1
     },
     suffixTextBox: {
         marginLeft: 'auto',

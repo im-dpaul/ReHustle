@@ -10,13 +10,14 @@ import UploadButton from '../../../components/buttons/UploadButton'
 import CommonTextInput from '../../../components/textInput/CommonTextInput'
 import CommonDivider from '../../../components/divider/CommonDivider'
 import PriceTextInput from '../../../components/textInput/PriceTextInput'
-import { setName, setDescription, setPrice, clearData, setPaymentType, setDate, setTime, addNewService, CreateEventServiceState, checkValidation, setServiceType } from "../redux/createEventServiceSlice";
+import { setName, setDescription, setPrice, clearData, setPaymentType, setDate, setTime, addNewService, CreateEventServiceState, checkValidation, setServiceType, setEmail } from "../redux/createEventServiceSlice";
 import { AppDispatch } from '../../../app/store'
 import { useDispatch, useSelector } from 'react-redux'
 import ToggleTabButton from '../../../components/buttons/ToggleTabButton'
-import { AddEventDetails, AddProductDetails, CreateServiceAppBar } from '../components'
+import { AddEventDetails, AddMeetingDetails, AddProductDetails, CreateServiceAppBar } from '../components'
 import { ServiceBannerImage } from '../../../components'
-import { AddServiceType } from '../../../constants'
+import { AddServiceType, StorageKeys } from '../../../constants'
+import LocalStorage from '../../../data/local_storage/LocalStorage'
 
 type CreateEventServiceProps = NativeStackScreenProps<RootStackParamList, 'CreateEventService'>
 
@@ -84,6 +85,13 @@ const CreateEventService = ({ navigation, route }: CreateEventServiceProps): Rea
             const d = new Date()
             dispatch(setDate(d.getTime()))
             dispatch(setTime(d.getTime()))
+        }
+        if (serviceType == AddServiceType.CALL) {
+            LocalStorage.GetData(StorageKeys.EMAIL).then((email) => {
+                if (email != null) {
+                    dispatch(setEmail(email))
+                }
+            })
         }
     }, [])
 
@@ -155,7 +163,9 @@ const CreateEventService = ({ navigation, route }: CreateEventServiceProps): Rea
                             ? <AddEventDetails />
                             : createEventServiceR.serviceType == AddServiceType.DIGITAL_PRODUCT
                                 ? <AddProductDetails />
-                                : null
+                                : createEventServiceR.serviceType == AddServiceType.CALL
+                                    ? <AddMeetingDetails />
+                                    : null
                     }
                     <View style={{ marginVertical: 24 }}>
                         <CommonDivider />

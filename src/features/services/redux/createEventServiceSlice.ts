@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { authenticatedPostMethod } from "../../../core/services/NetworkServices";
-import { AddServiceType, FileType } from "../../../constants";
+import { AddServiceType, FileType, ScheduleType, StorageKeys } from "../../../constants";
+import LocalStorage from "../../../data/local_storage/LocalStorage";
 
 export interface CreateEventServiceState {
     serviceType: string
@@ -26,6 +27,13 @@ export interface CreateEventServiceState {
     fileType: string
     externalFileUrl: string
     uploadFileUrl: string
+
+    /// Sell Time Services
+    scheduleType: string
+    email: string
+    videoCallUrl: string
+    calendlyUrl: string
+    meetingDuration: string
 }
 
 type ErrorType = {
@@ -38,6 +46,10 @@ type ErrorType = {
     priceError: string;
     uploadFileUrlError: string;
     externalFileUrlError: string;
+    meetingDuration: string
+    emailError: string
+    videoCallUrlError: string
+    calendlyUrlError: string
     message: string;
 }
 
@@ -51,6 +63,10 @@ const noError: ErrorType = {
     priceError: '',
     uploadFileUrlError: '',
     externalFileUrlError: '',
+    meetingDuration: '',
+    emailError: "",
+    videoCallUrlError: "",
+    calendlyUrlError: "",
     message: ''
 }
 
@@ -77,7 +93,14 @@ const initialState: CreateEventServiceState = {
     /// Sell Product Services
     fileType: FileType.INTERNAL,
     externalFileUrl: '',
-    uploadFileUrl: 'https://rehustle-user-assets.s3.amazonaws.com/products/65322107bc14c6028a50126c_1698397690988'
+    uploadFileUrl: 'https://rehustle-user-assets.s3.amazonaws.com/products/65322107bc14c6028a50126c_1698397690988',
+
+    /// Sell Time Services
+    scheduleType: ScheduleType.EMAIL,
+    meetingDuration: '',
+    email: '',
+    videoCallUrl: '',
+    calendlyUrl: ''
 }
 
 export const addNewService = createAsyncThunk<any>(
@@ -91,6 +114,7 @@ export const addNewService = createAsyncThunk<any>(
 
         // Set Service Details
         let service = {}
+
         /// Event service
         if (stateValue.serviceType == AddServiceType.EVENT) {
             // Set TimeStamp from date & time
@@ -110,6 +134,7 @@ export const addNewService = createAsyncThunk<any>(
                 "url": stateValue.serviceEventUrl == "" ? "https://meet.google.com/" : stateValue.serviceEventUrl,
             }
         }
+
         /// Sell Product service
         if (stateValue.serviceType == AddServiceType.DIGITAL_PRODUCT) {
             if (stateValue.fileType == FileType.INTERNAL) {
@@ -127,6 +152,27 @@ export const addNewService = createAsyncThunk<any>(
                         "fileType": stateValue.fileType,
                         "url": stateValue.externalFileUrl
                     }
+                }
+            }
+        }
+
+        /// Sell Time service
+        if (stateValue.serviceType == AddServiceType.CALL) {
+            if (stateValue.scheduleType == ScheduleType.EMAIL) {
+                service = {
+                    "serviceType": AddServiceType.CALL,
+                    "scheduleType": ScheduleType.EMAIL,
+                    "email": stateValue.email,
+                    "duration": stateValue.meetingDuration
+                }
+            } else {
+                const email = await LocalStorage.GetData(StorageKeys.EMAIL)
+                service = {
+                    "serviceType": AddServiceType.CALL,
+                    "scheduleType": stateValue.scheduleType,
+                    "email": email,
+                    "duration": stateValue.meetingDuration,
+                    "url": stateValue.scheduleType == ScheduleType.VIDEO_CALL ? stateValue.videoCallUrl : stateValue.calendlyUrl
                 }
             }
         }
@@ -182,6 +228,11 @@ export const createEventServiceSlice = createSlice({
             state.fileType = FileType.INTERNAL
             state.externalFileUrl = ''
             state.uploadFileUrl = 'https://rehustle-user-assets.s3.amazonaws.com/products/65322107bc14c6028a50126c_1698397690988'
+            state.scheduleType = ScheduleType.EMAIL
+            state.meetingDuration = ''
+            state.email = ''
+            state.calendlyUrl = ''
+            state.videoCallUrl = ''
         },
         setName: (state, action) => {
             state.serviceName = action.payload;
@@ -244,6 +295,23 @@ export const createEventServiceSlice = createSlice({
             state.externalFileUrl = action.payload
         },
 
+        /// Sell Time Services functions
+        setScheduleType: (state, action) => {
+            state.scheduleType = action.payload
+        },
+        setMeetingDuration: (state, action) => {
+            state.meetingDuration = action.payload.replace(/[^0-9]/g, '')
+        },
+        setEmail: (state, action) => {
+            state.email = action.payload
+        },
+        setVideoCallUrl: (state, action) => {
+            state.videoCallUrl = action.payload
+        },
+        setCalendlyUrl: (state, action) => {
+            state.calendlyUrl = action.payload
+        },
+
         /// Validation check function
         checkValidation: (state) => {
             if (state.serviceName != '' && state.serviceDescription != '' && state.servicePrice != '') {
@@ -283,6 +351,42 @@ export const createEventServiceSlice = createSlice({
                             state.validated = false
                         }
                     }
+                }
+                if (state.serviceType == AddServiceType.CALL) {
+                    let v = false
+                    if (state.scheduleType == ScheduleType.EMAIL) {
+                        if (state.email != '') {
+                            state.error.emailError = ''
+                            v = true
+                        } else {
+                            state.error.emailError = 'This field is mandatory.'
+                        }
+                    } else if (state.scheduleType == ScheduleType.VIDEO_CALL) {
+                        if (state.videoCallUrl != '') {
+                            state.error.videoCallUrlError = ''
+                            v = true
+                        } else {
+                            state.error.videoCallUrlError = 'This field is mandatory.'
+                        }
+                    } else if (state.scheduleType == ScheduleType.CALENDLY) {
+                        if (state.calendlyUrl != '') {
+                            state.error.calendlyUrlError = ''
+                            v = true
+                        } else {
+                            state.error.calendlyUrlError = 'This field is mandatory.'
+                        }
+                    }
+                    if (v && state.meetingDuration != '') {
+                        state.validated = true
+                        state.error = noError
+                    }
+                    else {
+                        state.validated = false
+                        if (state.meetingDuration == '') {
+                            state.error.meetingDuration = 'This field is mandatory.'
+                        }
+                    }
+
                 }
             }
             else {
@@ -331,11 +435,22 @@ export const createEventServiceSlice = createSlice({
                         if (e.errors.service.hasOwnProperty('duration')) {
                             state.error.durationError = e.errors.service.duration
                         }
-                        if (e.errors.service.hasOwnProperty('duration')) {
+                        if (e.errors.service.hasOwnProperty('url')) {
                             state.error.eventLinkError = e.errors.service.url
+                            if (state.serviceType == AddServiceType.CALL) {
+                                if (state.scheduleType == ScheduleType.VIDEO_CALL) {
+                                    state.error.videoCallUrlError = e.errors.service.url
+                                }
+                                if (state.scheduleType == ScheduleType.CALENDLY) {
+                                    state.error.calendlyUrlError = e.errors.service.url
+                                }
+                            }
                         }
                         if (e.errors.service.hasOwnProperty('assets.url')) {
                             state.error.externalFileUrlError = e.errors.service['assets.url']
+                        }
+                        if (e.errors.service.hasOwnProperty('email')) {
+                            state.error.emailError = e.errors.service.email
                         }
                     }
                 }
@@ -345,6 +460,6 @@ export const createEventServiceSlice = createSlice({
     }
 });
 
-export const { clearData, setName, setDescription, setPrice, setEventUrl, setPaymentType, setEventDuration, setDate, setTime, checkValidation, setServiceType, setFileType, setExternalFileUrl } = createEventServiceSlice.actions;
+export const { clearData, setName, setDescription, setPrice, setEventUrl, setPaymentType, setEventDuration, setDate, setTime, checkValidation, setServiceType, setFileType, setExternalFileUrl, setScheduleType, setMeetingDuration, setCalendlyUrl, setEmail, setVideoCallUrl } = createEventServiceSlice.actions;
 
 export default createEventServiceSlice.reducer;

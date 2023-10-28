@@ -4,6 +4,7 @@ import FontFamily from "./FontFamily";
 import MenuOptions from './MenuOptions'
 import StorageKeys from "./StorageKeys";
 import FileType from "./FileType";
+import ScheduleType from "./ScheduleType";
 
 export {
     AddServiceType,
@@ -11,5 +12,6 @@ export {
     FontFamily,
     MenuOptions,
     StorageKeys,
-    FileType
+    FileType,
+    ScheduleType
 }
