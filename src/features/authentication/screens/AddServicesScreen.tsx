@@ -1,6 +1,6 @@
 import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { addService, skipServices, addNewServices, getAllServices, clearData, AddServicesState } from "../../authentication/redux/addServicesSlice";
+import { addService, skipServices, addNewServices, getAllServices, clearData, AddServicesState, showAddServiceModal } from "../../authentication/redux/addServicesSlice";
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from "../../../App";
 import CommonStatusBar from "../../../components/layouts/CommonStatusBar";
@@ -15,10 +15,13 @@ import CommonButton from "../../../components/buttons/CommonButton";
 import { AppDispatch } from "../../../app/store";
 import { useEffect } from "react";
 import ServicesList from "../components/ServicesList";
+import { AddServiceModal } from "../components";
 
 type AddServicesProps = NativeStackScreenProps<RootStackParamList, 'AddServices'>;
 
-function AddServicesScreen({ navigation }: AddServicesProps): JSX.Element {
+function AddServicesScreen({ navigation, route }: AddServicesProps): JSX.Element {
+
+    const routeData = route.params;
 
     const addServicesR: AddServicesState = useSelector((state: any) => state.addServices);
 
@@ -26,13 +29,15 @@ function AddServicesScreen({ navigation }: AddServicesProps): JSX.Element {
 
     const dispatch = useDispatch<AppDispatch>();
 
+    const modalVisibility = (val: boolean) => {
+        dispatch(showAddServiceModal(val));
+    }
+
     const onContinueTap = () => { }
 
     const skipBtnTap = () => {
         dispatch(skipServices());
     }
-
-    const onAddService = () => { }
 
     const onServiceSelection = (id: number) => {
         if (addServicesR.servicesTypeId.includes(id)) {
@@ -58,9 +63,18 @@ function AddServicesScreen({ navigation }: AddServicesProps): JSX.Element {
     useEffect(() => {
         if (addServicesR.data != null) {
             navigation.replace('FinishAccountCreation');
-            dispatch(clearData({}));
+            dispatch(clearData());
         }
     }, [addServicesR.data])
+
+    useEffect(() => {
+        if (routeData != undefined) {
+            if (routeData.refresh == true) {
+                dispatch(getAllServices());
+                dispatch(getAllServices());
+            }
+        }
+    }, [routeData])
 
     useEffect(() => {
         dispatch(getAllServices());
@@ -94,7 +108,7 @@ function AddServicesScreen({ navigation }: AddServicesProps): JSX.Element {
                         <AddServicesManually />
                         <View style={{ height: 24 }}></View>
                         <View style={{ width: '100%' }}>
-                            <CommonButton title='+ Add Service' height={40} active={false} onPress={onAddService} />
+                            <CommonButton title='+ Add Service' height={40} active={false} onPress={() => { modalVisibility(true) }} />
                         </View>
                         <View style={{ height: 24 }}></View>
                         {
@@ -106,6 +120,7 @@ function AddServicesScreen({ navigation }: AddServicesProps): JSX.Element {
                         }
                         <ServicesList />
                     </View>
+                    <AddServiceModal navigation={navigation} route={route} />
                 </ScrollView>
                 <View>
                     <CommonDivider />

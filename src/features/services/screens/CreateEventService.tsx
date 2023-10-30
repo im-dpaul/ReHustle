@@ -104,7 +104,13 @@ const CreateEventService = ({ navigation, route }: CreateEventServiceProps): Rea
     useEffect(() => {
         if (createEventServiceR.data != null) {
             dispatch(clearData())
-            navigation.navigate('Services', { refresh: true })
+            const routeParams = route.params
+            if (routeParams.stack == 'AddService') {
+                navigation.navigate('AddServices', { refresh: true })
+            }
+            else {
+                navigation.navigate('Services', { refresh: true })
+            }
         }
     }, [createEventServiceR.data])
 

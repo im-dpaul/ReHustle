@@ -11,6 +11,7 @@ export interface AddServicesState {
     loading: boolean,
     screenLoading: boolean,
     servicesData: ServicesDataType[],
+    showAddServiceModal: boolean
 }
 
 type errorType = {
@@ -27,7 +28,8 @@ const initialState: AddServicesState = {
     error: noError,
     loading: false,
     screenLoading: false,
-    servicesData: []
+    servicesData: [],
+    showAddServiceModal: false
 }
 
 export const getAllServices = createAsyncThunk<any>(
@@ -129,8 +131,17 @@ export const addServicesSlice = createSlice({
         removeService: (state, action) => {
             state.servicesTypeId = state.servicesTypeId.filter((id) => id !== action.payload)
         },
-        clearData: (state, action) => {
-            state.data = [];
+        showAddServiceModal: (state, action) => {
+            state.showAddServiceModal = action.payload
+        },
+        clearData: (state) => {
+            state.data = []
+            state.error = noError
+            state.loading = false
+            state.screenLoading = false
+            state.servicesData = []
+            state.servicesTypeId = []
+            state.showAddServiceModal = false
         }
     },
     extraReducers: (builder) => {
@@ -214,6 +225,6 @@ export const addServicesSlice = createSlice({
     }
 });
 
-export const { addService, removeService, clearData } = addServicesSlice.actions;
+export const { addService, removeService, clearData, showAddServiceModal } = addServicesSlice.actions;
 
 export default addServicesSlice.reducer;
