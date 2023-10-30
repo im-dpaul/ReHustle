@@ -4,7 +4,7 @@ import { AddServiceType, FileType, ScheduleType, StorageKeys } from "../../../co
 import LocalStorage from "../../../data/local_storage/LocalStorage";
 import { MessagingServicePlatformType } from '../../../data'
 
-export interface CreateEventServiceState {
+export interface CreateServiceState {
     serviceType: string
     data: any;
     error: ErrorType;
@@ -99,7 +99,7 @@ const noError: ErrorType = {
     message: ''
 }
 
-const initialState: CreateEventServiceState = {
+const initialState: CreateServiceState = {
     serviceType: '',
     data: null,
     error: noError,
@@ -140,7 +140,7 @@ export const addNewService = createAsyncThunk<any>(
     'api/addNewService',
     async (_, thunkAPI) => {
         const state: any = thunkAPI.getState();
-        const stateValue: CreateEventServiceState = state.createEventService;
+        const stateValue: CreateServiceState = state.createEventService;
 
         // Set price
         let price = (stateValue.servicePrice != '') ? Number(stateValue.servicePrice) : 250;
@@ -247,8 +247,8 @@ export const addNewService = createAsyncThunk<any>(
         }
     });
 
-export const createEventServiceSlice = createSlice({
-    name: 'createEventService',
+export const createServiceSlice = createSlice({
+    name: 'createService',
     initialState,
     reducers: {
         /// Common functions
@@ -575,6 +575,6 @@ export const createEventServiceSlice = createSlice({
     }
 });
 
-export const { clearData, setName, setDescription, setPrice, setEventUrl, setPaymentType, setEventDuration, setDate, setTime, checkValidation, setServiceType, setFileType, setExternalFileUrl, setScheduleType, setMeetingDuration, setCalendlyUrl, setEmail, setVideoCallUrl, addPlatforms, removePlatforms, setPlatformValue } = createEventServiceSlice.actions;
+export const { clearData, setName, setDescription, setPrice, setEventUrl, setPaymentType, setEventDuration, setDate, setTime, checkValidation, setServiceType, setFileType, setExternalFileUrl, setScheduleType, setMeetingDuration, setCalendlyUrl, setEmail, setVideoCallUrl, addPlatforms, removePlatforms, setPlatformValue } = createServiceSlice.actions;
 
-export default createEventServiceSlice.reducer;
+export default createServiceSlice.reducer;

@@ -6,16 +6,16 @@ import { CommonRadioButton } from '../../../components'
 import TextInputWithIcon from '../../../components/textInput/TextInputWithIcon'
 import { useSelector, useDispatch } from 'react-redux'
 import { AppDispatch } from '../../../app/store'
-import { CreateEventServiceState, setFileType, setExternalFileUrl } from '../redux/createEventServiceSlice'
+import { CreateServiceState, setFileType, setExternalFileUrl } from '../redux/createServiceSlice'
 import { AddFile } from '../../../../assets/images'
 import CommonButton from '../../../components/buttons/CommonButton'
 
 const AddProductDetails = (): React.JSX.Element => {
-    const createEventServiceR: CreateEventServiceState = useSelector((state: any) => state.createEventService)
+    const createServiceR: CreateServiceState = useSelector((state: any) => state.createService)
     const dispatch = useDispatch<AppDispatch>();
 
     const onChangeFileType = (fileType: string) => {
-        if (fileType != createEventServiceR.fileType) {
+        if (fileType != createServiceR.fileType) {
             dispatch(setFileType(fileType))
         }
     }
@@ -34,20 +34,20 @@ const AddProductDetails = (): React.JSX.Element => {
                 <TouchableOpacity onPress={() => onChangeFileType(FileType.INTERNAL)}>
                     <View style={styles.buttonRow}>
                         <Text style={[styles.title, { fontSize: 14 }]}>Upload File</Text>
-                        <CommonRadioButton selected={createEventServiceR.fileType == FileType.INTERNAL} />
+                        <CommonRadioButton selected={createServiceR.fileType == FileType.INTERNAL} />
                     </View>
                 </TouchableOpacity>
                 <CommonDivider />
                 <TouchableOpacity onPress={() => onChangeFileType(FileType.EXTERNAL)}>
                     <View style={styles.buttonRow}>
                         <Text style={[styles.title, { fontSize: 14 }]}>External Hosted file</Text>
-                        <CommonRadioButton selected={createEventServiceR.fileType == FileType.EXTERNAL} />
+                        <CommonRadioButton selected={createServiceR.fileType == FileType.EXTERNAL} />
                     </View>
                 </TouchableOpacity>
             </View>
             <View style={{ height: 24 }}></View>
             {
-                createEventServiceR.fileType == FileType.INTERNAL
+                createServiceR.fileType == FileType.INTERNAL
                     ? <View>
                         <View style={styles.uploadFileContainer}>
                             <AddFile />
@@ -65,7 +65,7 @@ const AddProductDetails = (): React.JSX.Element => {
                             </View>
                         </View>
                         {
-                            ((createEventServiceR.uploadFileUrl.length ?? 0) != 0)
+                            ((createServiceR.uploadFileUrl.length ?? 0) != 0)
                                 ? <View style={{ marginTop: 4, flexDirection: 'row', alignItems: 'center' }}>
                                     <Text style={styles.title}>Digital File : </Text>
                                     <Text style={[styles.title, { color: AppColors.GRAY3 }]}> 1 File uploaded</Text>
@@ -73,9 +73,9 @@ const AddProductDetails = (): React.JSX.Element => {
                                 : null
                         }
                         {
-                            ((createEventServiceR.error.uploadFileUrlError.length ?? 0) != 0)
+                            ((createServiceR.error.uploadFileUrlError.length ?? 0) != 0)
                                 ? <View style={{ marginTop: 4 }}>
-                                    <Text style={styles.error}>{createEventServiceR.error.uploadFileUrlError}</Text>
+                                    <Text style={styles.error}>{createServiceR.error.uploadFileUrlError}</Text>
                                 </View>
                                 : null
                         }
@@ -85,8 +85,8 @@ const AddProductDetails = (): React.JSX.Element => {
                         <View style={{ height: 8 }}></View>
                         <TextInputWithIcon
                             placeholder=''
-                            errorText={createEventServiceR.error.externalFileUrlError}
-                            value={createEventServiceR.externalFileUrl}
+                            errorText={createServiceR.error.externalFileUrlError}
+                            value={createServiceR.externalFileUrl}
                             onChangeText={(url) => { onChangeExternalFileUrl(url) }}
                         />
                     </View>

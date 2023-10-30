@@ -10,7 +10,7 @@ import UploadButton from '../../../components/buttons/UploadButton'
 import CommonTextInput from '../../../components/textInput/CommonTextInput'
 import CommonDivider from '../../../components/divider/CommonDivider'
 import PriceTextInput from '../../../components/textInput/PriceTextInput'
-import { setName, setDescription, setPrice, clearData, setPaymentType, setDate, setTime, addNewService, CreateEventServiceState, checkValidation, setServiceType, setEmail } from "../redux/createEventServiceSlice";
+import { setName, setDescription, setPrice, clearData, setPaymentType, setDate, setTime, addNewService, CreateServiceState, checkValidation, setServiceType, setEmail } from "../redux/createServiceSlice";
 import { AppDispatch } from '../../../app/store'
 import { useDispatch, useSelector } from 'react-redux'
 import ToggleTabButton from '../../../components/buttons/ToggleTabButton'
@@ -19,10 +19,10 @@ import { ServiceBannerImage } from '../../../components'
 import { AddServiceType, StorageKeys } from '../../../constants'
 import LocalStorage from '../../../data/local_storage/LocalStorage'
 
-type CreateEventServiceProps = NativeStackScreenProps<RootStackParamList, 'CreateEventService'>
+type CreateServiceProps = NativeStackScreenProps<RootStackParamList, 'CreateService'>
 
-const CreateEventService = ({ navigation, route }: CreateEventServiceProps): React.JSX.Element => {
-    const createEventServiceR: CreateEventServiceState = useSelector((state: any) => state.createEventService)
+const CreateServiceScreen = ({ navigation, route }: CreateServiceProps): React.JSX.Element => {
+    const createServiceR: CreateServiceState = useSelector((state: any) => state.createService)
     const dispatch = useDispatch<AppDispatch>();
 
     // console.log("Create event service store", createEventServiceR);
@@ -50,14 +50,14 @@ const CreateEventService = ({ navigation, route }: CreateEventServiceProps): Rea
     }
 
     const onPaymentTypeSelection = (type: string) => {
-        if (createEventServiceR.servicePaymentType != type) {
+        if (createServiceR.servicePaymentType != type) {
             dispatch(setPaymentType(type))
         }
     }
 
     const getTitle = () => {
         let title = ''
-        switch (createEventServiceR.serviceType) {
+        switch (createServiceR.serviceType) {
             case AddServiceType.EVENT:
                 title = 'Organise an event'
                 break;
@@ -96,13 +96,13 @@ const CreateEventService = ({ navigation, route }: CreateEventServiceProps): Rea
     }, [])
 
     useEffect(() => {
-        if (createEventServiceR.validated == true) {
+        if (createServiceR.validated == true) {
             dispatch(addNewService())
         }
-    }, [createEventServiceR.validated])
+    }, [createServiceR.validated])
 
     useEffect(() => {
-        if (createEventServiceR.data != null) {
+        if (createServiceR.data != null) {
             dispatch(clearData())
             const routeParams = route.params
             if (routeParams.stack == 'AddService') {
@@ -112,7 +112,7 @@ const CreateEventService = ({ navigation, route }: CreateEventServiceProps): Rea
                 navigation.navigate('Services', { refresh: true })
             }
         }
-    }, [createEventServiceR.data])
+    }, [createServiceR.data])
 
     return (
         <SafeAreaView style={{ backgroundColor: AppColors.WHITE, flex: 1 }}>
@@ -129,7 +129,7 @@ const CreateEventService = ({ navigation, route }: CreateEventServiceProps): Rea
                         <View style={styles.imageContainer}>
                             {
                                 (true)
-                                    ? <ServiceBannerImage serviceType={createEventServiceR.serviceType} />
+                                    ? <ServiceBannerImage serviceType={createServiceR.serviceType} />
                                     : <Image style={styles.imageContainer} source={{ uri: '' }} />
                             }
                         </View>
@@ -142,9 +142,9 @@ const CreateEventService = ({ navigation, route }: CreateEventServiceProps): Rea
                         <Text style={styles.title}>Name</Text>
                         <View style={{ height: 8 }}></View>
                         <CommonTextInput
-                            value={createEventServiceR.serviceName}
+                            value={createServiceR.serviceName}
                             placeholder='Give it a name'
-                            errorText={createEventServiceR.error.nameError}
+                            errorText={createServiceR.error.nameError}
                             onChangeText={(name) => onNameChange(name)}
                         />
                     </View>
@@ -153,25 +153,25 @@ const CreateEventService = ({ navigation, route }: CreateEventServiceProps): Rea
                         <Text style={styles.title}>Short Description</Text>
                         <View style={{ height: 8 }}></View>
                         <CommonTextInput
-                            value={createEventServiceR.serviceDescription}
+                            value={createServiceR.serviceDescription}
                             placeholder='A little something to get people intigued'
-                            errorText={createEventServiceR.error.descriptionError}
+                            errorText={createServiceR.error.descriptionError}
                             onChangeText={(desc) => onChangeDescription(desc)}
                         />
                         <View style={{ height: 8 }}></View>
-                        <Text style={styles.wordCount}>{createEventServiceR.serviceDescription.length}/250</Text>
+                        <Text style={styles.wordCount}>{createServiceR.serviceDescription.length}/250</Text>
                     </View>
                     <View style={{ marginVertical: 24 }}>
                         <CommonDivider />
                     </View>
                     {
-                        createEventServiceR.serviceType == AddServiceType.EVENT
+                        createServiceR.serviceType == AddServiceType.EVENT
                             ? <AddEventDetails />
-                            : createEventServiceR.serviceType == AddServiceType.DIGITAL_PRODUCT
+                            : createServiceR.serviceType == AddServiceType.DIGITAL_PRODUCT
                                 ? <AddProductDetails />
-                                : createEventServiceR.serviceType == AddServiceType.CALL
+                                : createServiceR.serviceType == AddServiceType.CALL
                                     ? <AddMeetingDetails />
-                                    : createEventServiceR.serviceType == AddServiceType.CHAT
+                                    : createServiceR.serviceType == AddServiceType.CHAT
                                         ? <AddMessagingDetails />
                                         : null
                     }
@@ -186,7 +186,7 @@ const CreateEventService = ({ navigation, route }: CreateEventServiceProps): Rea
                         <ToggleTabButton
                             firstButtonName='Free'
                             secondButtonName='Paid'
-                            selectedButton={createEventServiceR.servicePaymentType}
+                            selectedButton={createServiceR.servicePaymentType}
                             onPress={(value) => onPaymentTypeSelection(value)}
                         />
                         <View style={{ height: 24 }}></View>
@@ -194,9 +194,9 @@ const CreateEventService = ({ navigation, route }: CreateEventServiceProps): Rea
                         <View style={{ height: 8 }}></View>
                         <PriceTextInput
                             placeholder='0'
-                            errorText={createEventServiceR.error.priceError}
-                            value={createEventServiceR.servicePrice}
-                            editable={createEventServiceR.servicePaymentType == 'Paid' ? true : false}
+                            errorText={createServiceR.error.priceError}
+                            value={createServiceR.servicePrice}
+                            editable={createServiceR.servicePaymentType == 'Paid' ? true : false}
                             onChangeText={(price) => onPriceChange(price)}
                         />
                     </View>
@@ -207,7 +207,7 @@ const CreateEventService = ({ navigation, route }: CreateEventServiceProps): Rea
     )
 }
 
-export default CreateEventService
+export default CreateServiceScreen
 
 const styles = StyleSheet.create({
     mainBody: {

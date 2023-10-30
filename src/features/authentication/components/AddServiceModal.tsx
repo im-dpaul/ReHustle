@@ -23,19 +23,19 @@ const AddServiceModal = ({ navigation }: ServicesProps) => {
 
     const addEventService = () => {
         modalVisibility(false)
-        navigation.push('CreateEventService', { serviceType: AddServiceType.EVENT, stack: 'AddService' })
+        navigation.push('CreateService', { serviceType: AddServiceType.EVENT, stack: 'AddService' })
     }
     const addSellProductService = () => {
         modalVisibility(false)
-        navigation.push('CreateEventService', { serviceType: AddServiceType.DIGITAL_PRODUCT, stack: 'AddService' })
+        navigation.push('CreateService', { serviceType: AddServiceType.DIGITAL_PRODUCT, stack: 'AddService' })
     }
     const addSellTimeService = () => {
         modalVisibility(false)
-        navigation.push('CreateEventService', { serviceType: AddServiceType.CALL, stack: 'AddService' })
+        navigation.push('CreateService', { serviceType: AddServiceType.CALL, stack: 'AddService' })
     }
     const addChatService = () => {
         modalVisibility(false)
-        navigation.push('CreateEventService', { serviceType: AddServiceType.CHAT, stack: 'AddService' })
+        navigation.push('CreateService', { serviceType: AddServiceType.CHAT, stack: 'AddService' })
     }
 
     return (

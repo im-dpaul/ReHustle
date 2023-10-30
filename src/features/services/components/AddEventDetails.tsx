@@ -6,11 +6,11 @@ import CommonTextInput from '../../../components/textInput/CommonTextInput'
 import TimeDurationTextInput from '../../../components/textInput/TimeDurationTextInput'
 import { useSelector, useDispatch } from 'react-redux'
 import { AppDispatch } from '../../../app/store'
-import { CreateEventServiceState, setDate, setEventDuration, setEventUrl, setTime } from '../redux/createEventServiceSlice'
+import { CreateServiceState, setDate, setEventDuration, setEventUrl, setTime } from '../redux/createServiceSlice'
 import { AppColors, FontFamily } from '../../../constants'
 
 const AddEventDetails = () => {
-    const createEventServiceR: CreateEventServiceState = useSelector((state: any) => state.createEventService)
+    const createServiceR: CreateServiceState = useSelector((state: any) => state.createService)
     const dispatch = useDispatch<AppDispatch>();
 
     const onDateChange = (date: number) => {
@@ -35,9 +35,9 @@ const AddEventDetails = () => {
                 <Text style={styles.title}>Video Event link (Zoom, Google Meet, Teams etc.)</Text>
                 <View style={{ height: 8 }}></View>
                 <CommonTextInput
-                    value={createEventServiceR.serviceEventUrl}
+                    value={createServiceR.serviceEventUrl}
                     placeholder='https://zoom.us/j/xxxxxxxxx'
-                    errorText={createEventServiceR.error.eventLinkError}
+                    errorText={createServiceR.error.eventLinkError}
                     onChangeText={(url) => onLinkChange(url)}
                 />
             </View>
@@ -48,8 +48,8 @@ const AddEventDetails = () => {
                 <Text style={[styles.title, { fontSize: 14 }]}>Time and date</Text>
                 <View style={{ height: 8 }}></View>
                 <CommonDateTimePicker
-                    date={createEventServiceR.serviceDate}
-                    time={createEventServiceR.serviceTime}
+                    date={createServiceR.serviceDate}
+                    time={createServiceR.serviceTime}
                     onDateChange={(date) => onDateChange(date)}
                     onTimeChange={(time) => onTimeChange(time)}
                 />
@@ -58,8 +58,8 @@ const AddEventDetails = () => {
                 <View style={{ height: 8 }}></View>
                 <TimeDurationTextInput
                     placeholder=''
-                    errorText={createEventServiceR.error.durationError}
-                    value={createEventServiceR.serviceEventDuration}
+                    errorText={createServiceR.error.durationError}
+                    value={createServiceR.serviceEventDuration}
                     onChangeText={(duration) => onDurationChange(duration)}
                 />
             </View>

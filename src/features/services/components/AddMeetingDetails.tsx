@@ -3,18 +3,18 @@ import React from 'react'
 import TimeDurationTextInput from '../../../components/textInput/TimeDurationTextInput'
 import { useSelector, useDispatch } from 'react-redux'
 import { AppDispatch } from '../../../app/store'
-import { CreateEventServiceState, setMeetingDuration, setScheduleType, setCalendlyUrl, setEmail, setVideoCallUrl } from '../redux/createEventServiceSlice'
+import { CreateServiceState, setMeetingDuration, setScheduleType, setCalendlyUrl, setEmail, setVideoCallUrl } from '../redux/createServiceSlice'
 import { AppColors, FontFamily, ScheduleType } from '../../../constants'
 import { CommonRadioButton } from '../../../components'
 import CommonDivider from '../../../components/divider/CommonDivider'
 import TextInputWithIcon from '../../../components/textInput/TextInputWithIcon'
 
 const AddMeetingDetails = () => {
-    const createEventServiceR: CreateEventServiceState = useSelector((state: any) => state.createEventService)
+    const createServiceR: CreateServiceState = useSelector((state: any) => state.createService)
     const dispatch = useDispatch<AppDispatch>();
 
     const onChangeScheduleType = (scheduleType: string) => {
-        if (scheduleType != createEventServiceR.scheduleType) {
+        if (scheduleType != createServiceR.scheduleType) {
             dispatch(setScheduleType(scheduleType))
         }
     }
@@ -47,7 +47,7 @@ const AddMeetingDetails = () => {
                             <View style={{ height: 4 }}></View>
                             <Text style={styles.description}>Organise a date and time over email after payment</Text>
                         </View>
-                        <CommonRadioButton selected={createEventServiceR.scheduleType == ScheduleType.EMAIL} />
+                        <CommonRadioButton selected={createServiceR.scheduleType == ScheduleType.EMAIL} />
                     </View>
                 </Pressable>
                 <CommonDivider />
@@ -58,7 +58,7 @@ const AddMeetingDetails = () => {
                             <View style={{ height: 4 }}></View>
                             <Text style={styles.description}>Provide video call link after payment</Text>
                         </View>
-                        <CommonRadioButton selected={createEventServiceR.scheduleType == ScheduleType.VIDEO_CALL} />
+                        <CommonRadioButton selected={createServiceR.scheduleType == ScheduleType.VIDEO_CALL} />
                     </View>
                 </Pressable>
                 <CommonDivider />
@@ -69,46 +69,46 @@ const AddMeetingDetails = () => {
                             <View style={{ height: 4 }}></View>
                             <Text style={styles.description}>Use Calendly or any other calendar manager to let people book annnn availability slot</Text>
                         </View>
-                        <CommonRadioButton selected={createEventServiceR.scheduleType == ScheduleType.CALENDLY} />
+                        <CommonRadioButton selected={createServiceR.scheduleType == ScheduleType.CALENDLY} />
                     </View>
                 </Pressable>
             </View>
             <View style={{ height: 24 }}></View>
             {
-                createEventServiceR.scheduleType == ScheduleType.EMAIL
+                createServiceR.scheduleType == ScheduleType.EMAIL
                     ? <View>
                         <Text style={styles.title}>Email address</Text>
                         <View style={{ height: 8 }}></View>
                         <TextInputWithIcon
                             placeholder='name@example.com'
-                            value={createEventServiceR.email}
-                            errorText={createEventServiceR.error.emailError}
+                            value={createServiceR.email}
+                            errorText={createServiceR.error.emailError}
                             onChangeText={(email) => { onEmailChange(email) }}
                         />
                         <View style={{ height: 8 }}></View>
                         <Text style={styles.description}>We’ll send a scheduling email to this address when someone pays.</Text>
                     </View>
-                    : createEventServiceR.scheduleType == ScheduleType.VIDEO_CALL
+                    : createServiceR.scheduleType == ScheduleType.VIDEO_CALL
                         ? <View>
                             <Text style={styles.title}>Video link</Text>
                             <View style={{ height: 8 }}></View>
                             <TextInputWithIcon
                                 placeholder='Enter the Video Call link'
-                                value={createEventServiceR.videoCallUrl}
-                                errorText={createEventServiceR.error.videoCallUrlError}
+                                value={createServiceR.videoCallUrl}
+                                errorText={createServiceR.error.videoCallUrlError}
                                 onChangeText={(url) => { onVideoCallUrlChange(url) }}
                             />
                             <View style={{ height: 8 }}></View>
                             <Text style={styles.description}>Zoom , Google Meet helps you with video calls without the back-and-forth communication.</Text>
                         </View>
-                        : createEventServiceR.scheduleType == ScheduleType.CALENDLY
+                        : createServiceR.scheduleType == ScheduleType.CALENDLY
                             ? <View>
                                 <Text style={styles.title}>Calendly link</Text>
                                 <View style={{ height: 8 }}></View>
                                 <TextInputWithIcon
                                     placeholder='https://calendly.com/yourname/60min'
-                                    value={createEventServiceR.calendlyUrl}
-                                    errorText={createEventServiceR.error.calendlyUrlError}
+                                    value={createServiceR.calendlyUrl}
+                                    errorText={createServiceR.error.calendlyUrlError}
                                     onChangeText={(url) => { onCalendlyUrlChange(url) }}
                                 />
                                 <View style={{ height: 8 }}></View>
@@ -121,8 +121,8 @@ const AddMeetingDetails = () => {
             <View style={{ height: 8 }}></View>
             <TimeDurationTextInput
                 placeholder=''
-                errorText={createEventServiceR.error.meetingDuration}
-                value={createEventServiceR.meetingDuration}
+                errorText={createServiceR.error.meetingDuration}
+                value={createServiceR.meetingDuration}
                 onChangeText={(duration) => onDurationChange(duration)}
             />
         </View>

@@ -3,7 +3,7 @@ import React from 'react'
 import { AppColors, FontFamily } from '../../../constants'
 import { useSelector, useDispatch } from 'react-redux'
 import { AppDispatch } from '../../../app/store'
-import { CreateEventServiceState, addPlatforms, removePlatforms, setPlatformValue } from '../redux/createEventServiceSlice'
+import { CreateServiceState, addPlatforms, removePlatforms, setPlatformValue } from '../redux/createServiceSlice'
 import TextInputWithIcon from '../../../components/textInput/TextInputWithIcon'
 import { MessagingServicePlatforms, MessagingServicePlatformType } from '../../../data'
 import CommonChip from '../../../components/chip/CommonChip'
@@ -11,11 +11,11 @@ import RemoveButton from '../../../components/buttons/RemoveButton'
 import { EmailIcon, WebsiteIcon, WhatsappIcon } from '../../../../assets/images'
 
 const AddMessagingDetails = (): React.JSX.Element => {
-    const createEventServiceR: CreateEventServiceState = useSelector((state: any) => state.createEventService)
+    const createServiceR: CreateServiceState = useSelector((state: any) => state.createService)
     const dispatch = useDispatch<AppDispatch>()
 
     const onPlatformSelection = (messagingService: MessagingServicePlatformType) => {
-        if (createEventServiceR.platformIdsList.includes(messagingService.title)) {
+        if (createServiceR.platformIdsList.includes(messagingService.title)) {
             // dispatch(removePlatforms(messagingService.title))
         } else {
             dispatch(addPlatforms(messagingService))
@@ -57,7 +57,7 @@ const AddMessagingDetails = (): React.JSX.Element => {
     }
 
     const isActive = (title: string) => {
-        if (createEventServiceR.platformIdsList.includes(title)) {
+        if (createServiceR.platformIdsList.includes(title)) {
             return true
         }
         return false
@@ -66,19 +66,19 @@ const AddMessagingDetails = (): React.JSX.Element => {
     const getErrorText = (title: string) => {
         switch (title) {
             case 'sms':
-                return createEventServiceR.error.platformLinkError.sms
+                return createServiceR.error.platformLinkError.sms
             case 'email':
-                return createEventServiceR.error.platformLinkError.email
+                return createServiceR.error.platformLinkError.email
             case 'messenger':
-                return createEventServiceR.error.platformLinkError.messenger
+                return createServiceR.error.platformLinkError.messenger
             case 'whatsapp':
-                return createEventServiceR.error.platformLinkError.whatsapp
+                return createServiceR.error.platformLinkError.whatsapp
             case 'signal':
-                return createEventServiceR.error.platformLinkError.signal
+                return createServiceR.error.platformLinkError.signal
             case 'telegram':
-                return createEventServiceR.error.platformLinkError.telegram
+                return createServiceR.error.platformLinkError.telegram
             case 'other':
-                return createEventServiceR.error.platformLinkError.other
+                return createServiceR.error.platformLinkError.other
             default:
                 return ''
         }
@@ -101,7 +101,7 @@ const AddMessagingDetails = (): React.JSX.Element => {
                 }
             </View>
             {
-                (createEventServiceR.platformList.length > 0)
+                (createServiceR.platformList.length > 0)
                     ? <View>
                         <View style={{ height: 16 }}></View>
                         <Text style={styles.title}>Links</Text>
@@ -110,7 +110,7 @@ const AddMessagingDetails = (): React.JSX.Element => {
             }
             <View style={{ height: 8 }}></View>
             {
-                createEventServiceR.platformList.map((platform: MessagingServicePlatformType) =>
+                createServiceR.platformList.map((platform: MessagingServicePlatformType) =>
                     <View key={platform.title}>
                         <TextInputWithIcon
                             placeholder={platform.placeholder}
@@ -130,9 +130,9 @@ const AddMessagingDetails = (): React.JSX.Element => {
                     </View>)
             }
             {
-                (createEventServiceR.error.platformLinksError != '')
+                (createServiceR.error.platformLinksError != '')
                     ? <View style={{ marginTop: 4, marginBottom: 4 }}>
-                        <Text style={styles.error}>{createEventServiceR.error.platformLinksError}</Text>
+                        <Text style={styles.error}>{createServiceR.error.platformLinksError}</Text>
                     </View>
                     : null
             }

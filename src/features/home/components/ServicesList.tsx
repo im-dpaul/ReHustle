@@ -4,8 +4,12 @@ import ServiceCard from '../../../components/card/ServiceCard'
 import { useSelector, useDispatch } from 'react-redux';
 import { updateService, deleteService } from '../redux/servicesSlice';
 import { AppDispatch } from '../../../app/store';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../../App';
 
-const ServicesList = () => {
+type ServicesProps = NativeStackScreenProps<RootStackParamList, 'Services'>;
+
+const ServicesList = ({ navigation }: ServicesProps) => {
     const servicesReducer = useSelector((state: any) => state.services);
     const dispatch = useDispatch<AppDispatch>();
 
@@ -27,7 +31,9 @@ const ServicesList = () => {
         dispatch(updateService(updatedService));
     }
 
-    const onEditService = () => { }
+    const onEditService = (service: any) => {
+        navigation.push('CreateService', { serviceType: service.service.serviceType, stack: 'Services', serviceData: service })
+    }
 
     const onDeleteService = (id: string) => {
         dispatch(deleteService(id));
@@ -53,7 +59,7 @@ const ServicesList = () => {
                                 price={item.item.price.amount}
                                 active={item.item.isActive}
                                 onHidePage={() => { onHidePage(item.item) }}
-                                onEditService={() => { onEditService() }}
+                                onEditService={() => { onEditService(item.item) }}
                                 onDeleteService={() => { onDeleteService(item.item._id) }}
                                 onMoreTap={() => { onMoreTap() }}
                             />

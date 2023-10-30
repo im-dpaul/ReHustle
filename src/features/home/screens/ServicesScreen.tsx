@@ -90,7 +90,7 @@ const ServicesScreen = ({ navigation, route }: ServicesProps) => {
                                         <ActivityIndicator size={48} color={AppColors.PRIMARY_COLOR} />
                                     </View>
                                     : servicesReducer.servicesData.length
-                                        ? <ServicesList />
+                                        ? <ServicesList navigation={navigation} route={route} />
                                         : <View >
                                             <View style={{ height: 150 }}></View>
                                             <NoServicesPresent />
