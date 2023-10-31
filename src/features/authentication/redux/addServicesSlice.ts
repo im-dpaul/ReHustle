@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { authenticatedDeleteMethod, authenticatedGetMethod, authenticatedPostMethod, authenticatedPutMethod } from "../../../core/services/NetworkServices";
 import LocalStorage from "../../../data/local_storage/LocalStorage";
 import StorageKeys from "../../../constants/StorageKeys";
-import { ServicesDataType } from "../../../data/constants/ServiceType";
+import { ServiceModel } from "../../../data";
 
 export interface AddServicesState {
     servicesTypeId: number[],
@@ -10,7 +10,7 @@ export interface AddServicesState {
     error: errorType,
     loading: boolean,
     screenLoading: boolean,
-    servicesData: ServicesDataType[],
+    servicesData: ServiceModel[],
     showAddServiceModal: boolean
 }
 
@@ -194,7 +194,7 @@ export const addServicesSlice = createSlice({
         builder.addCase(updateService.pending, (state) => {
         });
         builder.addCase(updateService.fulfilled, (state, action) => {
-            let allData: ServicesDataType[] = state.servicesData;
+            let allData: ServiceModel[] = state.servicesData;
             const newData = allData.map((service) => {
                 if (service._id == action.payload._id) {
                     return action.payload

@@ -4,29 +4,33 @@ import { useSelector, useDispatch } from 'react-redux';
 import { updateService, deleteService, AddServicesState } from '../redux/addServicesSlice';
 import { AppDispatch } from '../../../app/store';
 import ServiceCard from '../../../components/card/ServiceCard';
-import { ServicesDataType } from "../../../data/constants/ServiceType";
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../../App';
+import { ServiceModel } from '../../../data';
 
-const ServicesList = () => {
+type AddServicesProps = NativeStackScreenProps<RootStackParamList, 'AddServices'>;
+
+const ServicesList = ({ navigation }: AddServicesProps) => {
     const addServicesR: AddServicesState = useSelector((state: any) => state.addServices);
     const dispatch = useDispatch<AppDispatch>();
 
-    const onHidePage = (service: ServicesDataType) => {
-        let updatedService;
-        updatedService = {
-            "_id": service._id,
-            "bannerImage": service.bannerImage,
-            "description": service.description,
-            "isActive": !service.isActive,
-            "paymentMode": service.paymentMode,
-            "price": service.price,
-            "service": service.service,
-            "title": service.title,
+    const onHidePage = (service: ServiceModel) => {
+        let updatedService: ServiceModel = {
+            _id: service._id,
+            bannerImage: service.bannerImage,
+            description: service.description,
+            isActive: !service.isActive,
+            paymentMode: service.paymentMode,
+            price: service.price,
+            service: service.service,
+            title: service.title,
         };
-
         dispatch(updateService(updatedService));
     }
 
-    const onEditService = () => { }
+    const onEditService = (service: ServiceModel) => {
+        navigation.push('CreateService', { serviceType: service.service.serviceType, stack: 'AddService', serviceData: service })
+    }
 
     const onDeleteService = (id: string | undefined) => {
         if (id != undefined) {
@@ -49,12 +53,12 @@ const ServicesList = () => {
                                 description={item.item.description}
                                 bannerImage={item.item.bannerImage}
                                 serviceType={item.item.service.serviceType}
-                                duration={item.item.service.duration}
+                                duration={item.item.service.duration ?? ""}
                                 date={item.item.service.date}
                                 price={`${item.item.price.amount}`}
                                 active={item.item.isActive}
                                 onHidePage={() => { onHidePage(item.item) }}
-                                onEditService={() => { onEditService() }}
+                                onEditService={() => { onEditService(item.item) }}
                                 onDeleteService={() => { onDeleteService(item.item._id) }}
                                 onMoreTap={() => { onMoreTap() }}
                             />

@@ -118,7 +118,7 @@ function AddServicesScreen({ navigation, route }: AddServicesProps): JSX.Element
                                 </View>
                                 : null
                         }
-                        <ServicesList />
+                        <ServicesList navigation={navigation} route={route} />
                     </View>
                     <AddServiceModal navigation={navigation} route={route} />
                 </ScrollView>

@@ -15,18 +15,16 @@ const ServicesList = ({ navigation }: ServicesProps) => {
     const dispatch = useDispatch<AppDispatch>();
 
     const onHidePage = (service: ServiceModel) => {
-        let updatedService;
-        updatedService = {
-            "_id": service._id,
-            "bannerImage": service.bannerImage,
-            "description": service.description,
-            "isActive": !service.isActive,
-            "paymentMode": service.paymentMode,
-            "price": service.price,
-            "service": service.service,
-            "title": service.title,
+        let updatedService: ServiceModel = {
+            _id: service._id,
+            bannerImage: service.bannerImage,
+            description: service.description,
+            isActive: !service.isActive,
+            paymentMode: service.paymentMode,
+            price: service.price,
+            service: service.service,
+            title: service.title,
         };
-
         dispatch(updateService(updatedService));
     }
 

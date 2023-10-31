@@ -25,7 +25,7 @@ const CreateServiceScreen = ({ navigation, route }: CreateServiceProps): React.J
     const createServiceR: CreateServiceState = useSelector((state: any) => state.createService)
     const dispatch = useDispatch<AppDispatch>();
 
-    // console.log("Create event service store", createEventServiceR);
+    // console.log("Create event service store", createServiceR);
 
     const onCreate = () => {
         dispatch(checkValidation())
