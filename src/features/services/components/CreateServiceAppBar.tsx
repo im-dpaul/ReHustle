@@ -5,7 +5,7 @@ import AppColors from '../../../constants/AppColors'
 import FontFamily from '../../../constants/FontFamily'
 import { BackButtonIcon } from '../../../../assets/images'
 
-const CreateServiceAppBar = (props: { title: string, onCreate: () => void, onBackPress: () => void }): React.JSX.Element => {
+const CreateServiceAppBar = (props: { title: string, buttonTitle: string, onCreate: () => void, onBackPress: () => void }): React.JSX.Element => {
 
     return (
         <View>
@@ -17,7 +17,7 @@ const CreateServiceAppBar = (props: { title: string, onCreate: () => void, onBac
                 <Text style={styles.headerTitleText}>{props.title}</Text>
                 <View style={{ marginLeft: 'auto' }}></View>
                 <View style={{ width: 94 }}>
-                    <CommonButton title='Create Now' height={32} onPress={() => props.onCreate()} />
+                    <CommonButton title={props.buttonTitle} height={32} onPress={() => props.onCreate()} />
                 </View>
             </View>
         </View>

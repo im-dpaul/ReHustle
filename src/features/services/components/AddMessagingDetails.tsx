@@ -63,6 +63,27 @@ const AddMessagingDetails = (): React.JSX.Element => {
         return false
     }
 
+    const getPlaceholder = (title: string) => {
+        switch (title) {
+            case 'sms':
+                return MessagingServicePlatforms[0].placeholder!
+            case 'email':
+                return MessagingServicePlatforms[1].placeholder!
+            case 'messenger':
+                return MessagingServicePlatforms[2].placeholder!
+            case 'whatsapp':
+                return MessagingServicePlatforms[3].placeholder!
+            case 'signal':
+                return MessagingServicePlatforms[4].placeholder!
+            case 'telegram':
+                return MessagingServicePlatforms[5].placeholder!
+            case 'other':
+                return MessagingServicePlatforms[6].placeholder!
+            default:
+                return ''
+        }
+    }
+
     const getErrorText = (title: string) => {
         switch (title) {
             case 'sms':
@@ -93,7 +114,7 @@ const AddMessagingDetails = (): React.JSX.Element => {
                     MessagingServicePlatforms.map((messagingService: MessagingServicePlatformType) =>
                         <View key={messagingService.title}>
                             <CommonChip
-                                name={messagingService.name}
+                                name={messagingService.name ?? ''}
                                 active={isActive(messagingService.title)}
                                 onPress={() => { onPlatformSelection(messagingService) }}
                             />
@@ -113,7 +134,7 @@ const AddMessagingDetails = (): React.JSX.Element => {
                 createServiceR.platformList.map((platform: MessagingServicePlatformType) =>
                     <View key={platform.title}>
                         <TextInputWithIcon
-                            placeholder={platform.placeholder}
+                            placeholder={getPlaceholder(platform.title)}
                             value={platform.link}
                             errorText={getErrorText(platform.title)}
                             onChangeText={(value) => onChangePlatformValue(value, platform)}

@@ -6,6 +6,7 @@ import { updateService, deleteService } from '../redux/servicesSlice';
 import { AppDispatch } from '../../../app/store';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../App';
+import { ServiceModel } from '../../../data';
 
 type ServicesProps = NativeStackScreenProps<RootStackParamList, 'Services'>;
 
@@ -13,15 +14,13 @@ const ServicesList = ({ navigation }: ServicesProps) => {
     const servicesReducer = useSelector((state: any) => state.services);
     const dispatch = useDispatch<AppDispatch>();
 
-    const onHidePage = (service: any) => {
+    const onHidePage = (service: ServiceModel) => {
         let updatedService;
         updatedService = {
             "_id": service._id,
             "bannerImage": service.bannerImage,
-            "chronicalOrder": service.chronicalOrder,
             "description": service.description,
             "isActive": !service.isActive,
-            "pId": service.pId,
             "paymentMode": service.paymentMode,
             "price": service.price,
             "service": service.service,
@@ -31,7 +30,7 @@ const ServicesList = ({ navigation }: ServicesProps) => {
         dispatch(updateService(updatedService));
     }
 
-    const onEditService = (service: any) => {
+    const onEditService = (service: ServiceModel) => {
         navigation.push('CreateService', { serviceType: service.service.serviceType, stack: 'Services', serviceData: service })
     }
 

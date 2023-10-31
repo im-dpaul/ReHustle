@@ -1,28 +1,33 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { authenticatedPostMethod } from "../../../core/services/NetworkServices";
+import { authenticatedPostMethod, authenticatedPutMethod } from "../../../core/services/NetworkServices";
 import { AddServiceType, FileType, ScheduleType, StorageKeys } from "../../../constants";
 import LocalStorage from "../../../data/local_storage/LocalStorage";
-import { MessagingServicePlatformType } from '../../../data'
+import { MessagingServicePlatformType, ServiceDataModel, ServiceModel } from '../../../data'
+import { CapitalizeFirstWord } from "../../../utils";
 
 export interface CreateServiceState {
-    serviceType: string
-    data: any;
-    error: ErrorType;
-    loading: boolean;
-    screenLoading: boolean;
+    data: any
+    error: ErrorType
+    loading: boolean
+    screenLoading: boolean
     validated: boolean
 
     /// Service details
-    serviceName: string;
-    serviceDescription: string,
-    servicePrice: string,
-    servicePaymentType: string,
+    serviceType: string
+    serviceId: string
+    serviceName: string
+    serviceDescription: string
+    amount: string
+    servicePaymentType: string
+    isActive: boolean
+    bannerImage: string
+    currency: string
 
     /// Event Services
-    serviceEventUrl: string,
-    serviceEventDuration: string,
-    serviceDate: string,
-    serviceTime: string,
+    serviceEventUrl: string
+    serviceEventDuration: string
+    serviceDate: string
+    serviceTime: string
 
     /// Sell Product Services
     fileType: string
@@ -108,10 +113,14 @@ const initialState: CreateServiceState = {
     validated: false,
 
     /// Service details
+    serviceId: '',
     serviceName: '',
     serviceDescription: '',
-    servicePrice: '',
+    amount: '',
     servicePaymentType: 'Paid',
+    isActive: true,
+    bannerImage: '',
+    currency: 'INR',
 
     /// Event Services
     serviceEventUrl: '',
@@ -140,13 +149,12 @@ export const addNewService = createAsyncThunk<any>(
     'api/addNewService',
     async (_, thunkAPI) => {
         const state: any = thunkAPI.getState();
-        const stateValue: CreateServiceState = state.createEventService;
-
-        // Set price
-        let price = (stateValue.servicePrice != '') ? Number(stateValue.servicePrice) : 250;
+        const stateValue: CreateServiceState = state.createService;
 
         // Set Service Details
-        let service = {}
+        let service: ServiceDataModel = {
+            serviceType: ''
+        }
 
         /// Event service
         if (stateValue.serviceType == AddServiceType.EVENT) {
@@ -161,10 +169,10 @@ export const addNewService = createAsyncThunk<any>(
             let dateTimeStamp = new Date(year, month, day, hour, minute).getTime()
 
             service = {
-                "serviceType": AddServiceType.EVENT,
-                "date": dateTimeStamp,
-                "duration": stateValue.serviceEventDuration == "" ? "45" : stateValue.serviceEventDuration,
-                "url": stateValue.serviceEventUrl == "" ? "https://meet.google.com/" : stateValue.serviceEventUrl,
+                serviceType: AddServiceType.EVENT,
+                date: dateTimeStamp,
+                duration: stateValue.serviceEventDuration,
+                url: stateValue.serviceEventUrl,
             }
         }
 
@@ -172,18 +180,18 @@ export const addNewService = createAsyncThunk<any>(
         if (stateValue.serviceType == AddServiceType.DIGITAL_PRODUCT) {
             if (stateValue.fileType == FileType.INTERNAL) {
                 service = {
-                    "serviceType": AddServiceType.DIGITAL_PRODUCT,
-                    "assets": {
-                        "fileType": stateValue.fileType,
-                        "file": stateValue.uploadFileUrl
+                    serviceType: AddServiceType.DIGITAL_PRODUCT,
+                    assets: {
+                        fileType: stateValue.fileType,
+                        file: stateValue.uploadFileUrl
                     }
                 }
             } else {
                 service = {
-                    "serviceType": AddServiceType.DIGITAL_PRODUCT,
-                    "assets": {
-                        "fileType": stateValue.fileType,
-                        "url": stateValue.externalFileUrl
+                    serviceType: AddServiceType.DIGITAL_PRODUCT,
+                    assets: {
+                        fileType: stateValue.fileType,
+                        url: stateValue.externalFileUrl
                     }
                 }
             }
@@ -193,19 +201,19 @@ export const addNewService = createAsyncThunk<any>(
         if (stateValue.serviceType == AddServiceType.CALL) {
             if (stateValue.scheduleType == ScheduleType.EMAIL) {
                 service = {
-                    "serviceType": AddServiceType.CALL,
-                    "scheduleType": ScheduleType.EMAIL,
-                    "email": stateValue.email,
-                    "duration": stateValue.meetingDuration
+                    serviceType: AddServiceType.CALL,
+                    scheduleType: ScheduleType.EMAIL,
+                    email: stateValue.email,
+                    duration: stateValue.meetingDuration
                 }
             } else {
-                const email = await LocalStorage.GetData(StorageKeys.EMAIL)
+                const email = await LocalStorage.GetData(StorageKeys.EMAIL) ?? ""
                 service = {
-                    "serviceType": AddServiceType.CALL,
-                    "scheduleType": stateValue.scheduleType,
-                    "email": email,
-                    "duration": stateValue.meetingDuration,
-                    "url": stateValue.scheduleType == ScheduleType.VIDEO_CALL ? stateValue.videoCallUrl : stateValue.calendlyUrl
+                    serviceType: AddServiceType.CALL,
+                    scheduleType: stateValue.scheduleType,
+                    email: email,
+                    duration: stateValue.meetingDuration,
+                    url: stateValue.scheduleType == ScheduleType.VIDEO_CALL ? stateValue.videoCallUrl : stateValue.calendlyUrl
                 }
             }
         }
@@ -217,28 +225,37 @@ export const addNewService = createAsyncThunk<any>(
                 links[platform.title] = platform.link
             })
             service = {
-                "serviceType": AddServiceType.CHAT,
-                "links": links
+                serviceType: AddServiceType.CHAT,
+                links: links
             }
         }
 
-        const url = `/p/product`
         let data: any = null;
-        let values: any = {
-            "bannerImage": "https://rehustle-images.s3.amazonaws.com/images/virtual-coffee-banner.jpeg",
-            "title": stateValue.serviceName == "" ? "New Event" : stateValue.serviceName,
-            "description": stateValue.serviceDescription == "" ? "Event description" : stateValue.serviceDescription,
-            "paymentMode": stateValue.servicePaymentType.toLowerCase(),
-            "isActive": true,
-            "service": service,
-            "price": {
-                "currency": "INR",
-                "amount": Number.isNaN(price) ? 150 : price,
+        let response: any
+        let values: ServiceModel = {
+            bannerImage: "https://rehustle-images.s3.amazonaws.com/images/virtual-coffee-banner.jpeg",
+            title: stateValue.serviceName,
+            description: stateValue.serviceDescription,
+            paymentMode: stateValue.servicePaymentType.toLowerCase(),
+            isActive: true,
+            service: service,
+            price: {
+                currency: stateValue.currency,
+                amount: Number(stateValue.amount),
             }
         }
 
         try {
-            const response = await authenticatedPostMethod(url, values);
+            if (stateValue.serviceId == '') {
+                /// Create Service
+                const url = `/p/product`
+                response = await authenticatedPostMethod(url, values);
+            } else {
+                /// Update Service
+                const url = `/p/product/${stateValue.serviceId}`
+                response = await authenticatedPutMethod(url, values);
+            }
+
             data = response.data.result;
 
             return data;
@@ -261,23 +278,37 @@ export const createServiceSlice = createSlice({
             state.error = noError
             state.loading = false
             state.screenLoading = true
+            state.validated = false
+
+            /// Service details
+            state.serviceId = ''
             state.serviceName = ''
             state.serviceDescription = ''
-            state.servicePrice = ''
-            state.serviceEventUrl = ''
+            state.amount = ''
             state.servicePaymentType = 'Paid'
+            state.isActive = true
+            state.bannerImage = ''
+            state.currency = 'INR'
+
+            /// Event Services
+            state.serviceEventUrl = ''
             state.serviceEventDuration = ''
             state.serviceDate = ''
             state.serviceTime = ''
-            state.validated = false
+
+            /// Sell Product Services
             state.fileType = FileType.INTERNAL
             state.externalFileUrl = ''
             state.uploadFileUrl = 'https://rehustle-user-assets.s3.amazonaws.com/products/65322107bc14c6028a50126c_1698397690988'
+
+            /// Sell Time Services
             state.scheduleType = ScheduleType.EMAIL
             state.meetingDuration = ''
             state.email = ''
-            state.calendlyUrl = ''
             state.videoCallUrl = ''
+            state.calendlyUrl = ''
+
+            /// Chat Services
             state.platformIdsList = []
             state.platformList = []
         },
@@ -290,16 +321,16 @@ export const createServiceSlice = createSlice({
             state.error.descriptionError = ''
         },
         setPrice: (state, action) => {
-            state.servicePrice = action.payload.replace(/[^0-9]/g, '')
+            state.amount = action.payload.replace(/[^0-9]/g, '')
             state.error.priceError = ''
         },
         setPaymentType: (state, action) => {
             if (action.payload == 'Free') {
-                state.servicePrice = '0';
+                state.amount = '0';
                 state.error.priceError = ''
             }
             else {
-                state.servicePrice = ''
+                state.amount = ''
             }
             state.servicePaymentType = action.payload;
         },
@@ -386,9 +417,50 @@ export const createServiceSlice = createSlice({
             state.error.platformLinkError = noPlatformLinkError
         },
 
+        /// Update service functions
+        setInitialValues: (state, action) => {
+            const serviceData: ServiceModel = action.payload
+
+            state.serviceId = serviceData._id ?? ""
+            state.serviceName = serviceData.title
+            state.serviceDescription = serviceData.description
+            state.isActive = serviceData.isActive
+            state.bannerImage = serviceData.bannerImage
+            state.servicePaymentType = CapitalizeFirstWord(serviceData.paymentMode)
+            state.currency = serviceData.price.currency
+            state.amount = serviceData.price.amount.toString()
+            // Event
+            state.serviceEventUrl = serviceData.service.url ?? ''
+            state.serviceEventDuration = (serviceData.service.duration == undefined) ? '' : serviceData.service.duration.toString()
+            state.serviceDate = serviceData.service.date == undefined ? '' : serviceData.service.date.toString()
+            state.serviceTime = serviceData.service.date == undefined ? '' : serviceData.service.date.toString()
+            // Product
+            state.fileType = serviceData.service.assets?.fileType ?? ''
+            state.uploadFileUrl = serviceData.service.assets?.file ?? ''
+            state.externalFileUrl = serviceData.service.assets?.url ?? ''
+            // Time
+            state.scheduleType = serviceData.service.scheduleType ?? ''
+            state.email = serviceData.service.email ?? ''
+            state.meetingDuration = (serviceData.service.duration == undefined) ? '' : serviceData.service.duration.toString()
+            state.videoCallUrl = (serviceData.service.scheduleType == ScheduleType.VIDEO_CALL) ? (serviceData.service.url ?? '') : ''
+            state.calendlyUrl = (serviceData.service.scheduleType == ScheduleType.CALENDLY) ? (serviceData.service.url ?? '') : ''
+            // Chat
+            if (serviceData.service.links != undefined) {
+                state.platformIdsList = Object.keys(serviceData.service.links)
+
+                const platforms: [string, string][] = Object.entries(serviceData.service.links)
+                platforms.forEach((e) => {
+                    state.platformList.push({
+                        title: e[0],
+                        link: e[1]
+                    })
+                })
+            }
+        },
+
         /// Validation check function
         checkValidation: (state) => {
-            if (state.serviceName != '' && state.serviceDescription != '' && state.servicePrice != '') {
+            if (state.serviceName != '' && state.serviceDescription != '' && state.amount != '') {
                 if (state.serviceType == AddServiceType.EVENT) {
                     if (state.serviceEventUrl != '' && state.serviceEventDuration != '') {
                         state.validated = true
@@ -495,7 +567,7 @@ export const createServiceSlice = createSlice({
                     state.error.descriptionError = 'This field is required'
                 }
                 if (state.servicePaymentType != 'Free') {
-                    if (state.servicePrice != '' && state.servicePrice != '0') {
+                    if (state.amount != '' && state.amount != '0') {
                         state.error.priceError = ''
                     } else {
                         state.error.priceError = 'Please enter amount greater than 0'
@@ -575,6 +647,6 @@ export const createServiceSlice = createSlice({
     }
 });
 
-export const { clearData, setName, setDescription, setPrice, setEventUrl, setPaymentType, setEventDuration, setDate, setTime, checkValidation, setServiceType, setFileType, setExternalFileUrl, setScheduleType, setMeetingDuration, setCalendlyUrl, setEmail, setVideoCallUrl, addPlatforms, removePlatforms, setPlatformValue } = createServiceSlice.actions;
+export const { clearData, setName, setDescription, setPrice, setEventUrl, setPaymentType, setEventDuration, setDate, setTime, checkValidation, setServiceType, setFileType, setExternalFileUrl, setScheduleType, setMeetingDuration, setCalendlyUrl, setEmail, setVideoCallUrl, addPlatforms, removePlatforms, setPlatformValue, setInitialValues } = createServiceSlice.actions;
 
 export default createServiceSlice.reducer;

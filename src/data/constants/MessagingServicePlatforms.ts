@@ -1,6 +1,6 @@
 export type MessagingServicePlatformType = {
-    name: string,
-    placeholder: string,
+    name?: string,
+    placeholder?: string,
     title: string,
     link: string,
 }

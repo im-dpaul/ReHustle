@@ -10,7 +10,7 @@ import UploadButton from '../../../components/buttons/UploadButton'
 import CommonTextInput from '../../../components/textInput/CommonTextInput'
 import CommonDivider from '../../../components/divider/CommonDivider'
 import PriceTextInput from '../../../components/textInput/PriceTextInput'
-import { setName, setDescription, setPrice, clearData, setPaymentType, setDate, setTime, addNewService, CreateServiceState, checkValidation, setServiceType, setEmail } from "../redux/createServiceSlice";
+import { setName, setDescription, setPrice, clearData, setPaymentType, setDate, setTime, addNewService, CreateServiceState, checkValidation, setServiceType, setEmail, setInitialValues } from "../redux/createServiceSlice";
 import { AppDispatch } from '../../../app/store'
 import { useDispatch, useSelector } from 'react-redux'
 import ToggleTabButton from '../../../components/buttons/ToggleTabButton'
@@ -96,6 +96,13 @@ const CreateServiceScreen = ({ navigation, route }: CreateServiceProps): React.J
     }, [])
 
     useEffect(() => {
+        const routeParams = route.params
+        if (routeParams.serviceData != undefined) {
+            dispatch(setInitialValues(routeParams.serviceData))
+        }
+    }, [])
+
+    useEffect(() => {
         if (createServiceR.validated == true) {
             dispatch(addNewService())
         }
@@ -119,6 +126,7 @@ const CreateServiceScreen = ({ navigation, route }: CreateServiceProps): React.J
             <CommonStatusBar />
             <CreateServiceAppBar
                 title={getTitle()}
+                buttonTitle={createServiceR.serviceId == '' ? 'Create Now' : 'Update'}
                 onCreate={() => onCreate()}
                 onBackPress={() => onBackPress()}
             />
@@ -128,9 +136,9 @@ const CreateServiceScreen = ({ navigation, route }: CreateServiceProps): React.J
                     <View>
                         <View style={styles.imageContainer}>
                             {
-                                (true)
+                                createServiceR.bannerImage == ''
                                     ? <ServiceBannerImage serviceType={createServiceR.serviceType} />
-                                    : <Image style={styles.imageContainer} source={{ uri: '' }} />
+                                    : <Image style={styles.imageContainer} source={{ uri: createServiceR.bannerImage }} />
                             }
                         </View>
                         <View style={{ position: 'absolute', bottom: 14, right: 14 }}>
@@ -195,7 +203,7 @@ const CreateServiceScreen = ({ navigation, route }: CreateServiceProps): React.J
                         <PriceTextInput
                             placeholder='0'
                             errorText={createServiceR.error.priceError}
-                            value={createServiceR.servicePrice}
+                            value={createServiceR.amount}
                             editable={createServiceR.servicePaymentType == 'Paid' ? true : false}
                             onChangeText={(price) => onPriceChange(price)}
                         />

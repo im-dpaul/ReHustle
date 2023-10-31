@@ -16,6 +16,7 @@ import InsightsScreen from './features/home/screens/InsightsScreen';
 import ProfileScreen from './features/home/screens/ProfileScreen';
 import SettingsScreen from './features/home/screens/SettingsScreen';
 import ForgetPasswordScreen from './features/authentication/screens/ForgetPasswordScreen';
+import { ServiceModel } from './data';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -27,7 +28,7 @@ export type RootStackParamList = {
   AddServices: any;
   FinishAccountCreation: undefined;
   Services: any;
-  CreateService: { serviceType: string, serviceData?: any, stack?: string };
+  CreateService: { serviceType: string, serviceData?: ServiceModel, stack?: string };
   Payouts: undefined;
   Preview: undefined;
   Insights: undefined;
