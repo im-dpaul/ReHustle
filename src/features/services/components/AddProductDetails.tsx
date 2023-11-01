@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { AppColors, FileType, FontFamily } from '../../../constants'
 import CommonDivider from '../../../components/divider/CommonDivider'
@@ -6,7 +6,7 @@ import { CommonRadioButton } from '../../../components'
 import TextInputWithIcon from '../../../components/textInput/TextInputWithIcon'
 import { useSelector, useDispatch } from 'react-redux'
 import { AppDispatch } from '../../../app/store'
-import { CreateServiceState, setFileType, setExternalFileUrl } from '../redux/createServiceSlice'
+import { CreateServiceState, setFileType, setExternalFileUrl, uploadFile } from '../redux/createServiceSlice'
 import { AddFile } from '../../../../assets/images'
 import CommonButton from '../../../components/buttons/CommonButton'
 
@@ -24,7 +24,9 @@ const AddProductDetails = (): React.JSX.Element => {
         dispatch(setExternalFileUrl(url))
     }
 
-    const onFileUploadButtonClick = () => { }
+    const onFileUploadButtonClick = () => {
+        dispatch(uploadFile())
+    }
 
     return (
         <View>
@@ -50,25 +52,39 @@ const AddProductDetails = (): React.JSX.Element => {
                 createServiceR.fileType == FileType.INTERNAL
                     ? <View>
                         <View style={styles.uploadFileContainer}>
-                            <AddFile />
-                            <View style={{ height: 16 }}></View>
-                            <Text style={[styles.title, { fontSize: 18 }]}>Upload single file or a Zip file</Text>
-                            <View style={{ height: 8 }}></View>
-                            <Text style={styles.description}>Drag a file into the box or choose from your file picker. If you're selling multiple files please combine them into a .zip file.</Text>
-                            <View style={{ height: 16 }}></View>
-                            <View style={{ width: 110 }}>
-                                <CommonButton
-                                    height={32}
-                                    title='Choose File'
-                                    onPress={() => { onFileUploadButtonClick() }}
-                                />
+                            <View style={{ paddingHorizontal: 16, paddingVertical: 24, alignItems: 'center' }}>
+                                <AddFile />
+                                <View style={{ height: 16 }}></View>
+                                <Text style={[styles.title, { fontSize: 18 }]}>Upload single file or a Zip file</Text>
+                                <View style={{ height: 8 }}></View>
+                                <Text style={styles.description}>Drag a file into the box or choose from your file picker. If you're selling multiple files please combine them into a .zip file.</Text>
+                                <View style={{ height: 16 }}></View>
+                                <View style={{ width: 110 }}>
+                                    <CommonButton
+                                        height={32}
+                                        title='Choose File'
+                                        onPress={() => { onFileUploadButtonClick() }}
+                                    />
+                                </View>
                             </View>
+                            {
+                                createServiceR.uploadFileLoading
+                                    ? <View style={styles.uploadFileLoading}>
+                                        <ActivityIndicator size={'large'} color={AppColors.PRIMARY_COLOR} />
+                                    </View>
+                                    : null
+                            }
                         </View>
                         {
-                            ((createServiceR.uploadFileUrl.length ?? 0) != 0)
-                                ? <View style={{ marginTop: 4, flexDirection: 'row', alignItems: 'center' }}>
+                            (createServiceR.uploadFileUrl != '')
+                                ? <View style={{ marginTop: 4, flexDirection: 'row', alignItems: 'center', width: '80%' }}>
                                     <Text style={styles.title}>Digital File : </Text>
-                                    <Text style={[styles.title, { color: AppColors.GRAY3 }]}> 1 File uploaded</Text>
+                                    <Text
+                                        style={[styles.title, { color: AppColors.GRAY3 }]}
+                                        selectable={true}
+                                        selectionColor={AppColors.GRAY5}>
+                                        {createServiceR.uploadFileUrl}
+                                    </Text>
                                 </View>
                                 : null
                         }
@@ -127,9 +143,15 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         borderWidth: 1,
         borderColor: AppColors.GRAY6,
-        paddingHorizontal: 16,
-        paddingVertical: 24,
-        alignItems: 'center'
+    },
+    uploadFileLoading: {
+        borderRadius: 4,
+        justifyContent: 'center',
+        position: 'absolute',
+        backgroundColor: AppColors.GRAY7,
+        width: '100%',
+        opacity: 0.65,
+        height: '100%',
     },
     error: {
         color: AppColors.RED,

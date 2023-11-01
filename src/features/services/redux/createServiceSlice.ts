@@ -5,6 +5,7 @@ import LocalStorage from "../../../data/local_storage/LocalStorage";
 import { MessagingServicePlatformType, ServiceDataModel, ServiceModel } from '../../../data'
 import { CapitalizeFirstWord } from "../../../utils";
 import { launchImageLibrary } from 'react-native-image-picker'
+import DocumentPicker from 'react-native-document-picker'
 
 export interface CreateServiceState {
     data: any
@@ -35,6 +36,7 @@ export interface CreateServiceState {
     fileType: string
     externalFileUrl: string
     uploadFileUrl: string
+    uploadFileLoading: boolean
 
     /// Sell Time Services
     scheduleType: string
@@ -136,7 +138,8 @@ const initialState: CreateServiceState = {
     /// Sell Product Services
     fileType: FileType.INTERNAL,
     externalFileUrl: '',
-    uploadFileUrl: 'https://rehustle-user-assets.s3.amazonaws.com/products/65322107bc14c6028a50126c_1698397690988',
+    uploadFileUrl: '',
+    uploadFileLoading: false,
 
     /// Sell Time Services
     scheduleType: ScheduleType.EMAIL,
@@ -208,6 +211,67 @@ export const uploadBannerImage = createAsyncThunk<any>(
                 }
             }
         } catch (e) {
+            return thunkApi.rejectWithValue(e)
+        }
+    }
+)
+
+export const uploadFile = createAsyncThunk<any>(
+    'api/uploadFile',
+    async (_, thunkApi) => {
+        const state: any = thunkApi.getState();
+        const stateValue: CreateServiceState = state.createService;
+        try {
+            const file = await DocumentPicker.pickSingle({
+                allowMultiSelection: false,
+                type: ['audio/*', 'image/*', 'application/pdf', 'video/*', 'application/zip']
+            })
+            let e: any = {}
+
+            if (file.uri != '') {
+                let fileUrl = ''
+                let signedUrl = ''
+                const filePath = file.uri.replace('file://', '') ?? ''
+                const fileType: string[] = (file.type)?.split('/') ?? []
+                const url = '/p/mediaUrl'
+                const mType = fileType[0]
+                const cType = fileType[1]
+                const queryParams = {
+                    mType: mType == 'application' ? 'DOCUMENTS' : mType.toUpperCase(),
+                    cType: cType.toUpperCase()
+                }
+
+                const getSignedUrlResponse = await authenticatedGetMethod(url, queryParams)
+
+                if (getSignedUrlResponse.data.result) {
+                    fileUrl = getSignedUrlResponse.data.result.url
+                    signedUrl = getSignedUrlResponse.data.result.signedUrl
+
+                    const contentType = `${mType}/${cType}`
+
+                    const response = await fileUploadMethod(signedUrl, filePath, contentType)
+
+                    if (response.respInfo.status == 200) {
+                        return fileUrl
+                    } else {
+                        e.message = 'Something went wrong'
+                        return thunkApi.rejectWithValue(e)
+                    }
+                }
+            }
+        } catch (e) {
+            const cancelled = DocumentPicker.isCancel((e))
+            const inProgress = DocumentPicker.isInProgress((e))
+            let err: any = {}
+            if (cancelled) {
+                err.message = 'No file selected'
+                return thunkApi.rejectWithValue(err)
+            }
+            if (inProgress) {
+                err.message = 'File selection is in progress'
+                return thunkApi.rejectWithValue(err)
+            }
+
             return thunkApi.rejectWithValue(e)
         }
     }
@@ -368,7 +432,8 @@ export const createServiceSlice = createSlice({
             /// Sell Product Services
             state.fileType = FileType.INTERNAL
             state.externalFileUrl = ''
-            state.uploadFileUrl = 'https://rehustle-user-assets.s3.amazonaws.com/products/65322107bc14c6028a50126c_1698397690988'
+            state.uploadFileUrl = ''
+            state.uploadFileLoading = false
 
             /// Sell Time Services
             state.scheduleType = ScheduleType.EMAIL
@@ -713,7 +778,6 @@ export const createServiceSlice = createSlice({
                 state.screenLoading = false;
                 state.data = null
             });
-
         builder.addCase(uploadBannerImage.pending,
             (state) => {
                 state.bannerImageLoading = true
@@ -727,9 +791,24 @@ export const createServiceSlice = createSlice({
         builder.addCase(uploadBannerImage.rejected,
             (state, action) => {
                 let e: any = action.payload
-                console.log('error result', e);
                 state.bannerImageLoading = false
                 state.error.bannerImageError = e.message
+            });
+        builder.addCase(uploadFile.pending,
+            (state) => {
+                state.uploadFileLoading = true
+            });
+        builder.addCase(uploadFile.fulfilled,
+            (state, action) => {
+                state.uploadFileLoading = false
+                state.uploadFileUrl = action.payload
+                state.error.uploadFileUrlError = ''
+            });
+        builder.addCase(uploadFile.rejected,
+            (state, action) => {
+                let e: any = action.payload
+                state.uploadFileLoading = false
+                state.error.uploadFileUrlError = e.message
             });
     }
 });
