@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { authenticatedPostMethod, authenticatedPutMethod } from "../../../core/services/NetworkServices";
+import { authenticatedGetMethod, authenticatedPostMethod, authenticatedPutMethod, fileUploadMethod } from "../../../core/services/NetworkServices";
 import { AddServiceType, FileType, ScheduleType, StorageKeys } from "../../../constants";
 import LocalStorage from "../../../data/local_storage/LocalStorage";
 import { MessagingServicePlatformType, ServiceDataModel, ServiceModel } from '../../../data'
 import { CapitalizeFirstWord } from "../../../utils";
+import { launchImageLibrary } from 'react-native-image-picker'
 
 export interface CreateServiceState {
     data: any
@@ -22,6 +23,7 @@ export interface CreateServiceState {
     isActive: boolean
     bannerImage: string
     currency: string
+    bannerImageLoading: boolean
 
     /// Event Services
     serviceEventUrl: string
@@ -59,6 +61,7 @@ type PlatformLinkError = {
 type ErrorType = {
     nameError: string;
     descriptionError: string;
+    bannerImageError: string
     eventLinkError: string;
     dateError: string;
     timeError: string;
@@ -88,6 +91,7 @@ const noPlatformLinkError = {
 const noError: ErrorType = {
     nameError: '',
     descriptionError: '',
+    bannerImageError: '',
     eventLinkError: '',
     dateError: '',
     timeError: '',
@@ -121,6 +125,7 @@ const initialState: CreateServiceState = {
     isActive: true,
     bannerImage: '',
     currency: 'INR',
+    bannerImageLoading: false,
 
     /// Event Services
     serviceEventUrl: '',
@@ -144,6 +149,69 @@ const initialState: CreateServiceState = {
     platformIdsList: [],
     platformList: []
 }
+
+export const uploadBannerImage = createAsyncThunk<any>(
+    'api/uploadBannerImage',
+    async (_, thunkApi) => {
+        const state: any = thunkApi.getState();
+        const stateValue: CreateServiceState = state.createService;
+        try {
+            const imageFile = await launchImageLibrary({
+                mediaType: "photo",
+                quality: 1,
+                selectionLimit: 1,
+            })
+            let e: any = {}
+            if (imageFile.didCancel) {
+                e.message = 'Image not selected'
+                return thunkApi.rejectWithValue(e)
+            }
+            if (imageFile.errorCode) {
+                if (imageFile.errorCode == 'permission') {
+                    e.message = 'Access denied'
+                } else if (imageFile.errorMessage) {
+                    e.message = imageFile.errorMessage
+                } {
+                    e.message = 'Something went wrong'
+                }
+                return thunkApi.rejectWithValue(e)
+            }
+            if (imageFile.assets) {
+                let imageUrl = ''
+                let signedUrl = ''
+                const filePath = imageFile.assets[0].uri?.replace('file://', '') ?? ''
+                const fileType: string[] = (imageFile.assets[0].type)?.split('/') ?? []
+                const url = '/p/mediaUrl'
+                const mType = fileType[0]
+                const cType = fileType[1]
+                const queryParams = {
+                    mType: mType.toUpperCase(),
+                    cType: cType.toUpperCase()
+                }
+
+                const getSignedUrlResponse = await authenticatedGetMethod(url, queryParams)
+
+                if (getSignedUrlResponse.data.result) {
+                    imageUrl = getSignedUrlResponse.data.result.url
+                    signedUrl = getSignedUrlResponse.data.result.signedUrl
+
+                    const contentType = `${mType}/${cType}`
+
+                    const response = await fileUploadMethod(signedUrl, filePath, contentType)
+
+                    if (response.respInfo.status == 200) {
+                        return imageUrl
+                    } else {
+                        e.message = 'Something went wrong'
+                        return thunkApi.rejectWithValue(e)
+                    }
+                }
+            }
+        } catch (e) {
+            return thunkApi.rejectWithValue(e)
+        }
+    }
+)
 
 export const addNewService = createAsyncThunk<any>(
     'api/addNewService',
@@ -233,7 +301,7 @@ export const addNewService = createAsyncThunk<any>(
         let data: any = null;
         let response: any
         let values: ServiceModel = {
-            bannerImage: "https://rehustle-images.s3.amazonaws.com/images/virtual-coffee-banner.jpeg",
+            bannerImage: stateValue.bannerImage,
             title: stateValue.serviceName,
             description: stateValue.serviceDescription,
             paymentMode: stateValue.servicePaymentType.toLowerCase(),
@@ -289,6 +357,7 @@ export const createServiceSlice = createSlice({
             state.isActive = true
             state.bannerImage = ''
             state.currency = 'INR'
+            state.bannerImageLoading = false
 
             /// Event Services
             state.serviceEventUrl = ''
@@ -643,6 +712,24 @@ export const createServiceSlice = createSlice({
                 }
                 state.screenLoading = false;
                 state.data = null
+            });
+
+        builder.addCase(uploadBannerImage.pending,
+            (state) => {
+                state.bannerImageLoading = true
+            });
+        builder.addCase(uploadBannerImage.fulfilled,
+            (state, action) => {
+                state.bannerImage = action.payload
+                state.bannerImageLoading = false
+                state.error.bannerImageError = ''
+            });
+        builder.addCase(uploadBannerImage.rejected,
+            (state, action) => {
+                let e: any = action.payload
+                console.log('error result', e);
+                state.bannerImageLoading = false
+                state.error.bannerImageError = e.message
             });
     }
 });

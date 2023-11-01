@@ -1,4 +1,4 @@
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import AppColors from '../../../constants/AppColors'
@@ -10,7 +10,7 @@ import UploadButton from '../../../components/buttons/UploadButton'
 import CommonTextInput from '../../../components/textInput/CommonTextInput'
 import CommonDivider from '../../../components/divider/CommonDivider'
 import PriceTextInput from '../../../components/textInput/PriceTextInput'
-import { setName, setDescription, setPrice, clearData, setPaymentType, setDate, setTime, addNewService, CreateServiceState, checkValidation, setServiceType, setEmail, setInitialValues } from "../redux/createServiceSlice";
+import { setName, setDescription, setPrice, clearData, setPaymentType, setDate, setTime, addNewService, CreateServiceState, checkValidation, setServiceType, setEmail, setInitialValues, uploadBannerImage } from "../redux/createServiceSlice";
 import { AppDispatch } from '../../../app/store'
 import { useDispatch, useSelector } from 'react-redux'
 import ToggleTabButton from '../../../components/buttons/ToggleTabButton'
@@ -35,7 +35,9 @@ const CreateServiceScreen = ({ navigation, route }: CreateServiceProps): React.J
         dispatch(clearData())
         navigation.pop()
     }
-    const onImageUpload = () => { }
+    const onImageUpload = () => {
+        dispatch(uploadBannerImage())
+    }
 
     const onNameChange = (name: string) => {
         dispatch(setName(name))
@@ -140,11 +142,25 @@ const CreateServiceScreen = ({ navigation, route }: CreateServiceProps): React.J
                                     ? <ServiceBannerImage serviceType={createServiceR.serviceType} />
                                     : <Image style={styles.imageContainer} source={{ uri: createServiceR.bannerImage }} />
                             }
+                            {
+                                createServiceR.bannerImageLoading
+                                    ? <View style={[styles.imageContainer, { position: 'absolute', backgroundColor: AppColors.WHITE, width: '100%', justifyContent: 'center', opacity: 0.5 }]}>
+                                        <ActivityIndicator size={'large'} color={AppColors.PRIMARY_COLOR} />
+                                    </View>
+                                    : null
+                            }
                         </View>
                         <View style={{ position: 'absolute', bottom: 14, right: 14 }}>
                             <UploadButton onPress={() => onImageUpload()} />
                         </View>
                     </View>
+                    {
+                        (createServiceR.error.bannerImageError != '')
+                            ? <View style={{ marginTop: 4 }}>
+                                <Text style={styles.error}>{createServiceR.error.bannerImageError}</Text>
+                            </View>
+                            : null
+                    }
                     <View style={{ height: 18 }}></View>
                     <View>
                         <Text style={styles.title}>Name</Text>
