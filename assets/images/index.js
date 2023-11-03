@@ -13,6 +13,7 @@ import LinkIcon from './link_icon.svg'
 import ArrowDown from './arrow_down.svg'
 import NoServicesImage from './no_services.svg'
 import RadioButton from './radio_button'
+import EditPen from './edit_pen'
 
 /// Menu bar icons
 import MenuIconSVG from './menu_icon.svg';
@@ -134,5 +135,6 @@ export {
     RadioButton,
     AddFile,
     WhatsappIcon,
-    AttachmentClip
+    AttachmentClip,
+    EditPen
 }
