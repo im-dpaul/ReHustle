@@ -1,19 +1,19 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import Moment from 'moment';
-import AppColors from '../../constants/AppColors';
-import FontFamily from '../../constants/FontFamily';
 import CommonButton from '../buttons/CommonButton';
 import CommonDivider from '../divider/CommonDivider';
-import { CalenderHalf, CalenderIcon, ClockIcon, EditIcon, MoreIcon, PriceIcon, StarHalf, TrashIcon, VideoIcon } from '../../../assets/images';
+import { AttachmentClip, CalenderIcon, ChatIcon, ClockIcon, EditIcon, MoreIcon, PriceIcon, TrashIcon, VideoIcon } from '../../../assets/images';
+import { ServiceBannerImage } from '..';
+import { AddServiceType, AppColors, FontFamily } from '../../constants';
 
 interface ServiceCardProps {
     title: string,
     description: string,
     bannerImage: string,
     serviceType: string,
-    duration: string,
-    date: string | undefined,
+    duration: string | number,
+    date: string | number | undefined,
     price: string,
     active: boolean,
     onHidePage: (() => void),
@@ -22,13 +22,16 @@ interface ServiceCardProps {
     onMoreTap: (() => void)
 }
 
-const ServiceCard = (props: ServiceCardProps) => {
+const ServiceCard = (props: ServiceCardProps): React.JSX.Element => {
     let service = '';
-    if (props.serviceType == 'call') {
-        service = 'Video Call'
-    }
-    else {
+    if (props.serviceType == AddServiceType.EVENT) {
         service = 'Event'
+    } else if (props.serviceType == AddServiceType.CALL) {
+        service = 'Video Call'
+    } else if (props.serviceType == AddServiceType.DIGITAL_PRODUCT) {
+        service = 'Digital Product'
+    } else if (props.serviceType == AddServiceType.CHAT) {
+        service = 'Chat Service'
     }
 
     let date = ''
@@ -49,10 +52,7 @@ const ServiceCard = (props: ServiceCardProps) => {
             <View style={styles.imageContainer}>
                 {
                     (props.bannerImage == '')
-                        ? <View style={{ alignItems: 'center', justifyContent: 'flex-end', marginTop: 'auto' }}>
-                            <CalenderHalf style={{ maxHeight: 134, maxWidth: 216 }} />
-                            <StarHalf style={{ maxHeight: 42, maxWidth: 66, position: 'absolute' }} />
-                        </View>
+                        ? <ServiceBannerImage serviceType={props.serviceType} />
                         : <Image style={styles.imageContainer} source={{ uri: props.bannerImage }} />
                 }
             </View>
@@ -64,16 +64,28 @@ const ServiceCard = (props: ServiceCardProps) => {
                 <View style={styles.iconAndTextRow}>
                     <View>
                         <View style={styles.iconAndText}>
-                            <VideoIcon style={styles.imageIcon} />
+                            {
+                                (props.serviceType == AddServiceType.CHAT)
+                                    ? <ChatIcon style={styles.imageIcon} />
+                                    : (props.serviceType == AddServiceType.DIGITAL_PRODUCT)
+                                        ? <AttachmentClip style={styles.imageIcon} />
+                                        : <VideoIcon style={styles.imageIcon} />
+                            }
                             <View style={{ width: 8 }}></View>
                             <Text style={styles.iconText}>{service}</Text>
                         </View>
-                        <View style={{ height: 16 }}></View>
-                        <View style={styles.iconAndText}>
-                            <ClockIcon style={styles.imageIcon} />
-                            <View style={{ width: 8 }}></View>
-                            <Text style={styles.iconText}>{props.duration} minutes</Text>
-                        </View>
+                        {
+                            (props.serviceType == AddServiceType.EVENT || props.serviceType == AddServiceType.CALL)
+                                ? <View>
+                                    <View style={{ height: 16 }}></View>
+                                    <View style={styles.iconAndText}>
+                                        <ClockIcon style={styles.imageIcon} />
+                                        <View style={{ width: 8 }}></View>
+                                        <Text style={styles.iconText}>{props.duration} minutes</Text>
+                                    </View>
+                                </View>
+                                : null
+                        }
                     </View>
                     <View>
                         <View style={styles.iconAndText}>
@@ -81,12 +93,19 @@ const ServiceCard = (props: ServiceCardProps) => {
                             <View style={{ width: 8 }}></View>
                             <Text style={styles.iconText}>₹ {props.price}</Text>
                         </View>
-                        <View style={{ height: 16 }}></View>
-                        <View style={styles.iconAndText}>
-                            <CalenderIcon style={styles.imageIcon} />
-                            <View style={{ width: 8 }}></View>
-                            <Text style={styles.iconText}>{date}</Text>
-                        </View>
+                        {
+                            (props.serviceType == AddServiceType.EVENT || props.serviceType == AddServiceType.CALL)
+                                ? <View>
+                                    <View style={{ height: 16 }}></View>
+                                    <View style={styles.iconAndText}>
+                                        <CalenderIcon style={styles.imageIcon} />
+                                        <View style={{ width: 8 }}></View>
+                                        <Text style={styles.iconText}>{date}</Text>
+                                    </View>
+                                </View>
+                                : null
+                        }
+
                     </View>
                 </View>
             </View>
@@ -103,10 +122,10 @@ const ServiceCard = (props: ServiceCardProps) => {
                 <TouchableOpacity onPress={() => { props.onDeleteService() }}>
                     <TrashIcon style={styles.imageIcon} />
                 </TouchableOpacity>
-                <View style={{ width: 12 }}></View>
+                {/* <View style={{ width: 12 }}></View>
                 <TouchableOpacity onPress={() => { props.onMoreTap() }}>
                     <MoreIcon style={styles.imageIcon} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
         </View>
     )

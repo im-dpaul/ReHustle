@@ -12,6 +12,7 @@ import CheckBoxFilled from './check_box.svg'
 import LinkIcon from './link_icon.svg'
 import ArrowDown from './arrow_down.svg'
 import NoServicesImage from './no_services.svg'
+import RadioButton from './radio_button'
 
 /// Menu bar icons
 import MenuIconSVG from './menu_icon.svg';
@@ -35,8 +36,7 @@ import TimeIcon from './time_icon.svg'
 /// Create Services icons
 import UploadIcon from './upload_icon.svg'
 import VideoIcon from './video_icon.svg'
-import StarHalf from './star_half.svg'
-import CalenderHalf from './calender_half.svg'
+import AddFile from './add_file.svg'
 
 /// Service card icons
 import TrashIcon from './trash_icon.svg'
@@ -44,6 +44,13 @@ import EditIcon from './edit_icon.svg'
 import MoreIcon from './more_icon.svg'
 import CalenderIcon from './calender_icon.svg'
 import ClockIcon from './clock_icon.svg'
+import AttachmentClip from './attachment_clip.svg'
+
+/// Service banner
+import BannerChat from './banner_chat.svg'
+import BannerEvent from './banner_event.svg'
+import BannerProduct from './banner_product.svg'
+import BannerTime from './banner_time.svg'
 
 /// Emoji Icons
 import DancingFigure from './dancing_figure.svg'
@@ -66,6 +73,7 @@ import TiktokIcon from './tiktok_icon.svg'
 import TwitterIcon from './twitter_icon.svg'
 import WebsiteIcon from './website_icon.svg'
 import YoutubeIcon from './youtube_icon.svg'
+import WhatsappIcon from './whatsapp_icon.svg'
 
 export {
     RehustleLogo,
@@ -114,11 +122,17 @@ export {
     LinkIcon,
     PartyingFace,
     ArrowDown,
-    CalenderHalf,
-    StarHalf,
     EditIcon,
     MoreIcon,
     TrashIcon,
     CalenderIcon,
-    ClockIcon
+    ClockIcon,
+    BannerChat,
+    BannerEvent,
+    BannerProduct,
+    BannerTime,
+    RadioButton,
+    AddFile,
+    WhatsappIcon,
+    AttachmentClip
 }

@@ -1,22 +1,20 @@
 import { Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import AppColors from '../../../constants/AppColors'
 import { useSelector, useDispatch } from 'react-redux'
 import { AppDispatch } from '../../../app/store'
-import { showAddServiceModal } from '../redux/servicesSlice'
-import FontFamily from '../../../constants/FontFamily'
+import { AddServicesState, showAddServiceModal } from '../redux/addServicesSlice'
 import CommonDivider from '../../../components/divider/CommonDivider'
 import IconWithTitleDescription from '../../../components/text/IconWithTitleDescription'
 import CommonStatusBar from '../../../components/layouts/CommonStatusBar'
 import { RootStackParamList } from '../../../App';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { EventIcon, TimeIcon, ChatIcon, CrossIcon, DocumentIcon } from '../../../../assets/images'
-import { AddServiceType } from '../../../constants'
+import { AddServiceType, AppColors, FontFamily } from '../../../constants'
 
-type ServicesProps = NativeStackScreenProps<RootStackParamList, 'Services'>;
+type ServicesProps = NativeStackScreenProps<RootStackParamList, 'AddServices'>
 
 const AddServiceModal = ({ navigation }: ServicesProps) => {
-    const servicesReducer = useSelector((state: any) => state.services);
+    const addServices: AddServicesState = useSelector((state: any) => state.addServices);
     const dispatch = useDispatch<AppDispatch>();
 
     const modalVisibility = (val: boolean) => {
@@ -25,25 +23,25 @@ const AddServiceModal = ({ navigation }: ServicesProps) => {
 
     const addEventService = () => {
         modalVisibility(false)
-        navigation.push('CreateService', { serviceType: AddServiceType.EVENT })
+        navigation.push('CreateService', { serviceType: AddServiceType.EVENT, stack: 'AddService' })
     }
     const addSellProductService = () => {
         modalVisibility(false)
-        navigation.push('CreateService', { serviceType: AddServiceType.DIGITAL_PRODUCT })
+        navigation.push('CreateService', { serviceType: AddServiceType.DIGITAL_PRODUCT, stack: 'AddService' })
     }
     const addSellTimeService = () => {
         modalVisibility(false)
-        navigation.push('CreateService', { serviceType: AddServiceType.CALL })
+        navigation.push('CreateService', { serviceType: AddServiceType.CALL, stack: 'AddService' })
     }
     const addChatService = () => {
         modalVisibility(false)
-        navigation.push('CreateService', { serviceType: AddServiceType.CHAT })
+        navigation.push('CreateService', { serviceType: AddServiceType.CHAT, stack: 'AddService' })
     }
 
     return (
         <View>
             <Modal
-                transparent visible={servicesReducer.showAddServiceModal}
+                transparent visible={addServices.showAddServiceModal}
                 onRequestClose={() => { modalVisibility(false) }}
                 animationType='fade'
             >

@@ -9,13 +9,14 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ServicesScreen from './features/home/screens/ServicesScreen';
 import SplashScreen from './features/splash/screens/SplashScreen';
 import GetYourInfoScreen from './features/authentication/screens/GetYourInfoScreen';
-import CreateEventService from './features/home/screens/CreateEventService';
+import CreateServiceScreen from './features/services/screens/CreateServiceScreen';
 import PayoutsScreen from './features/home/screens/PayoutsScreen';
 import PreviewScreen from './features/home/screens/PreviewScreen';
 import InsightsScreen from './features/home/screens/InsightsScreen';
 import ProfileScreen from './features/home/screens/ProfileScreen';
 import SettingsScreen from './features/home/screens/SettingsScreen';
 import ForgetPasswordScreen from './features/authentication/screens/ForgetPasswordScreen';
+import { ServiceModel } from './data';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -24,10 +25,10 @@ export type RootStackParamList = {
   CreateAccount: undefined;
   GetYourInfo: undefined;
   AboutYou: undefined;
-  AddServices: undefined;
+  AddServices: any;
   FinishAccountCreation: undefined;
   Services: any;
-  CreateEventService: undefined;
+  CreateService: { serviceType: string, serviceData?: ServiceModel, stack?: string };
   Payouts: undefined;
   Preview: undefined;
   Insights: undefined;
@@ -98,8 +99,8 @@ function App(): JSX.Element {
           component={SettingsScreen}
         />
         <Stack.Screen
-          name='CreateEventService'
-          component={CreateEventService}
+          name='CreateService'
+          component={CreateServiceScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>

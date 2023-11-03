@@ -1,5 +1,7 @@
 import ValidateEmail from './ValidateEmail'
+import CapitalizeFirstWord from './CapitalizeFirstWord'
 
 export {
-    ValidateEmail
+    ValidateEmail,
+    CapitalizeFirstWord
 }

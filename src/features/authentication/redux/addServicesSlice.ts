@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { authenticatedDeleteMethod, authenticatedGetMethod, authenticatedPostMethod, authenticatedPutMethod } from "../../../core/services/NetworkServices";
 import LocalStorage from "../../../data/local_storage/LocalStorage";
 import StorageKeys from "../../../constants/StorageKeys";
-import { ServicesDataType } from "../../../data/constants/ServiceType";
+import { ServiceModel } from "../../../data";
 
 export interface AddServicesState {
     servicesTypeId: number[],
@@ -10,7 +10,8 @@ export interface AddServicesState {
     error: errorType,
     loading: boolean,
     screenLoading: boolean,
-    servicesData: ServicesDataType[],
+    servicesData: ServiceModel[],
+    showAddServiceModal: boolean
 }
 
 type errorType = {
@@ -27,7 +28,8 @@ const initialState: AddServicesState = {
     error: noError,
     loading: false,
     screenLoading: false,
-    servicesData: []
+    servicesData: [],
+    showAddServiceModal: false
 }
 
 export const getAllServices = createAsyncThunk<any>(
@@ -129,8 +131,17 @@ export const addServicesSlice = createSlice({
         removeService: (state, action) => {
             state.servicesTypeId = state.servicesTypeId.filter((id) => id !== action.payload)
         },
-        clearData: (state, action) => {
-            state.data = [];
+        showAddServiceModal: (state, action) => {
+            state.showAddServiceModal = action.payload
+        },
+        clearData: (state) => {
+            state.data = []
+            state.error = noError
+            state.loading = false
+            state.screenLoading = false
+            state.servicesData = []
+            state.servicesTypeId = []
+            state.showAddServiceModal = false
         }
     },
     extraReducers: (builder) => {
@@ -183,7 +194,7 @@ export const addServicesSlice = createSlice({
         builder.addCase(updateService.pending, (state) => {
         });
         builder.addCase(updateService.fulfilled, (state, action) => {
-            let allData: ServicesDataType[] = state.servicesData;
+            let allData: ServiceModel[] = state.servicesData;
             const newData = allData.map((service) => {
                 if (service._id == action.payload._id) {
                     return action.payload
@@ -214,6 +225,6 @@ export const addServicesSlice = createSlice({
     }
 });
 
-export const { addService, removeService, clearData } = addServicesSlice.actions;
+export const { addService, removeService, clearData, showAddServiceModal } = addServicesSlice.actions;
 
 export default addServicesSlice.reducer;
