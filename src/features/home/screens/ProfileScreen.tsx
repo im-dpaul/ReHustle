@@ -1,4 +1,4 @@
-import { ActivityIndicator, Image, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect } from 'react'
 import CommonDivider from '../../../components/divider/CommonDivider'
 import CommonStatusBar from '../../../components/layouts/CommonStatusBar'
@@ -10,18 +10,18 @@ import FontFamily from '../../../constants/FontFamily'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch } from '../../../app/store'
 import RehustleLinkTextInput from '../../../components/textInput/RehustleLinkTextInput'
-import { UserActiveIcon } from '../../../../assets/images'
-import { getCurrentUserData } from '../redux/profileSlice'
-import { updateName, updateLink, updateAbout, setSnackbar, setValidation, updateProfile } from '../redux/profileSlice'
+import { EditPen, UserActiveIcon } from '../../../../assets/images'
+import { updateName, updateLink, updateAbout, setSnackbar, setValidation, updateProfile, ProfileState, changeImage, getCurrentUserData } from '../redux/profileSlice'
 import CommonButton from '../../../components/buttons/CommonButton'
 import CommonSnackbar, { SnackbarPosition } from '../../../components/snackbar/CommonSnackbar'
 import SocialProfileLinks from '../components/SocialProfileLinks'
 import SocialProfilesLinksList from '../components/SocialProfilesLinksList'
 import ProfileLinkTitleDescription from '../components/ProfileLinkTitleDescription'
 import AddLinksList from '../components/AddLinksList'
+import { ChangeCoverButton } from '../components'
 
 const ProfileScreen = (): JSX.Element => {
-    const profileStore = useSelector((state: any) => state.profile)
+    const profileStore: ProfileState = useSelector((state: any) => state.profile)
     const dispatch = useDispatch<AppDispatch>()
 
     // console.log("Profile store", profileStore);
@@ -40,6 +40,14 @@ const ProfileScreen = (): JSX.Element => {
 
     const saveDetails = () => {
         dispatch(setValidation())
+    }
+
+    const onChangeProfilePhoto = () => {
+        dispatch(changeImage('profilePhoto'))
+    }
+
+    const onChangeBannerImage = () => {
+        dispatch(changeImage('banner'))
     }
 
     useEffect(() => {
@@ -70,7 +78,7 @@ const ProfileScreen = (): JSX.Element => {
             </View>
             <View style={{ backgroundColor: AppColors.WHITE, flex: 1 }}>
                 {
-                    (profileStore.loadingScreen)
+                    (profileStore.loading)
                         ? <View style={styles.loadingScreen}>
                             <ActivityIndicator size={48} color={AppColors.PRIMARY_COLOR} />
                         </View>
@@ -102,7 +110,7 @@ const ProfileScreen = (): JSX.Element => {
                                 <CommonTextInput
                                     value={profileStore.about}
                                     placeholder='Let your audience know about you in brief'
-                                    // errorText={profileStore.error.accountNoError}
+                                    errorText={profileStore.error.descriptionError}
                                     onChangeText={(about) => { setAbout(about) }}
                                 />
                                 <View style={{ height: 16 }}></View>
@@ -120,14 +128,24 @@ const ProfileScreen = (): JSX.Element => {
                                 <View style={{ height: 24 }}></View>
                                 <View style={styles.card}>
                                     {
-                                        ((profileStore.bannerImage == "") || (profileStore.bannerImage == null) || (profileStore.bannerImage == undefined))
+                                        (profileStore.bannerImage == "")
                                             ? <View style={styles.cover}></View>
                                             : <Image style={styles.imageContainer} source={{ uri: profileStore.bannerImage }} />
                                     }
+                                    {
+                                        profileStore.bannerImageLoading
+                                            ? <View style={styles.coverLoading}>
+                                                <ActivityIndicator size={'large'} color={AppColors.PRIMARY_COLOR} />
+                                            </View>
+                                            : null
+                                    }
+                                    <View style={styles.uploadButton}>
+                                        <ChangeCoverButton onPress={() => { onChangeBannerImage() }} />
+                                    </View>
                                     <View style={styles.topContainer}>
                                         <View style={styles.profileBox}>
                                             {
-                                                ((profileStore.profileImage != "") && (profileStore.profileImage != null))
+                                                (profileStore.profileImage != "")
                                                     ? <Image style={styles.profile} source={{ uri: profileStore.profileImage }} />
                                                     : <View style={styles.profile}>
                                                         <View style={{ borderRadius: 16, flex: 1, justifyContent: 'flex-end' }}>
@@ -135,25 +153,46 @@ const ProfileScreen = (): JSX.Element => {
                                                         </View>
                                                     </View>
                                             }
+                                            {
+                                                profileStore.profileImageLoading
+                                                    ? <View style={styles.profileLoading}>
+                                                        <ActivityIndicator size={'large'} color={AppColors.PRIMARY_COLOR} />
+                                                    </View>
+                                                    : null
+                                            }
                                         </View>
-                                        <View style={{ height: 12 }}></View>
-
+                                        <View style={styles.profileEdit}>
+                                            <TouchableOpacity onPress={onChangeProfilePhoto}>
+                                                <EditPen />
+                                            </TouchableOpacity>
+                                        </View>
                                     </View>
                                 </View>
+                                {
+                                    (profileStore.error.imageError != '')
+                                        ? <View style={{ marginTop: 4 }}>
+                                            <Text style={styles.error}>{profileStore.error.imageError}</Text>
+                                        </View>
+                                        : null
+                                }
                                 <View style={{ height: 24 }}></View>
                             </View>
                         </ScrollView>
                 }
-                <View>
-                    <CommonDivider />
-                    <View style={{ margin: 24 }}>
-                        {
-                            profileStore.buttonLoading
-                                ? <ActivityIndicator size={'large'} color={AppColors.PRIMARY_COLOR} />
-                                : <CommonButton title='Save changes' onPress={saveDetails} />
-                        }
-                    </View>
-                </View>
+                {
+                    !(profileStore.loading)
+                        ? <View>
+                            <CommonDivider />
+                            <View style={{ margin: 24 }}>
+                                {
+                                    profileStore.buttonLoading
+                                        ? <ActivityIndicator size={'large'} color={AppColors.PRIMARY_COLOR} />
+                                        : <CommonButton title='Save changes' onPress={saveDetails} />
+                                }
+                            </View>
+                        </View>
+                        : null
+                }
                 <CommonSnackbar
                     message='Updated Successfully!'
                     position={SnackbarPosition.TOP}
@@ -201,12 +240,28 @@ const styles = StyleSheet.create({
         height: 206,
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
-        backgroundColor: AppColors.GRAY6
+        backgroundColor: AppColors.GRAY5
+    },
+    coverLoading: {
+        borderTopLeftRadius: 16,
+        borderTopRightRadius: 16,
+        position: 'absolute',
+        backgroundColor: AppColors.GRAY6,
+        width: '100%',
+        height: 206,
+        justifyContent: 'center',
+        opacity: 0.75,
+        alignSelf: 'center',
     },
     imageContainer: {
         height: 206,
         borderTopRightRadius: 16,
         borderTopLeftRadius: 16,
+    },
+    uploadButton: {
+        position: 'absolute',
+        top: 16,
+        right: 16
     },
     topContainer: {
         position: 'absolute',
@@ -220,10 +275,27 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         backgroundColor: AppColors.WHITE
     },
+    profileEdit: {
+        position: 'absolute',
+        bottom: 16,
+        right: 16
+    },
     profile: {
         height: 112,
         width: 112,
         backgroundColor: AppColors.GRAY6,
         borderRadius: 16,
     },
+    profileLoading: {
+        top: 8,
+        padding: 8,
+        borderRadius: 16,
+        position: 'absolute',
+        backgroundColor: AppColors.GRAY6,
+        width: '100%',
+        justifyContent: 'center',
+        opacity: 0.5,
+        height: '100%',
+        alignSelf: 'center',
+    }
 })

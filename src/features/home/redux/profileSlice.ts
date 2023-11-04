@@ -1,14 +1,17 @@
 import { createSlice, createAsyncThunk, nanoid } from "@reduxjs/toolkit";
-import { authenticatedGetMethod, authenticatedPutMethod } from "../../../core/services/NetworkServices";
+import { authenticatedGetMethod, authenticatedPutMethod, fileUploadMethod } from "../../../core/services/NetworkServices";
 import StorageKeys from "../../../constants/StorageKeys";
 import LocalStorage from "../../../data/local_storage/LocalStorage";
 import { SocialProfileDataType } from "../../../data/constants/AllSocialProfileType";
+import { launchImageLibrary } from "react-native-image-picker";
 
 export interface ProfileState {
     data: any;
-    error: errorType;
+    error: ErrorType;
     loading: boolean;
     buttonLoading: boolean;
+    profileImageLoading: boolean
+    bannerImageLoading: boolean
     name: string;
     link: string;
     about: string;
@@ -27,20 +30,24 @@ export type CustomProfileType = {
     url: string,
 }
 
-type errorType = {
+type ErrorType = {
     nameError: string;
     linkError: string;
+    descriptionError: string
     message: string;
     profileLinkEmptyError: string;
     customLinkEmptyError: string;
+    imageError: string
 }
 
-const noError: errorType = {
+const noError: ErrorType = {
     nameError: '',
     linkError: '',
+    descriptionError: '',
     message: '',
     profileLinkEmptyError: '',
-    customLinkEmptyError: ''
+    customLinkEmptyError: '',
+    imageError: ''
 }
 
 const initialState: ProfileState = {
@@ -53,6 +60,8 @@ const initialState: ProfileState = {
     about: '',
     profileImage: '',
     bannerImage: '',
+    bannerImageLoading: false,
+    profileImageLoading: false,
     showSnackbar: false,
     validated: false,
     socialProfileIDs: [],
@@ -98,11 +107,11 @@ export const updateProfile = createAsyncThunk<any>(
         const values = {
             "name": stateValue.name,
             "userName": stateValue.link,
-            "description": stateValue.about == undefined ? '' : stateValue.about,
-            "profileImage": stateValue.profileImage == '' ? null : stateValue.profileImage,
+            "description": stateValue.about,
+            "profileImage": stateValue.profileImage,
             "profileUrls": stateValue.customProfiles,
             "socialLinks": stateValue.socialProfiles,
-            "appearance": `{\"color\":\"\",\"bannerImage\":\"${bannerImg}\",\"profileImage\":\"${profileImg}\",\"buttonRounded\":\"\"}`
+            "appearance": `{\"color\":\"\",\"bannerImage\":\"${stateValue.bannerImage}\",\"profileImage\":\"${stateValue.profileImage}\",\"buttonRounded\":\"\"}`
         };
 
         try {
@@ -123,6 +132,71 @@ export const updateProfile = createAsyncThunk<any>(
         }
     }
 );
+
+export const changeImage = createAsyncThunk<any, string>(
+    'api/changeImage',
+    async (placeHolder, thunkApi) => {
+        try {
+            const imageFile = await launchImageLibrary({
+                mediaType: "photo",
+                quality: 1,
+                selectionLimit: 1,
+            })
+            let e: any = {}
+            if (imageFile.didCancel) {
+                e.message = 'Image not selected'
+                return thunkApi.rejectWithValue(e)
+            }
+            if (imageFile.errorCode) {
+                if (imageFile.errorCode == 'permission') {
+                    e.message = 'Access denied'
+                } else if (imageFile.errorMessage) {
+                    e.message = imageFile.errorMessage
+                } {
+                    e.message = 'Something went wrong'
+                }
+                return thunkApi.rejectWithValue(e)
+            }
+            if (imageFile.assets) {
+                let imageUrl = ''
+                let signedUrl = ''
+                const filePath = imageFile.assets[0].uri?.replace('file://', '') ?? ''
+                const fileType: string[] = (imageFile.assets[0].type)?.split('/') ?? []
+                const url = '/p/mediaUrl'
+                const mType = fileType[0]
+                const cType = fileType[1]
+                const queryParams = {
+                    mType: mType.toUpperCase(),
+                    cType: cType.toUpperCase()
+                }
+
+                const getSignedUrlResponse = await authenticatedGetMethod(url, queryParams)
+
+                if (getSignedUrlResponse.data.result) {
+                    imageUrl = getSignedUrlResponse.data.result.url
+                    signedUrl = getSignedUrlResponse.data.result.signedUrl
+
+                    const contentType = `${mType}/${cType}`
+
+                    const response = await fileUploadMethod(signedUrl, filePath, contentType)
+
+                    let result: any = {}
+                    if (response.respInfo.status == 200) {
+                        result.placeHolder = placeHolder
+                        result.imageUrl = imageUrl
+
+                        return result
+                    } else {
+                        e.message = 'Something went wrong'
+                        return thunkApi.rejectWithValue(e)
+                    }
+                }
+            }
+        } catch (e) {
+            return thunkApi.rejectWithValue(e)
+        }
+    }
+)
 
 const getPlaceholderValue = (title: string) => {
     let placeholder: string = '';
@@ -294,10 +368,10 @@ export const profileSlice = createSlice({
                 state.socialProfiles = socialProfilesList;
             }
 
-            state.name = action.payload.name;
-            state.link = action.payload.userName;
-            state.about = action.payload.description;
-            state.profileImage = action.payload.profileImage;
+            state.name = action.payload.name ?? '';
+            state.link = action.payload.userName ?? '';
+            state.about = action.payload.description ?? '';
+            state.profileImage = action.payload.profileImage ?? '';
             state.loading = false;
             state.data = action.payload;
         });
@@ -337,6 +411,33 @@ export const profileSlice = createSlice({
             }
             state.data = null;
         });
+        builder.addCase(changeImage.pending,
+            (state, action) => {
+                if (action.meta.arg == 'banner') {
+                    state.bannerImageLoading = true
+                } else if (action.meta.arg == 'profilePhoto') {
+                    state.profileImageLoading = true
+                }
+            });
+        builder.addCase(changeImage.fulfilled,
+            (state, action) => {
+                const result = action.payload
+                if (result.placeHolder == 'banner') {
+                    state.bannerImage = result.imageUrl
+                    state.bannerImageLoading = false
+                } else if (result.placeHolder == 'profilePhoto') {
+                    state.profileImage = result.imageUrl
+                    state.profileImageLoading = false
+                }
+                state.error.imageError = ''
+            });
+        builder.addCase(changeImage.rejected,
+            (state, action) => {
+                let e: any = action.payload
+                state.error.imageError = e.message
+                state.bannerImageLoading = false
+                state.profileImageLoading = false
+            });
     },
 });
 
