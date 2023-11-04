@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
         paddingBottom: 5,
     },
     signInDescriptionText: {
-        color: AppColors.GRAY2,
+        color: AppColors.GRAY3,
         fontFamily: FontFamily.NUNITO_REGULAR,
         fontSize: 12,
         fontStyle: 'normal',

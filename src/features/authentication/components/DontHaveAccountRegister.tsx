@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     dontHaveAccountText: {
-        color: AppColors.GRAY2,
+        color: AppColors.GRAY3,
         fontFamily: FontFamily.NUNITO_REGULAR,
         fontSize: 14,
         fontStyle: 'normal',

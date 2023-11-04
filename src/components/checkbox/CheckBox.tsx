@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
-import { CheckBoxFilled } from "../../../assets/images";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import AppColors from "../../constants/AppColors";
+import { CheckBoxFilled } from "../../../assets/images";
 
 function CheckBox(props: { onChangeValue: ((value: boolean) => void) }): JSX.Element {
 
@@ -12,7 +12,7 @@ function CheckBox(props: { onChangeValue: ((value: boolean) => void) }): JSX.Ele
             <TouchableOpacity onPress={() => { setEnable(!enable), props.onChangeValue(!enable) }}>
                 {
                     enable ?
-                        <Image style={styles.checkBox} source={CheckBoxFilled} />
+                        <CheckBoxFilled style={styles.checkBox} />
                         : <View style={styles.emptyCheckBox}></View>
                 }
             </TouchableOpacity>
@@ -22,8 +22,8 @@ function CheckBox(props: { onChangeValue: ((value: boolean) => void) }): JSX.Ele
 
 const styles = StyleSheet.create({
     checkBox: {
-        height: 24,
-        width: 24,
+        maxHeight: 24,
+        maxWidth: 24,
     },
     emptyCheckBox: {
         height: 24,
