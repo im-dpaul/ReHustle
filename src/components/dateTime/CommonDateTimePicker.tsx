@@ -53,16 +53,6 @@ const CommonDateTimePicker = (props: CommonDateTimePickerProps): React.JSX.Eleme
                     style={styles.itemBox}>
                     <Text style={styles.dateTimeText}>{date}</Text>
                     <ArrowDown style={styles.arrowStyle} />
-                    {
-                        isDatePickerVisible
-                            ? <RNDateTimePicker
-                                mode='date'
-                                value={new Date(props.date)}
-                                minimumDate={new Date()}
-                                onChange={(date) => onDateChange(date)}
-                            />
-                            : null
-                    }
                 </TouchableOpacity>
                 <View style={{ width: 1, backgroundColor: AppColors.GRAY6 }}></View>
                 <TouchableOpacity
@@ -70,19 +60,35 @@ const CommonDateTimePicker = (props: CommonDateTimePickerProps): React.JSX.Eleme
                     style={styles.itemBox}>
                     <Text style={styles.dateTimeText}>{time}</Text>
                     <ArrowDown style={styles.arrowStyle} />
-                    {
-                        isTimePickerVisible
-                            ? <RNDateTimePicker
-                                mode='time'
-                                display='spinner'
-                                value={new Date(props.time)}
-                                minimumDate={new Date()}
-                                minuteInterval={15}
-                                onChange={(date) => onTimeChange(date)}
-                            />
-                            : null
-                    }
                 </TouchableOpacity>
+            </View>
+            <View style={{marginTop: 8}}>
+            {
+                isDatePickerVisible
+                    ? <View style={styles.dateStyle}>
+                        <RNDateTimePicker
+                            mode='date'
+                            value={new Date(props.date)}
+                            minimumDate={new Date()}
+                            onChange={(date) => onDateChange(date)}
+                        />
+                    </View> 
+                    : null
+            }
+            {
+                isTimePickerVisible
+                    ? <View style={{alignItems: 'center'}}>
+                        <RNDateTimePicker
+                            mode='time'
+                            display='spinner'
+                            value={new Date(props.time)}
+                            minimumDate={new Date()}
+                            minuteInterval={15}
+                            onChange={(date) => onTimeChange(date)}
+                        />
+                    </View> 
+                    : null
+            }
             </View>
         </View>
     )
@@ -124,5 +130,9 @@ const styles = StyleSheet.create({
     arrowStyle: {
         maxWidth: 16,
         maxHeight: 16
+    }, 
+    dateStyle: {
+        alignItems: 'center',
+        width: '50%'
     }
 })
