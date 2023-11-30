@@ -47,7 +47,7 @@ const ServicesList = ({ navigation }: AddServicesProps) => {
                 scrollEnabled={false}
                 renderItem={
                     (item) =>
-                        <View style={{ marginBottom: 20, paddingHorizontal: 2 }}>
+                        <View style={{ marginBottom: 20, paddingHorizontal: 2, marginTop: 4 }}>
                             <ServiceCard
                                 title={item.item.title}
                                 description={item.item.description}

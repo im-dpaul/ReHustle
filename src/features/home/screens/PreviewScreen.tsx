@@ -83,8 +83,10 @@ const styles = StyleSheet.create({
         height: 356,
         borderRadius: 16,
         shadowColor: AppColors.MODAL_BG,
-        shadowRadius: 20,
-        elevation: 2
+        shadowRadius: 8,
+        elevation: 2,
+        shadowOpacity: 0.2, 
+        // zIndex:999, 
     },
     cover: {
         height: 206,
@@ -107,7 +109,12 @@ const styles = StyleSheet.create({
         elevation: 6,
         padding: 8,
         borderRadius: 16,
-        backgroundColor: AppColors.WHITE
+        backgroundColor: AppColors.WHITE,
+        shadowOffset: { width: 6, height: 6 },  
+        shadowRadius: 8,
+        shadowColor: AppColors.MODAL_BG,  
+        shadowOpacity: 0.4, 
+        // zIndex:999, 
     },
     profile: {
         height: 112,
