@@ -1,4 +1,4 @@
-import { Image, Linking, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Linking, Modal, Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import AppColors from '../../../constants/AppColors'
 import IconWithTitleDescription from '../../../components/text/IconWithTitleDescription'
@@ -12,6 +12,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../../App'
 import MenuOptions from '../../../constants/MenuOptions'
 import CommonButton from '../../../components/buttons/CommonButton'
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const MenuOptionsModal = (props: {
     title: string,
@@ -21,6 +22,8 @@ const MenuOptionsModal = (props: {
     closeButtonTap: (() => void),
     copyButtonTap: (() => void)
 }): JSX.Element => {
+
+    const insets = useSafeAreaInsets();
 
     const Navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
@@ -34,42 +37,54 @@ const MenuOptionsModal = (props: {
                 if (Navigation.canGoBack()) {
                     Navigation.popToTop();
                 }
-                Navigation.replace('Preview');
+                setTimeout(() => { 
+                    Navigation.replace('Preview');
+                }, 500)
             }
             else if (option == MenuOptions.INSIGHTS) {
                 props.closeButtonTap()
                 if (Navigation.canGoBack()) {
                     Navigation.popToTop();
                 }
-                Navigation.replace('Insights');
+                setTimeout(() => { 
+                    Navigation.replace('Insights');
+                }, 500)
             }
             else if (option == MenuOptions.PROFILE) {
                 props.closeButtonTap()
                 if (Navigation.canGoBack()) {
                     Navigation.popToTop();
                 }
-                Navigation.replace('Profile');
+                setTimeout(() => { 
+                    Navigation.replace('Profile');
+                }, 500)
             }
             else if (option == MenuOptions.SERVICES) {
                 props.closeButtonTap()
                 if (Navigation.canGoBack()) {
                     Navigation.popToTop();
                 }
+                setTimeout(() => { 
                 Navigation.replace('Services');
+                }, 500)
             }
             else if (option == MenuOptions.PAYOUTS) {
                 props.closeButtonTap()
                 if (Navigation.canGoBack()) {
                     Navigation.popToTop();
                 }
+                setTimeout(() => {  
                 Navigation.replace('Payouts');
+                }, 500)
             }
             else if (option == MenuOptions.SETTINGS) {
                 props.closeButtonTap()
                 if (Navigation.canGoBack()) {
                     Navigation.popToTop();
                 }
+                setTimeout(() => {  
                 Navigation.replace('Settings');
+                }, 500)
             }
             else if (option == MenuOptions.HELP) {
                 Linking.openURL('mailto:hello@rehustle.co').then((value) => { }).catch((err) => { })
@@ -82,7 +97,9 @@ const MenuOptionsModal = (props: {
         if (Navigation.canGoBack()) {
             Navigation.popToTop();
         }
-        Navigation.replace('SignIn', { 'fromHome': true });
+        setTimeout(() => {
+            Navigation.replace('SignIn', { 'fromHome': true });
+        }, 500) 
 
         await LocalStorage.DeleteData(StorageKeys.TOKEN);
         await LocalStorage.DeleteData(StorageKeys.ID);
@@ -100,6 +117,7 @@ const MenuOptionsModal = (props: {
                 animationType='fade'>
                 <View style={styles.main}>
                     <View style={styles.container}>
+                        <View style={{height: insets.top}}></View>
                         <View style={styles.appBar}>
                             <View style={styles.appBarContainer}>
                                 {
@@ -116,9 +134,9 @@ const MenuOptionsModal = (props: {
                                 <View style={{ marginLeft: 'auto', marginRight: 16, width: 80 }}>
                                     <CommonButton title="Copy Link" height={32} active={false} onPress={() => props.copyButtonTap()} />
                                 </View>
-                                <TouchableOpacity onPress={() => { props.closeButtonTap ? props.closeButtonTap() : null }}>
+                                <Pressable onPress={() => { props.closeButtonTap ? props.closeButtonTap() : null }}>
                                     <CrossIcon style={styles.iconStyle} />
-                                </TouchableOpacity>
+                                </Pressable>
                             </View>
                         </View>
                         <CommonDivider />
@@ -216,13 +234,13 @@ const MenuOptionsModal = (props: {
                             <CommonDivider />
                         </View>
                         <View style={styles.logoutBox}>
-                            <TouchableOpacity onPress={() => { onLogout() }}>
+                            <Pressable onPress={() => { onLogout() }}>
                                 <View style={styles.logoutButton}>
                                     <LogoutIcon style={styles.logoutIcon} />
                                     <View style={{ width: 8 }}></View>
                                     <Text style={styles.logoutText}>Log Out</Text>
                                 </View>
-                            </TouchableOpacity>
+                            </Pressable>
                         </View>
                     </View>
                 </View>

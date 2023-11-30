@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet, View, } from 'react-native';
+import { ActivityIndicator, SafeAreaView, StyleSheet, View, } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../App';
 import AppColors from '../../../constants/AppColors';
@@ -52,7 +52,7 @@ function FinishAccountCreationScreen({ navigation }: FinishAccountCreationProps)
     }, [finishCreationR.data])
 
     return (
-        <View style={{ flex: 1, backgroundColor: AppColors.WHITE }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: AppColors.WHITE }}>
             <CommonStatusBar />
             <View style={{ flex: 1 }}>
                 <View style={{ height: 74 }}>
@@ -82,7 +82,7 @@ function FinishAccountCreationScreen({ navigation }: FinishAccountCreationProps)
                     </View>
                 </View>
             </View>
-        </View>
+        </SafeAreaView>
     );
 }
 
