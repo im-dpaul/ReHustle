@@ -51,6 +51,7 @@ export const googleSignin = createAsyncThunk<any>(
         GoogleSignin.configure({
             offlineAccess: true,
             webClientId: '91194681066-qk09a4hci98arje9v0hfltn8ut0innia.apps.googleusercontent.com',
+            iosClientId: '91194681066-3jhk1mldv66u3jqf17jj1p7ag6pn54l0.apps.googleusercontent.com',
         });
         const hasPlayServices = await GoogleSignin.hasPlayServices();
         let errors: errorType = {
