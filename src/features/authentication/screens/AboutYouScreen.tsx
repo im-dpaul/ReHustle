@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, Text, View, } from 'react-native';
+import { ActivityIndicator, SafeAreaView, ScrollView, StyleSheet, Text, View, } from 'react-native';
 import CommonButton from '../../../components/buttons/CommonButton';
 import CommonStatusBar from '../../../components/layouts/CommonStatusBar';
 import CommonDivider from '../../../components/divider/CommonDivider';
@@ -62,7 +62,7 @@ function AboutYouScreen({ navigation }: AboutYouProps): JSX.Element {
     }, [])
 
     return (
-        <View style={{ flex: 1, backgroundColor: AppColors.WHITE }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: AppColors.WHITE }}>
             <CommonStatusBar />
             <View style={{ flex: 1 }}>
                 <View style={{ height: 74 }}>
@@ -103,7 +103,7 @@ function AboutYouScreen({ navigation }: AboutYouProps): JSX.Element {
                     </View>
                 </View>
             </View>
-        </View>
+        </SafeAreaView>
     );
 }
 

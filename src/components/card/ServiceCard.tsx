@@ -138,7 +138,10 @@ const styles = StyleSheet.create({
         backgroundColor: AppColors.WHITE,
         borderRadius: 16,
         elevation: 6,
-        shadowColor: AppColors.GRAY3
+        shadowColor: AppColors.GRAY3,
+        shadowOpacity: 0.2,
+        shadowRadius: 8,
+        shadowOffset: {height: 6, width: 2}
     },
     imageContainer: {
         backgroundColor: AppColors.SECONDARY_COLOR,

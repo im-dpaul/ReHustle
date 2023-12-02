@@ -1,4 +1,4 @@
-import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { addService, skipServices, addNewServices, getAllServices, clearData, AddServicesState, showAddServiceModal } from "../../authentication/redux/addServicesSlice";
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -81,7 +81,7 @@ function AddServicesScreen({ navigation, route }: AddServicesProps): JSX.Element
     }, [])
 
     return (
-        <View style={{ flex: 1, backgroundColor: AppColors.WHITE }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: AppColors.WHITE }}>
             <CommonStatusBar />
             <View style={{ flex: 1 }}>
                 <View style={{ height: 74 }}>
@@ -133,7 +133,7 @@ function AddServicesScreen({ navigation, route }: AddServicesProps): JSX.Element
                     </View>
                 </View>
             </View>
-        </View>
+        </SafeAreaView>
     )
 };
 

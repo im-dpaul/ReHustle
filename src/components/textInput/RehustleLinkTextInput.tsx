@@ -40,6 +40,8 @@ const styles = StyleSheet.create({
         borderColor: AppColors.PRIMARY_COLOR,
         borderWidth: 1,
         flexDirection: 'row',
+        alignItems: "center",
+        height: 36
     },
     rehustleLink: {
         color: AppColors.WHITE,

@@ -64,7 +64,7 @@ const AddMeetingDetails = () => {
                 <CommonDivider />
                 <Pressable onPress={() => onChangeScheduleType(ScheduleType.CALENDLY)}>
                     <View style={styles.buttonRow}>
-                        <View style={{ width: 300 }}>
+                        <View style={{ width: 260 }}>
                             <Text style={[styles.title, { fontSize: 14 }]}>Automatic</Text>
                             <View style={{ height: 4 }}></View>
                             <Text style={styles.description}>Use Calendly or any other calendar manager to let people book annnn availability slot</Text>
