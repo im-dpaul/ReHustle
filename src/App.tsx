@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import SignInScreen from './features/authentication/screens/SignInScreen';
 import CreateAccountScreen from './features/authentication/screens/CreateAccountScreen';
 import AboutYouScreen from './features/authentication/screens/AboutYouScreen';
@@ -17,6 +17,8 @@ import ProfileScreen from './features/home/screens/ProfileScreen';
 import SettingsScreen from './features/home/screens/SettingsScreen';
 import ForgetPasswordScreen from './features/authentication/screens/ForgetPasswordScreen';
 import { ServiceModel } from './data';
+import ReactMoE from 'react-native-moengage';
+import { MoEInitConfig, MoEPushConfig, MoEngageLogConfig, MoEngageLogLevel } from "react-native-moengage";
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -39,6 +41,17 @@ export type RootStackParamList = {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function App(): JSX.Element {
+
+  useEffect(() => {
+    const moEInitConfig = new MoEInitConfig(
+      MoEPushConfig.defaultConfig(),
+      new MoEngageLogConfig(MoEngageLogLevel.VERBOSE, false)
+    );
+    ReactMoE.initialize("W5U27R9YSMKXUZA72ZVPQJDM", moEInitConfig);
+
+    ReactMoE.setUserUniqueID('user01');
+  }, []);
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName='Splash' screenOptions={{ headerShown: false }} >

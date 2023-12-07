@@ -9,7 +9,12 @@ import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactNativeHost;
 import com.facebook.soloader.SoLoader;
 import java.util.List;
-// import com.moengage.react.MoEReactPackage;
+import com.moengage.react.MoEReactPackage;
+import com.moengage.core.DataCenter;
+import com.moengage.core.MoEngage;
+import com.moengage.react.MoEInitializer;
+// import com.moengage.core.config.LogConfig;
+// import com.moengage.core.LogLevel;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -61,5 +66,8 @@ public class MainApplication extends Application implements ReactApplication {
       DefaultNewArchitectureEntryPoint.load();
     }
     ReactNativeFlipper.initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+    MoEngage.Builder moEngage = new MoEngage.Builder(this, "W5U27R9YSMKXUZA72ZVPQJDM", DataCenter.DATA_CENTER_1);
+              // .configureLogs(new LogConfig(LogLevel.VERBOSE));
+    MoEInitializer.INSTANCE.initializeDefaultInstance(getApplicationContext(), moEngage);
   }
 }
