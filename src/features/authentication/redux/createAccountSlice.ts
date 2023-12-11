@@ -2,8 +2,9 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { postMethod } from '../../../core/services/NetworkServices';
 import LocalStorage from '../../../data/local_storage/LocalStorage';
 import StorageKeys from '../../../constants/StorageKeys';
-import { ValidateEmail } from '../../../utils';
+import { MoEAppUpdate, MoESetEmail, MoESetUniqueID, ValidateEmail } from '../../../utils';
 import { GoogleSignin, User, statusCodes } from '@react-native-google-signin/google-signin';
+import DeviceInfo from 'react-native-device-info';
 
 export interface CreateAccountState {
     data: any,
@@ -88,6 +89,17 @@ export const googleSignup = createAsyncThunk<any>(
                     let profileImage = data.profileImage ?? "";
                     let id = data._id ?? "";
 
+                    if (userName != '') {
+                        MoESetUniqueID(userName);
+                    }
+                    if (email != '') {
+                        MoESetEmail(email);
+                    }
+
+                    let currentVersion = DeviceInfo.getVersion();
+                    MoEAppUpdate(false);
+                    await LocalStorage.SetData(StorageKeys.APP_VERSION, currentVersion);
+
                     await LocalStorage.SetData(StorageKeys.TOKEN, userToken);
                     await LocalStorage.SetData(StorageKeys.EMAIL, email);
                     await LocalStorage.SetData(StorageKeys.NAME, name);
@@ -147,6 +159,17 @@ export const createAccount = createAsyncThunk<any>(
             let userName = data.userName ?? "";
             let profileImage = data.profileImage ?? "";
             let id = data._id ?? "";
+
+            if (userName != '') {
+                MoESetUniqueID(userName);
+            }
+            if (email != '') {
+                MoESetEmail(email);
+            }
+
+            let currentVersion = DeviceInfo.getVersion();
+            MoEAppUpdate(false);
+            await LocalStorage.SetData(StorageKeys.APP_VERSION, currentVersion);
 
             await LocalStorage.SetData(StorageKeys.TOKEN, token);
             await LocalStorage.SetData(StorageKeys.EMAIL, email);

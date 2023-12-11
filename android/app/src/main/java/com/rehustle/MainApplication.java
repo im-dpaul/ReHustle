@@ -66,7 +66,7 @@ public class MainApplication extends Application implements ReactApplication {
       DefaultNewArchitectureEntryPoint.load();
     }
     ReactNativeFlipper.initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
-    MoEngage.Builder moEngage = new MoEngage.Builder(this, "W5U27R9YSMKXUZA72ZVPQJDM", DataCenter.DATA_CENTER_1);
+    MoEngage.Builder moEngage = new MoEngage.Builder(this, "S8SC36D2HDMH0R1CCLJX0K0U", DataCenter.DATA_CENTER_1);
               // .configureLogs(new LogConfig(LogLevel.VERBOSE));
     MoEInitializer.INSTANCE.initializeDefaultInstance(getApplicationContext(), moEngage);
   }

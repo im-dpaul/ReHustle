@@ -6,7 +6,8 @@ const StorageKeys = {
     USER_NAME: 'user_name',
     SETUP_STAGE: 'setup_stage',
     PROFILE_IMAGE: 'profile_image',
-    REMEMBER_ME: 'remember_me'
+    REMEMBER_ME: 'remember_me',
+    APP_VERSION: 'app_version'
 };
 
 export default StorageKeys;

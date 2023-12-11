@@ -3,6 +3,7 @@ import { authenticatedPutMethod } from "../../../core/services/NetworkServices";
 import StorageKeys from "../../../constants/StorageKeys";
 import LocalStorage from "../../../data/local_storage/LocalStorage";
 import { SocialMediaDataType } from "../../../data/constants/SocialMediaType";
+import { MoESetName } from "../../../utils";
 
 export interface AboutYouState {
     name: string,
@@ -117,6 +118,10 @@ export const addProfileLinks = createAsyncThunk<any>(
             let profileImage = data.profileImage ?? "";
             let id = data._id ?? "";
 
+            if (name != '') {
+                MoESetName(name);
+            }
+
             await LocalStorage.SetData(StorageKeys.EMAIL, email);
             await LocalStorage.SetData(StorageKeys.NAME, name);
             await LocalStorage.SetData(StorageKeys.USER_NAME, userName);
@@ -146,6 +151,10 @@ export const skipAboutYou = createAsyncThunk<any>(
             let userName = data.userName ?? "";
             let profileImage = data.profileImage ?? "";
             let id = data._id ?? "";
+
+            if (name != '') {
+                MoESetName(name);
+            }
 
             await LocalStorage.SetData(StorageKeys.EMAIL, email);
             await LocalStorage.SetData(StorageKeys.NAME, name);

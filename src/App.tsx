@@ -47,9 +47,7 @@ function App(): JSX.Element {
       MoEPushConfig.defaultConfig(),
       new MoEngageLogConfig(MoEngageLogLevel.VERBOSE, false)
     );
-    ReactMoE.initialize("W5U27R9YSMKXUZA72ZVPQJDM", moEInitConfig);
-
-    ReactMoE.setUserUniqueID('user01');
+    ReactMoE.initialize("S8SC36D2HDMH0R1CCLJX0K0U", moEInitConfig);
   }, []);
 
   return (
