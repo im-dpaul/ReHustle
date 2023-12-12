@@ -13,6 +13,10 @@ import com.moengage.react.MoEReactPackage;
 import com.moengage.core.DataCenter;
 import com.moengage.core.MoEngage;
 import com.moengage.react.MoEInitializer;
+import com.moengage.core.config.NotificationConfig;
+import com.moengage.pushbase.MoEPushHelper;
+import com.moengage.firebase.MoEFireBaseHelper;
+import com.moengage.firebase.MoEFireBaseMessagingService;
 // import com.moengage.core.config.LogConfig;
 // import com.moengage.core.LogLevel;
 
@@ -66,8 +70,20 @@ public class MainApplication extends Application implements ReactApplication {
       DefaultNewArchitectureEntryPoint.load();
     }
     ReactNativeFlipper.initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
-    MoEngage.Builder moEngage = new MoEngage.Builder(this, "S8SC36D2HDMH0R1CCLJX0K0U", DataCenter.DATA_CENTER_1);
+    MoEngage.Builder moEngage = new MoEngage.Builder(this, "S8SC36D2HDMH0R1CCLJX0K0U", DataCenter.DATA_CENTER_1)
+              .configureNotificationMetaData(
+					      new NotificationConfig(
+                R.drawable.small_icon, /* Small Icon */
+                R.drawable.large_icon, /* Large Icon */
+                R.color.notification_color, /* Notification Color */
+                true, /* True, to show multiple notification in notification drawer */
+                true, /* True, to synthesize back-stack for the notification's click action */
+                true /* True, to show notification large icon on Lollipop and above devices */
+              ));
               // .configureLogs(new LogConfig(LogLevel.VERBOSE));
     MoEInitializer.INSTANCE.initializeDefaultInstance(getApplicationContext(), moEngage);
+
+    MoEPushHelper.getInstance().setUpNotificationChannels(this.getApplicationContext());
+    // MoEFireBaseHelper.getInstance().addTokenListener(listener: onTokenAvailable());
   }
 }

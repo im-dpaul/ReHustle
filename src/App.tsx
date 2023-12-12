@@ -19,6 +19,7 @@ import ForgetPasswordScreen from './features/authentication/screens/ForgetPasswo
 import { ServiceModel } from './data';
 import ReactMoE from 'react-native-moengage';
 import { MoEInitConfig, MoEPushConfig, MoEngageLogConfig, MoEngageLogLevel } from "react-native-moengage";
+import { getFCMToken, initForegroundMessageHandler, requestNotificationPermission } from './app/firebase_messaging_service';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -42,7 +43,20 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function App(): JSX.Element {
 
+  ReactMoE.setEventListener('pushTokenGenerated', (payload : any) => {
+    console.log('pushTokenGenerated', payload);
+  });
+
   useEffect(() => {
+    // getFCMToken().then((token) => {
+    //   if (token) {
+    //     console.log('Token', token);
+    //   }
+    // })
+    requestNotificationPermission();
+
+    initForegroundMessageHandler();
+
     const moEInitConfig = new MoEInitConfig(
       MoEPushConfig.defaultConfig(),
       new MoEngageLogConfig(MoEngageLogLevel.VERBOSE, false)
