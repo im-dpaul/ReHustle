@@ -38,7 +38,7 @@ const requestNotificationPermission = async () => {
   } else {
     ReactMoE.setupNotificationChannelsAndroid() 
   }
-  console.log('Notification permission :', en);
+  // console.log('Notification permission :', en);
   return en
 }
 
@@ -54,7 +54,7 @@ const getFCMToken = async () => {
 
 const initForegroundMessageHandler = () => {
   const unsubscribe = messaging().onMessage(async remoteMessage => {
-    console.log('Remote Message:', remoteMessage);
+    // console.log('Remote Message:', remoteMessage);
   });
 
   return unsubscribe;
@@ -62,7 +62,7 @@ const initForegroundMessageHandler = () => {
 
 const initBackgroundMessageHandler = () => {
   messaging().setBackgroundMessageHandler(async remoteMessage => {
-    console.log('Message handled in the background!', remoteMessage);
+    // console.log('Message handled in the background!', remoteMessage);
   });
 }
 

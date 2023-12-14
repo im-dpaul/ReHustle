@@ -44,7 +44,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function App(): JSX.Element {
 
   ReactMoE.setEventListener('pushTokenGenerated', (payload : any) => {
-    console.log('pushTokenGenerated', payload);
+    // console.log('pushTokenGenerated', payload);
   });
 
   useEffect(() => {
