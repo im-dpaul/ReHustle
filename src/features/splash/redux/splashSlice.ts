@@ -2,6 +2,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { authenticatedGetMethod } from "../../../core/services/NetworkServices";
 import LocalStorage from "../../../data/local_storage/LocalStorage";
 import StorageKeys from "../../../constants/StorageKeys";
+import { MoEAppUpdate, MoESetEmail, MoESetName, MoESetUniqueID } from "../../../utils";
+import DeviceInfo from "react-native-device-info";
 
 export interface SplashState {
     data: any;
@@ -42,6 +44,25 @@ export const getUserData = createAsyncThunk<any>('api/getUserData',
             let userName = data.userName ?? "";
             let profileImage = data.profileImage ?? "";
             let id = `${data._id}` ?? "";
+
+            if (userName != '') {
+                MoESetUniqueID(userName);
+            }
+            if (name != '') {
+                MoESetName(name);
+            }
+            if (email != '') {
+                MoESetEmail(email);
+            }
+
+            let oldVersion = await LocalStorage.GetData(StorageKeys.APP_VERSION);
+            let currentVersion = DeviceInfo.getVersion();
+            if (oldVersion == null) {
+                MoEAppUpdate(false);
+            } else if (currentVersion != oldVersion) {
+                MoEAppUpdate(true);
+                await LocalStorage.SetData(StorageKeys.APP_VERSION, currentVersion);
+            }
 
             await LocalStorage.SetData(StorageKeys.ID, id);
             await LocalStorage.SetData(StorageKeys.EMAIL, email);

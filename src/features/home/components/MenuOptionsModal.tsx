@@ -13,6 +13,7 @@ import { RootStackParamList } from '../../../App'
 import MenuOptions from '../../../constants/MenuOptions'
 import CommonButton from '../../../components/buttons/CommonButton'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
+import { MoELogout } from '../../../utils'
 
 const MenuOptionsModal = (props: {
     title: string,
@@ -101,6 +102,7 @@ const MenuOptionsModal = (props: {
             Navigation.replace('SignIn', { 'fromHome': true });
         }, 500) 
 
+        MoELogout();
         await LocalStorage.DeleteData(StorageKeys.TOKEN);
         await LocalStorage.DeleteData(StorageKeys.ID);
         await LocalStorage.DeleteData(StorageKeys.NAME);

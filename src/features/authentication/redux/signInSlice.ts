@@ -2,8 +2,9 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { postMethod } from "../../../core/services/NetworkServices";
 import LocalStorage from "../../../data/local_storage/LocalStorage";
 import StorageKeys from "../../../constants/StorageKeys";
-import { ValidateEmail } from "../../../utils";
+import { MoEAppUpdate, MoESetEmail, MoESetName, MoESetUniqueID, ValidateEmail,  } from "../../../utils";
 import { GoogleSignin, User, statusCodes } from '@react-native-google-signin/google-signin';
+import DeviceInfo from "react-native-device-info";
 
 export interface SigninState {
     data: any,
@@ -83,6 +84,25 @@ export const googleSignin = createAsyncThunk<any>(
                     let profileImage = data.profileImage ?? "";
                     let id = data._id ?? "";
 
+                    if (userName != '') {
+                        MoESetUniqueID(userName);
+                    }
+                    if (name != '') {
+                        MoESetName(name);
+                    }
+                    if (email != '') {
+                        MoESetEmail(email);
+                    }
+
+                    let oldVersion = await LocalStorage.GetData(StorageKeys.APP_VERSION);
+                    let currentVersion = DeviceInfo.getVersion();
+                    if (oldVersion == null) {
+                        MoEAppUpdate(false);
+                    } else if (currentVersion != oldVersion) {
+                        MoEAppUpdate(true);
+                        await LocalStorage.SetData(StorageKeys.APP_VERSION, currentVersion);
+                    }
+
                     await LocalStorage.SetData(StorageKeys.TOKEN, userToken);
                     await LocalStorage.SetData(StorageKeys.EMAIL, email);
                     await LocalStorage.SetData(StorageKeys.NAME, name);
@@ -141,6 +161,25 @@ export const signIn = createAsyncThunk<any>(
             let userName = data.userName ?? "";
             let profileImage = data.profileImage ?? "";
             let id = data._id ?? "";
+
+            if (userName != '') {
+                MoESetUniqueID(userName);
+            }
+            if (name != '') {
+                MoESetName(name);
+            }
+            if (email != '') {
+                MoESetEmail(email);
+            }
+
+            let oldVersion = await LocalStorage.GetData(StorageKeys.APP_VERSION);
+            let currentVersion = DeviceInfo.getVersion();
+            if (oldVersion == null) {
+                MoEAppUpdate(false);
+            } else if (currentVersion != oldVersion) {
+                MoEAppUpdate(true);
+                await LocalStorage.SetData(StorageKeys.APP_VERSION, currentVersion);
+            }
 
             await LocalStorage.SetData(StorageKeys.TOKEN, token);
             await LocalStorage.SetData(StorageKeys.EMAIL, email);

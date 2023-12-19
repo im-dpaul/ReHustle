@@ -2,6 +2,15 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>MoEngage</key>
+	<dict>
+		<key>ENABLE_LOGS</key>
+		<true/>
+		<key>MoEngage_APP_ID</key>
+		<string>S8SC36D2HDMH0R1CCLJX0K0U</string>
+		<key>DATA_CENTER</key>
+		<string>DATA_CENTER_01</string>
+	</dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>

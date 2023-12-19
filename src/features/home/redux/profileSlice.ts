@@ -4,6 +4,7 @@ import StorageKeys from "../../../constants/StorageKeys";
 import LocalStorage from "../../../data/local_storage/LocalStorage";
 import { SocialProfileDataType } from "../../../data/constants/AllSocialProfileType";
 import { launchImageLibrary } from "react-native-image-picker";
+import { MoESetName, MoEUpdateUniqueID } from "../../../utils";
 
 export interface ProfileState {
     data: any;
@@ -121,6 +122,14 @@ export const updateProfile = createAsyncThunk<any>(
             let name = data.name ?? "";
             let userName = data.userName ?? "";
             let profileImage = data.profileImage ?? "";
+
+            if (name != '') {
+                MoESetName(name);
+            }
+            let oldUserName = await LocalStorage.GetData(StorageKeys.USER_NAME);
+            if (oldUserName != userName) {
+                MoEUpdateUniqueID(userName);
+            }
 
             await LocalStorage.SetData(StorageKeys.NAME, name);
             await LocalStorage.SetData(StorageKeys.USER_NAME, userName);

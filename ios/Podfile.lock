@@ -88,6 +88,14 @@ PODS:
     - hermes-engine/Pre-built (= 0.72.4)
   - hermes-engine/Pre-built (0.72.4)
   - libevent (2.1.12)
+  - MoEngage-iOS-SDK (9.13.0)
+  - MoEngageInApp (4.12.1):
+    - MoEngage-iOS-SDK (< 9.14.0, >= 9.13.0)
+  - MoEngagePluginBase (4.5.0):
+    - MoEngage-iOS-SDK (< 9.14.0, >= 9.13.0)
+    - MoEngageInApp (< 4.13.0, >= 4.12.0)
+  - MoEngageRichNotification (7.12.0):
+    - MoEngage-iOS-SDK (< 9.14.0, >= 9.13.0)
   - OpenSSL-Universal (1.1.1100)
   - RCT-Folly (2021.07.22.00):
     - boost
@@ -507,11 +515,17 @@ PODS:
     - React-jsi (= 0.72.4)
     - React-logger (= 0.72.4)
     - React-perflogger (= 0.72.4)
+  - ReactNativeMoEngage (8.6.0):
+    - MoEngagePluginBase (< 4.6.0, >= 4.5.0)
+    - MoEngageRichNotification (< 7.13.0, >= 7.12.0)
+    - React
   - RNCAsyncStorage (1.19.3):
     - React-Core
   - RNCClipboard (1.5.1):
     - React-Core
   - RNDateTimePicker (7.6.1):
+    - React-Core
+  - RNDeviceInfo (10.12.0):
     - React-Core
   - RNGoogleSignin (10.0.1):
     - GoogleSignIn (~> 7.0)
@@ -593,9 +607,11 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - ReactNativeMoEngage (from `../node_modules/react-native-moengage`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCClipboard (from `../node_modules/@react-native-community/clipboard`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
+  - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
@@ -618,6 +634,10 @@ SPEC REPOS:
     - GTMAppAuth
     - GTMSessionFetcher
     - libevent
+    - MoEngage-iOS-SDK
+    - MoEngageInApp
+    - MoEngagePluginBase
+    - MoEngageRichNotification
     - OpenSSL-Universal
     - SocketRocket
     - YogaKit
@@ -708,12 +728,16 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/utils"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  ReactNativeMoEngage:
+    :path: "../node_modules/react-native-moengage"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCClipboard:
     :path: "../node_modules/@react-native-community/clipboard"
   RNDateTimePicker:
     :path: "../node_modules/@react-native-community/datetimepicker"
+  RNDeviceInfo:
+    :path: "../node_modules/react-native-device-info"
   RNGoogleSignin:
     :path: "../node_modules/@react-native-google-signin/google-signin"
   RNScreens:
@@ -745,6 +769,10 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 41b9ef0b4c08a6db4b7eb51a21ae5183ec99a2c8
   hermes-engine: 81191603c4eaa01f5e4ae5737a9efcf64756c7b2
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
+  MoEngage-iOS-SDK: 4da6190f464f11f66dd0fa6ef827948e59998257
+  MoEngageInApp: a19587bb84baa5a4b5c5bc2a94baa48212cceaaa
+  MoEngagePluginBase: c134c3a4021c8e445ceb087735571e3709d24014
+  MoEngageRichNotification: f76d0e002ab430b71f896d7fe6b788b24252bcf4
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: c0569ecc035894e4a68baecb30fe6a7ea6e399f9
@@ -782,9 +810,11 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 4941cc1b3cf08b792fbf666342c9fc95f1969035
   React-utils: b79f2411931f9d3ea5781404dcbb2fa8a837e13a
   ReactCommon: 4b2bdcb50a3543e1c2b2849ad44533686610826d
+  ReactNativeMoEngage: 8e6137f51d45c8b6245ddf6300a7b942944f1b6c
   RNCAsyncStorage: c913ede1fa163a71cea118ed4670bbaaa4b511bb
   RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
   RNDateTimePicker: 8fb39263b721223e095248acaf6f406d5b7f6713
+  RNDeviceInfo: db5c64a060e66e5db3102d041ebe3ef307a85120
   RNGoogleSignin: ccaa4a81582cf713eea562c5dd9dc1961a715fd0
   RNScreens: 85d3880b52d34db7b8eeebe2f1a0e807c05e69fa
   RNSVG: d00c8f91c3cbf6d476451313a18f04d220d4f396
